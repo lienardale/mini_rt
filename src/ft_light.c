@@ -68,7 +68,6 @@ int		ft_lstsize_light(t_window *win)
 double	ft_shadow(t_window *win, t_pt n, t_pt p, t_shape *sh)
 {
 	t_shape	*cur_shape;
-//	t_shape	*min_sh;
 	double	min;
 	t_ray	ray;
 
@@ -76,17 +75,13 @@ double	ft_shadow(t_window *win, t_pt n, t_pt p, t_shape *sh)
 	ray.dir = n;
 	ray.lenght = -1;
 	cur_shape = win->beg_sh;
-//	min_sh = NULL;
 	min = INFINITY;
 	(void)sh;
 	while (cur_shape)
 	{
 		ft_which_shape(cur_shape, &ray);
 		if (ray.lenght > 0.0001 && ray.lenght < min)
-		{
 			min = ray.lenght;
-//			min_sh = cur_shape;
-		}
 		cur_shape = cur_shape->next;
 	}
 	return (min);
