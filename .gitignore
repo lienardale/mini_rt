@@ -27,3 +27,4 @@ ft_mini_rt copy.c
 *.log
 /scratc*
 invalid*
+Makefile.gen
