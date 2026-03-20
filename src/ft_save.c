@@ -68,8 +68,11 @@ int		ft_pixel_data(int fd, t_window *win)
 	unsigned int	i;
 	unsigned int	x;
 	unsigned int	y;
-	unsigned char	tab[3 * win->x * win->y];
+	unsigned char	*tab;
 
+	tab = malloc(3 * win->x * win->y);
+	if (!tab)
+		return (-1);
 	i = 0;
 	y = 0;
 	while (y < win->y)
@@ -86,6 +89,10 @@ int		ft_pixel_data(int fd, t_window *win)
 		y++;
 	}
 	if (write(fd, tab, 3 * win->x * win->y) == -1)
+	{
+		free(tab);
 		return (-1);
+	}
+	free(tab);
 	return (0);
 }

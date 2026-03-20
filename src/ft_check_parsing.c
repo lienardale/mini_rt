@@ -16,8 +16,6 @@ int	ft_check_resol(t_window *win)
 {
 	if (!win || !win->x || !win->y || win->x <= 0 || win->y <= 0)
 	{
-		printf("THIS ONE\n");
-		printf("%d,%d",win->x, win->y);
 		return (ft_error(7, win, "resolution"));
 	}
 	if (win->x > 2560)

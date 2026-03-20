@@ -81,9 +81,9 @@ int		ft_key(int keycode, t_window *param)
 
 int		ft_mouse(int button, int x, int y, t_window *param)
 {
-	ft_printf("button:%d\n", button);
-	ft_printf("x:%d\n", x);
-	ft_printf("y:%d\n", y);
+	(void)button;
+	(void)x;
+	(void)y;
 	(void)param;
 	return (0);
 }
