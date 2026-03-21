@@ -178,6 +178,7 @@ void			ft_swap_pt(t_pt *a, t_pt *b);
 int				ft_error(int error, t_window *win, const char *str);
 void			ft_error_id(t_window *win);
 void			ft_error_param(int amb, int res, t_window *win);
+void			ft_cleanup(t_window *win);
 int				ft_close(t_window *win);
 int				ft_free_lst_cam(t_window *win);
 int				ft_free_lst_light(t_window *win);
