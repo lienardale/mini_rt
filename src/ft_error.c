@@ -50,6 +50,7 @@ int		ft_error(int error, t_window *win, const char *str)
 		ft_printf("invalid orientation in %s line.\n", str);
 	if (error == 9)
 		ft_printf("invalid colors in %s line.\n", str);
-	ft_close(win);
+	ft_cleanup(win);
+	exit(1);
 	return (-1);
 }
