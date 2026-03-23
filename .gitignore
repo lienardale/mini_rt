@@ -39,3 +39,5 @@ ft_mini_rt copy.c
 /scratc*
 invalid*
 Makefile.gen
+gen_scene
+run_benchmark
