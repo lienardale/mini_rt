@@ -12,16 +12,16 @@
 
 #include "mini_rt.h"
 
-int		ft_save(t_window *rt)
+int ft_save(t_window *rt)
 {
-	int				fd;
-	int				ret;
+	int fd;
+	int ret;
 
 	ret = 0;
 	if ((fd = open("miniRT.bmp", O_WRONLY | O_CREAT | O_TRUNC, 0777)) == -1)
 		return (-5);
-	if (ft_file_header(fd, rt) == -1 || ft_info_header(fd, rt) == -1
-		|| ft_pixel_data(fd, rt) == -1)
+	if (ft_file_header(fd, rt) == -1 || ft_info_header(fd, rt) == -1 ||
+		ft_pixel_data(fd, rt) == -1)
 		ret = -1;
 	close(fd);
 	if (ret == -1)
@@ -30,21 +30,21 @@ int		ft_save(t_window *rt)
 	return (0);
 }
 
-int		ft_file_header(int fd, t_window *rt)
+int ft_file_header(int fd, t_window *rt)
 {
-	t_fileheader	fh;
+	t_fileheader fh;
 
 	ft_bzero(&fh, sizeof(t_fileheader));
-	fh = (t_fileheader){ 19778, 54 + rt->x * rt->y * 3, 0, 54};
+	fh = (t_fileheader){19778, 54 + rt->x * rt->y * 3, 0, 54};
 	if (write(fd, &fh.id, 2) == -1 || write(fd, &fh.size, 4) == -1 ||
 		write(fd, &fh.reserved, 4) == -1 || write(fd, &fh.offset, 4) == -1)
 		return (-1);
 	return (0);
 }
 
-int		ft_info_header(int fd, t_window *rt)
+int ft_info_header(int fd, t_window *rt)
 {
-	t_infoheader	dib;
+	t_infoheader dib;
 
 	ft_bzero(&dib, sizeof(t_infoheader));
 	dib.headersize = sizeof(t_infoheader);
@@ -52,23 +52,19 @@ int		ft_info_header(int fd, t_window *rt)
 	dib.height = rt->y;
 	dib.pane = 1;
 	dib.bitcount = 24;
-	if (
-		write(fd, &dib.headersize, 4) == -1 ||
-		write(fd, &dib.width, 4) == -1 ||
-		write(fd, &dib.height, 4) == -1 ||
-		write(fd, &dib.pane, 2) == -1 ||
-		write(fd, &dib.bitcount, 2) == -1 ||
-		write(fd, &dib.offset, 24) == -1)
+	if (write(fd, &dib.headersize, 4) == -1 || write(fd, &dib.width, 4) == -1 ||
+		write(fd, &dib.height, 4) == -1 || write(fd, &dib.pane, 2) == -1 ||
+		write(fd, &dib.bitcount, 2) == -1 || write(fd, &dib.offset, 24) == -1)
 		return (-1);
 	return (0);
 }
 
-int		ft_pixel_data(int fd, t_window *win)
+int ft_pixel_data(int fd, t_window *win)
 {
-	unsigned int	i;
-	unsigned int	x;
-	unsigned int	y;
-	unsigned char	*tab;
+	unsigned int i;
+	unsigned int x;
+	unsigned int y;
+	unsigned char *tab;
 
 	tab = malloc(3 * win->x * win->y);
 	if (!tab)

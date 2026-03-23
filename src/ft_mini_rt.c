@@ -12,17 +12,17 @@
 
 #include "mini_rt.h"
 
-int		ft_aff(t_window *win)
+int ft_aff(t_window *win)
 {
-	double	i;
-	double	j;
-	t_cam	*cam;
+	double i;
+	double j;
+	t_cam *cam;
 
 	if (win->img_ptr)
 		mlx_destroy_image(win->mlx_ptr, win->img_ptr);
 	win->img_ptr = mlx_new_image(win->mlx_ptr, win->x, win->y);
 	win->data = mlx_get_data_addr(win->img_ptr, &(win->depth),
-								&(win->size_line), &(win->endian));
+								  &(win->size_line), &(win->endian));
 	cam = win->cur_cam;
 	j = 0;
 	while (j != win->y)
@@ -35,16 +35,15 @@ int		ft_aff(t_window *win)
 		}
 		j += win->resol;
 	}
-	mlx_put_image_to_window(win->mlx_ptr, win->win_ptr,
-								win->img_ptr, 0, 0);
-		// return (ft_error(2, win, "put img to window"));
+	mlx_put_image_to_window(win->mlx_ptr, win->win_ptr, win->img_ptr, 0, 0);
+	// return (ft_error(2, win, "put img to window"));
 	return (0);
 }
 
-void	ft_parse(int *check, t_window *win, int fd)
+void ft_parse(int *check, t_window *win, int fd)
 {
-	int		res;
-	int		amb;
+	int res;
+	int amb;
 
 	res = 0;
 	amb = 0;
@@ -62,19 +61,20 @@ void	ft_parse(int *check, t_window *win, int fd)
 			ft_shape_init(win, &win->beg_sh, win->line);
 		else if (win->line[0] != '\0')
 			ft_error_id(win);
-		if (win->line){
+		if (win->line)
+		{
 			free(win->line);
 			win->line = NULL;
 		}
 		if (*check == 0)
-			break ;
+			break;
 	}
 	ft_error_param(amb, res, win);
 }
 
-void	ft_mlx_init(t_window *win, int ac, char **av)
+void ft_mlx_init(t_window *win, int ac, char **av)
 {
-	int		ret;
+	int ret;
 
 	mlx_key_hook(win->win_ptr, &ft_key, win);
 	mlx_mouse_hook(win->win_ptr, &ft_mouse, win);
@@ -87,10 +87,10 @@ void	ft_mlx_init(t_window *win, int ac, char **av)
 	mlx_loop(win->mlx_ptr);
 }
 
-int		main(int ac, char **av)
+int main(int ac, char **av)
 {
-	t_window	win;
-	int			check;
+	t_window win;
+	int check;
 
 	ft_window_init(&win);
 	if (ac > 3 || !av[1] || (ft_strrchr(av[1], '.')) == NULL)

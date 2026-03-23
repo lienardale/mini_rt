@@ -12,8 +12,7 @@
 
 #include "mini_rt.h"
 
-void
-	ft_cylinder_calc_one(t_shape *sh, t_ray *ray, t_mat *tmp, t_argb *dot)
+void ft_cylinder_calc_one(t_shape *sh, t_ray *ray, t_mat *tmp, t_argb *dot)
 {
 	sh->in = 0;
 	tmp->x = sh->pt_0;
@@ -26,17 +25,15 @@ void
 	dot->b = ft_dot_product(tmp->z, tmp->a);
 }
 
-void
-	ft_cylinder_calc_two(t_pt *calc, t_ray *ray, t_mat *tmp, t_argb *dot)
+void ft_cylinder_calc_two(t_pt *calc, t_ray *ray, t_mat *tmp, t_argb *dot)
 {
 	calc->x = dot->r - ft_sqr(dot->g);
 	calc->y = dot->r * ft_dot_product(tmp->a, ray->dir) - dot->b * dot->g;
-	calc->z = dot->r * ft_dot_product(tmp->a, tmp->a) - ft_sqr(dot->b) \
-		- ft_sqr(dot->a) * dot->r;
+	calc->z = dot->r * ft_dot_product(tmp->a, tmp->a) - ft_sqr(dot->b) -
+			  ft_sqr(dot->a) * dot->r;
 }
 
-double
-	ft_cylinder_calc_three(t_pt *calc, t_argb *dist, t_argb *dot, t_ray *ray)
+double ft_cylinder_calc_three(t_pt *calc, t_argb *dist, t_argb *dot, t_ray *ray)
 {
 	dist->a = calc->y * calc->y - calc->x * calc->z;
 	if (dist->a < 0.001 && (ray->lenght = -1))
@@ -45,20 +42,18 @@ double
 	return (0);
 }
 
-void
-	ft_cylinder_calc_four(t_pt *calc, t_argb *dist, t_argb *dot)
+void ft_cylinder_calc_four(t_pt *calc, t_argb *dist, t_argb *dot)
 {
 	dist->a = sqrt(dist->a);
 	dist->r = (-calc->y - dist->a) / calc->x;
 	dist->g = (-calc->y + dist->a) / calc->x;
-	if ((dist->g > 0.0001 && dist->g < dist->r)
-		|| (dist->g > 0.0001 && dist->r < 0.0001))
+	if ((dist->g > 0.0001 && dist->g < dist->r) ||
+		(dist->g > 0.0001 && dist->r < 0.0001))
 		dist->r = dist->g;
 	dist->b = dot->b + dist->r * dot->g;
 }
 
-double
-	ft_cylinder_calc_five(t_shape *sh, t_argb *dist, t_argb *dot, t_ray *ray)
+double ft_cylinder_calc_five(t_shape *sh, t_argb *dist, t_argb *dot, t_ray *ray)
 {
 	if (dist->b > 0.0001 && dist->b < dot->r)
 	{

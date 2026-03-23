@@ -12,7 +12,7 @@
 
 #include "mini_rt.h"
 
-void	ft_key_moove(int keycode, t_window *param)
+void ft_key_moove(int keycode, t_window *param)
 {
 	if (keycode == MV_R)
 		param->cur_cam->coord.x -= 5;
@@ -23,13 +23,12 @@ void	ft_key_moove(int keycode, t_window *param)
 	if (keycode == MV_FWD)
 		param->cur_cam->coord.z -= 5;
 	if (keycode == MV_UP)
-		param->cur_cam->coord.y += 5;	
+		param->cur_cam->coord.y += 5;
 	if (keycode == MV_DWN)
 		param->cur_cam->coord.y -= 5;
-
 }
 
-void	ft_key_look(int keycode, t_window *param)
+void ft_key_look(int keycode, t_window *param)
 {
 	if (keycode == LK_LFT)
 		param->cur_cam->ori.y -= 0.05;
@@ -40,12 +39,12 @@ void	ft_key_look(int keycode, t_window *param)
 	if (keycode == LK_DWN)
 		param->cur_cam->ori.x += 0.05;
 	if (keycode == LK_ZL)
-		param->cur_cam->ori.z -= 0.05;	
+		param->cur_cam->ori.z -= 0.05;
 	if (keycode == LK_ZR)
-		param->cur_cam->ori.z += 0.05;	
+		param->cur_cam->ori.z += 0.05;
 }
 
-void	ft_key_fov(int keycode, t_window *param)
+void ft_key_fov(int keycode, t_window *param)
 {
 	if (keycode == FOV_P)
 	{
@@ -59,7 +58,7 @@ void	ft_key_fov(int keycode, t_window *param)
 	}
 }
 
-int		ft_key(int keycode, t_window *param)
+int ft_key(int keycode, t_window *param)
 {
 	if (keycode == ESC)
 		ft_close(param);
@@ -79,7 +78,7 @@ int		ft_key(int keycode, t_window *param)
 	return (0);
 }
 
-int		ft_mouse(int button, int x, int y, t_window *param)
+int ft_mouse(int button, int x, int y, t_window *param)
 {
 	(void)button;
 	(void)x;

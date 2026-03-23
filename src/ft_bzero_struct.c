@@ -12,7 +12,7 @@
 
 #include "mini_rt.h"
 
-int		ft_window_init(t_window *win)
+int ft_window_init(t_window *win)
 {
 	win->fd = -1;
 	win->line = NULL;
@@ -31,7 +31,7 @@ int		ft_window_init(t_window *win)
 	return (0);
 }
 
-void	ft_argb_init(t_argb *a)
+void ft_argb_init(t_argb *a)
 {
 	a->a = 0;
 	a->r = 0;

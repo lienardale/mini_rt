@@ -12,15 +12,15 @@
 
 #include "mini_rt.h"
 
-void	ft_ray(double i, double j, t_window *win, t_cam *cam)
+void ft_ray(double i, double j, t_window *win, t_cam *cam)
 {
-	t_argb	color;
-	double	size;
-	t_mat	unit;
+	t_argb color;
+	double size;
+	t_mat unit;
 
-	unit.x = (t_pt) {1, 0, 0};
-	unit.y = (t_pt) {0, 1, 0};
-	unit.z = (t_pt) {0, 0, -1};
+	unit.x = (t_pt){1, 0, 0};
+	unit.y = (t_pt){0, 1, 0};
+	unit.z = (t_pt){0, 0, -1};
 	size = tan(cam->fov * M_PI / 180 / 2);
 	cam->pij = cam->coord;
 	cam->rij.x = (i - (win->x / 2));
@@ -34,7 +34,7 @@ void	ft_ray(double i, double j, t_window *win, t_cam *cam)
 	ft_pix(i, j, win, color);
 }
 
-void	ft_init_ray_cam(t_cam *cam, t_ray *ray)
+void ft_init_ray_cam(t_cam *cam, t_ray *ray)
 {
 	ray->dir = cam->rij;
 	ray->orig = cam->pij;
@@ -42,13 +42,13 @@ void	ft_init_ray_cam(t_cam *cam, t_ray *ray)
 	ray->unit = cam->rij;
 }
 
-t_argb	ft_trace_ray(t_window *win, t_cam *cam)
+t_argb ft_trace_ray(t_window *win, t_cam *cam)
 {
-	t_shape	*cur_shape;
-	t_shape	*min_sh;
-	double	min;
-	t_ray	ray;
-	t_argb	black;
+	t_shape *cur_shape;
+	t_shape *min_sh;
+	double min;
+	t_ray ray;
+	t_argb black;
 
 	cur_shape = win->beg_sh;
 	min_sh = NULL;
@@ -71,9 +71,9 @@ t_argb	ft_trace_ray(t_window *win, t_cam *cam)
 	return (black);
 }
 
-t_ray	ft_shoot_ray(t_pt orig, t_pt dir, double t)
+t_ray ft_shoot_ray(t_pt orig, t_pt dir, double t)
 {
-	t_ray	ray;
+	t_ray ray;
 
 	ray.orig = orig;
 	ray.dir = dir;

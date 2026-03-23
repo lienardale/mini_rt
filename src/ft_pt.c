@@ -12,7 +12,7 @@
 
 #include "mini_rt.h"
 
-void	ft_swap_pt(t_pt *a, t_pt *b)
+void ft_swap_pt(t_pt *a, t_pt *b)
 {
 	t_pt c;
 
@@ -21,28 +21,28 @@ void	ft_swap_pt(t_pt *a, t_pt *b)
 	*b = c;
 }
 
-double	ft_sqr(double d)
+double ft_sqr(double d)
 {
 	return (d * d);
 }
 
-void	ft_inv_pt(t_pt *dir)
+void ft_inv_pt(t_pt *dir)
 {
 	dir->x = 1 / dir->x;
 	dir->y = 1 / dir->y;
 	dir->z = 1 / dir->z;
 }
 
-void	ft_pt_init(t_pt *a, double x, double y, double z)
+void ft_pt_init(t_pt *a, double x, double y, double z)
 {
 	a->x = x;
 	a->y = y;
 	a->z = z;
 }
 
-t_pt	ft_pt_create(double x, double y, double z)
+t_pt ft_pt_create(double x, double y, double z)
 {
-	t_pt	a;
+	t_pt a;
 
 	a.x = x;
 	a.y = y;

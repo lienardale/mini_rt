@@ -12,7 +12,7 @@
 
 #include "mini_rt.h"
 
-int		ft_which_id(char *line)
+int ft_which_id(char *line)
 {
 	if (line[0] == 's' && (ft_isalpha(line[1])) == 1)
 	{
@@ -30,7 +30,7 @@ int		ft_which_id(char *line)
 	return (-1);
 }
 
-void	ft_iterate_in_line(char **line)
+void ft_iterate_in_line(char **line)
 {
 	while ((ft_isdigit(**line)) == 1 || **line == '.' || **line == ',')
 		(*line)++;
@@ -38,7 +38,7 @@ void	ft_iterate_in_line(char **line)
 		(*line)++;
 }
 
-int		ft_cam_init(t_window *win, t_cam **begin, char *line)
+int ft_cam_init(t_window *win, t_cam **begin, char *line)
 {
 	t_cam *cur;
 
@@ -49,20 +49,20 @@ int		ft_cam_init(t_window *win, t_cam **begin, char *line)
 	while ((ft_isspace(*line)) == 1 || (ft_isalpha(*line)) == 1)
 		line++;
 	(ft_isnum(line) == 1) ? ft_point_init(win, &(*cur).coord, &line)
-		: ft_error(3, win, "camera");
+						  : ft_error(3, win, "camera");
 	(ft_isnum(line) == 1) ? ft_point_init(win, &(*cur).ori, &line)
-		: ft_error(7, win, "camera orientation");
+						  : ft_error(7, win, "camera orientation");
 	cur->fov = (ft_isdigit(*line) == 1) ? ft_atoi(line)
-		: ft_error(7, win, "camera fov");
+										: ft_error(7, win, "camera fov");
 	while ((ft_isdigit(*line)) == 1)
 		line++;
 	while ((ft_isspace(*line)) == 1)
 		line++;
-	return (*line == '\0' ?
-		ft_check_cam_parsing(win, cur) : ft_error(4, win, "camera"));
+	return (*line == '\0' ? ft_check_cam_parsing(win, cur)
+						  : ft_error(4, win, "camera"));
 }
 
-int		ft_light_init(t_window *win, t_light **begin, char *line)
+int ft_light_init(t_window *win, t_light **begin, char *line)
 {
 	t_light *cur;
 
@@ -73,15 +73,16 @@ int		ft_light_init(t_window *win, t_light **begin, char *line)
 	while ((ft_isspace(*line)) == 1 || (ft_isalpha(*line)) == 1)
 		line++;
 	(ft_isnum(line) == 1) ? ft_point_init(win, &(*cur).coord, &line)
-		: ft_error(3, win, "light");
-	(*cur).light_ratio = ((ft_isdigit(*line) == 1) ? ft_atof(line)
-		: ft_error(7, win, "light ratio"));
+						  : ft_error(3, win, "light");
+	(*cur).light_ratio =
+		((ft_isdigit(*line) == 1) ? ft_atof(line)
+								  : ft_error(7, win, "light ratio"));
 	while ((ft_isdigit(*line)) == 1 || *line == '.')
 		line++;
 	while ((ft_isspace(*line)) == 1)
 		line++;
 	(ft_isdigit(*line) == 1) ? ft_color_init(win, &(*cur).col, &line)
-		: ft_error(7, win, "light color");
+							 : ft_error(7, win, "light color");
 	return ((*line == '\0') ? ft_check_light_parsing(win, cur)
-		: ft_error(4, win, "light"));
+							: ft_error(4, win, "light"));
 }

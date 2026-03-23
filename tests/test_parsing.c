@@ -148,7 +148,181 @@ TEST(test_argb_init)
 	ASSERT_DBL_EQ(0.0, a.b);
 }
 
-int	main(void)
+/* ========== ft_check_resol tests ========== */
+
+TEST(test_check_resol_valid)
+{
+	t_window win;
+	ft_window_init(&win);
+	win.x = 1920;
+	win.y = 1080;
+	ASSERT_TRUE(ft_check_resol(&win) == 0);
+	ASSERT_TRUE(win.x == 1920);
+	ASSERT_TRUE(win.y == 1080);
+}
+
+TEST(test_check_resol_clamped)
+{
+	t_window win;
+	ft_window_init(&win);
+	win.x = 5000;
+	win.y = 3000;
+	ASSERT_TRUE(ft_check_resol(&win) == 0);
+	ASSERT_TRUE(win.x == 2560);
+	ASSERT_TRUE(win.y == 1440);
+}
+
+TEST(test_check_resol_invalid_zero)
+{
+	t_window win;
+	ft_window_init(&win);
+	win.x = 0;
+	win.y = 1080;
+	ASSERT_TRUE(ft_check_resol(&win) != 0);
+}
+
+/* ========== ft_check_amb_light tests ========== */
+
+TEST(test_check_amb_light_valid)
+{
+	t_window win;
+	ft_window_init(&win);
+	win.ratio = 0.5;
+	win.col = (t_argb){0, 128, 128, 128};
+	ASSERT_TRUE(ft_check_amb_light(&win) == 0);
+}
+
+TEST(test_check_amb_light_no_ratio)
+{
+	t_window win;
+	ft_window_init(&win);
+	win.ratio = 0;
+	ASSERT_TRUE(ft_check_amb_light(&win) != 0);
+}
+
+TEST(test_check_amb_light_bad_ratio)
+{
+	t_window win;
+	ft_window_init(&win);
+	win.ratio = 1.5;
+	ASSERT_TRUE(ft_check_amb_light(&win) != 0);
+}
+
+TEST(test_check_amb_light_bad_color)
+{
+	t_window win;
+	ft_window_init(&win);
+	win.ratio = 0.5;
+	win.col = (t_argb){0, 300, 0, 0};
+	ASSERT_TRUE(ft_check_amb_light(&win) != 0);
+}
+
+/* ========== ft_check_cam_parsing tests ========== */
+
+TEST(test_check_cam_valid)
+{
+	t_window win;
+	t_cam cam;
+
+	ft_window_init(&win);
+	memset(&cam, 0, sizeof(t_cam));
+	cam.coord = ft_pt_create(0, 0, 0);
+	cam.ori = ft_pt_create(0, 0, -1);
+	cam.fov = 70;
+	ASSERT_TRUE(ft_check_cam_parsing(&win, &cam) == 0);
+}
+
+TEST(test_check_cam_null)
+{
+	t_window win;
+	ft_window_init(&win);
+	ASSERT_TRUE(ft_check_cam_parsing(&win, NULL) != 0);
+}
+
+TEST(test_check_cam_bad_fov)
+{
+	t_window win;
+	t_cam cam;
+
+	ft_window_init(&win);
+	memset(&cam, 0, sizeof(t_cam));
+	cam.fov = 200;
+	cam.ori = ft_pt_create(0, 0, -1);
+	ASSERT_TRUE(ft_check_cam_parsing(&win, &cam) != 0);
+}
+
+TEST(test_check_cam_bad_ori)
+{
+	t_window win;
+	t_cam cam;
+
+	ft_window_init(&win);
+	memset(&cam, 0, sizeof(t_cam));
+	cam.fov = 70;
+	cam.ori = ft_pt_create(5, 0, 0);
+	ASSERT_TRUE(ft_check_cam_parsing(&win, &cam) != 0);
+}
+
+/* ========== ft_check_light_parsing tests ========== */
+
+TEST(test_check_light_valid)
+{
+	t_window win;
+	t_light light;
+
+	ft_window_init(&win);
+	memset(&light, 0, sizeof(t_light));
+	light.coord = ft_pt_create(0, 10, 0);
+	light.light_ratio = 0.7;
+	light.col = (t_argb){0, 255, 255, 255};
+	ASSERT_TRUE(ft_check_light_parsing(&win, &light) == 0);
+}
+
+TEST(test_check_light_null)
+{
+	t_window win;
+	ft_window_init(&win);
+	ASSERT_TRUE(ft_check_light_parsing(&win, NULL) != 0);
+}
+
+TEST(test_check_light_bad_ratio)
+{
+	t_window win;
+	t_light light;
+
+	ft_window_init(&win);
+	memset(&light, 0, sizeof(t_light));
+	light.light_ratio = 2.0;
+	light.col = (t_argb){0, 255, 255, 255};
+	ASSERT_TRUE(ft_check_light_parsing(&win, &light) != 0);
+}
+
+/* ========== ft_check_parsing (integration) ========== */
+
+TEST(test_check_parsing_full)
+{
+	t_window win;
+	t_cam cam;
+
+	ft_window_init(&win);
+	win.x = 640;
+	win.y = 480;
+	win.ratio = 0.5;
+	win.col = (t_argb){0, 255, 255, 255};
+
+	memset(&cam, 0, sizeof(t_cam));
+	cam.coord = ft_pt_create(0, 0, 0);
+	cam.ori = ft_pt_create(0, 0, -1);
+	cam.fov = 70;
+	cam.next = NULL;
+	win.beg_cam = &cam;
+
+	ft_check_parsing(&win);
+	ASSERT_TRUE(win.x == 640);
+	ASSERT_TRUE(win.y == 480);
+}
+
+int main(void)
 {
 	TEST_SUITE("ft_which_id");
 	RUN_TEST(test_which_id_sphere);
@@ -176,6 +350,31 @@ int	main(void)
 	TEST_SUITE("ft_window_init / ft_argb_init");
 	RUN_TEST(test_window_init);
 	RUN_TEST(test_argb_init);
+
+	TEST_SUITE("ft_check_resol");
+	RUN_TEST(test_check_resol_valid);
+	RUN_TEST(test_check_resol_clamped);
+	RUN_TEST(test_check_resol_invalid_zero);
+
+	TEST_SUITE("ft_check_amb_light");
+	RUN_TEST(test_check_amb_light_valid);
+	RUN_TEST(test_check_amb_light_no_ratio);
+	RUN_TEST(test_check_amb_light_bad_ratio);
+	RUN_TEST(test_check_amb_light_bad_color);
+
+	TEST_SUITE("ft_check_cam_parsing");
+	RUN_TEST(test_check_cam_valid);
+	RUN_TEST(test_check_cam_null);
+	RUN_TEST(test_check_cam_bad_fov);
+	RUN_TEST(test_check_cam_bad_ori);
+
+	TEST_SUITE("ft_check_light_parsing");
+	RUN_TEST(test_check_light_valid);
+	RUN_TEST(test_check_light_null);
+	RUN_TEST(test_check_light_bad_ratio);
+
+	TEST_SUITE("ft_check_parsing (integration)");
+	RUN_TEST(test_check_parsing_full);
 
 	TEST_REPORT();
 }

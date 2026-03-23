@@ -12,7 +12,7 @@
 
 #include "mini_rt.h"
 
-int	ft_check_resol(t_window *win)
+int ft_check_resol(t_window *win)
 {
 	if (!win || !win->x || !win->y || win->x <= 0 || win->y <= 0)
 	{
@@ -25,7 +25,7 @@ int	ft_check_resol(t_window *win)
 	return (0);
 }
 
-int	ft_check_amb_light(t_window *win)
+int ft_check_amb_light(t_window *win)
 {
 	int check;
 
@@ -39,7 +39,7 @@ int	ft_check_amb_light(t_window *win)
 	return ((check == 0) ? check : ft_error(check, win, "amb_light"));
 }
 
-int	ft_check_cam_parsing(t_window *win, t_cam *current)
+int ft_check_cam_parsing(t_window *win, t_cam *current)
 {
 	int check;
 
@@ -52,7 +52,7 @@ int	ft_check_cam_parsing(t_window *win, t_cam *current)
 	return ((check == 0) ? check : ft_error(check, win, "camera"));
 }
 
-int	ft_check_light_parsing(t_window *win, t_light *current)
+int ft_check_light_parsing(t_window *win, t_light *current)
 {
 	int check;
 
@@ -65,7 +65,7 @@ int	ft_check_light_parsing(t_window *win, t_light *current)
 	return ((check == 0) ? check : ft_error(check, win, "light"));
 }
 
-void	ft_check_parsing(t_window *win)
+void ft_check_parsing(t_window *win)
 {
 	ft_check_resol(win);
 	ft_check_amb_light(win);

@@ -12,7 +12,7 @@
 
 #include "mini_rt.h"
 
-double	ft_lenght(t_pt a)
+double ft_lenght(t_pt a)
 {
 	double len;
 
@@ -20,24 +20,24 @@ double	ft_lenght(t_pt a)
 	return (len);
 }
 
-void	ft_inv_norm(t_pt *dir)
+void ft_inv_norm(t_pt *dir)
 {
 	dir->x = -dir->x;
 	dir->y = -dir->y;
 	dir->z = -dir->z;
 }
 
-t_pt	ft_normal_vect(t_pt a)
+t_pt ft_normal_vect(t_pt a)
 {
-	double	len;
-	t_pt	b;
+	double len;
+	t_pt b;
 
 	len = ft_lenght(a);
 	b = ft_div_scal(len, a);
 	return (b);
 }
 
-double	ft_dot_product(t_pt a, t_pt b)
+double ft_dot_product(t_pt a, t_pt b)
 {
 	double c;
 
@@ -45,9 +45,9 @@ double	ft_dot_product(t_pt a, t_pt b)
 	return (c);
 }
 
-t_pt	ft_div_vect(t_pt a, t_pt b)
+t_pt ft_div_vect(t_pt a, t_pt b)
 {
-	t_pt	c;
+	t_pt c;
 
 	c.x = (a.x / b.x);
 	c.y = (a.y / b.y);

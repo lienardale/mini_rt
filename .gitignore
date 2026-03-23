@@ -27,6 +27,7 @@ miniRT
 run_tests
 run_test_*
 cov_test_*
+miniRT.bmp
 coverage/
 *.gcno
 *.gcda
