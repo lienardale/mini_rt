@@ -33,3 +33,18 @@ void ft_which_shape(t_shape *sh, t_ray *ray)
 	else if (sh->id == 't')
 		ft_intersect_ray_triangle(sh, ray);
 }
+
+void ft_trace_shapes(t_shape *cur_shape, t_ray *ray, double *min,
+					 t_shape **min_sh)
+{
+	while (cur_shape)
+	{
+		ft_which_shape(cur_shape, ray);
+		if (ray->lenght > 0.0001 && ray->lenght < *min)
+		{
+			*min = ray->lenght;
+			*min_sh = cur_shape;
+		}
+		cur_shape = cur_shape->next;
+	}
+}

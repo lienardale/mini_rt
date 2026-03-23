@@ -27,6 +27,11 @@ void ft_cleanup(t_window *win)
 	}
 	ft_free_lst_cam(win);
 	ft_free_lst_light(win);
+	if (win->bvh)
+	{
+		ft_bvh_free(win->bvh);
+		win->bvh = NULL;
+	}
 	ft_free_lst_sh(win);
 	if (win->mlx_ptr && win->img_ptr)
 		mlx_destroy_image(win->mlx_ptr, win->img_ptr);

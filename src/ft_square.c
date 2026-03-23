@@ -66,8 +66,7 @@ void ft_intersect_ray_square(t_shape *sh, t_ray *ray)
 	t_pt r;
 
 	sh->n = sh->ori;
-	t = -ft_dot_product(sh->n, sh->pt_0);
-	t = -(ft_dot_product(sh->n, ray->orig) + t) /
+	t = -(ft_dot_product(sh->n, ray->orig) + sh->plane_d) /
 		ft_dot_product(sh->n, ray->dir);
 	if (t < 0.0001)
 	{

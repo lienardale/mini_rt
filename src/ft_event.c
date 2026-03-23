@@ -66,7 +66,15 @@ int ft_key(int keycode, t_window *param)
 	ft_key_look(keycode, param);
 	ft_key_fov(keycode, param);
 	if (keycode == CHG_RES)
-		param->resol = (param->resol == 4) ? 1 : 4;
+	{
+		if (param->resol == 4)
+		{
+			param->resol = 1;
+			ft_aff(param);
+			return (0);
+		}
+		param->resol = 4;
+	}
 	if (keycode == NXT_CAM)
 	{
 		if (param->cur_cam->next)
@@ -74,6 +82,9 @@ int ft_key(int keycode, t_window *param)
 		else
 			param->cur_cam = param->beg_cam;
 	}
+	param->resol = 4;
+	ft_aff(param);
+	param->resol = 1;
 	ft_aff(param);
 	return (0);
 }

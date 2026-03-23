@@ -16,11 +16,11 @@ void ft_cylinder_calc_one(t_shape *sh, t_ray *ray, t_mat *tmp, t_argb *dot)
 {
 	sh->in = 0;
 	tmp->x = sh->pt_0;
-	tmp->y = ft_addition(sh->pt_0, ft_multi_scal(sh->height, sh->ori));
+	tmp->y = sh->cyl_top;
 	dot->a = sh->diameter / 2;
-	tmp->z = ft_subtraction(tmp->y, tmp->x);
+	tmp->z = sh->cyl_axis;
 	tmp->a = ft_subtraction(ray->orig, tmp->x);
-	dot->r = ft_dot_product(tmp->z, tmp->z);
+	dot->r = sh->cyl_axis_len_sq;
 	dot->g = ft_dot_product(tmp->z, ray->dir);
 	dot->b = ft_dot_product(tmp->z, tmp->a);
 }

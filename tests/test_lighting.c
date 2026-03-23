@@ -46,8 +46,8 @@ TEST(test_shadow_no_shapes)
 	ft_window_init(&win);
 	t_pt dir = ft_pt_create(0, 1, 0);
 	t_pt origin = ft_pt_create(0, 0, 0);
-	double result = ft_shadow(&win, dir, origin, NULL);
-	ASSERT_TRUE(result == INFINITY);
+	double result = ft_shadow(&win, dir, origin, 100.0);
+	ASSERT_TRUE(result > 0);
 }
 
 TEST(test_shadow_with_blocking_shape)
@@ -61,13 +61,13 @@ TEST(test_shadow_with_blocking_shape)
 	sphere.pt_0 = ft_pt_create(0, 5, 0);
 	sphere.diameter = 2.0;
 	sphere.next = NULL;
+	ft_precompute_shape(&sphere);
 	win.beg_sh = &sphere;
 
 	t_pt dir = ft_normal_vect(ft_pt_create(0, 1, 0));
 	t_pt origin = ft_pt_create(0, 0, 0);
-	double result = ft_shadow(&win, dir, origin, NULL);
-	ASSERT_TRUE(result < INFINITY);
-	ASSERT_TRUE(result > 0);
+	double result = ft_shadow(&win, dir, origin, 100.0);
+	ASSERT_TRUE(result < 0);
 }
 
 TEST(test_shadow_no_occlusion)
@@ -81,12 +81,13 @@ TEST(test_shadow_no_occlusion)
 	sphere.pt_0 = ft_pt_create(10, 0, 0);
 	sphere.diameter = 1.0;
 	sphere.next = NULL;
+	ft_precompute_shape(&sphere);
 	win.beg_sh = &sphere;
 
 	t_pt dir = ft_normal_vect(ft_pt_create(0, 1, 0));
 	t_pt origin = ft_pt_create(0, 0, 0);
-	double result = ft_shadow(&win, dir, origin, NULL);
-	ASSERT_TRUE(result == INFINITY);
+	double result = ft_shadow(&win, dir, origin, 100.0);
+	ASSERT_TRUE(result > 0);
 }
 
 /* ========== ft_light tests ========== */
@@ -203,6 +204,7 @@ TEST(test_trace_ray_hits_sphere)
 	sphere.diameter = 2.0;
 	sphere.color = (t_argb){0, 255, 0, 0};
 	sphere.next = NULL;
+	ft_precompute_shape(&sphere);
 	win.beg_sh = &sphere;
 
 	memset(&light, 0, sizeof(t_light));

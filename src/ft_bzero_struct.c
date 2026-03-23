@@ -28,6 +28,7 @@ int ft_window_init(t_window *win)
 	win->y = 0;
 	win->ratio = -1;
 	win->resol = RESOL;
+	win->bvh = NULL;
 	return (0);
 }
 

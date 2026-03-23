@@ -69,10 +69,10 @@ void ft_intersect_ray_sphere(t_shape *sh, t_ray *ray)
 
 	sh->in = 0;
 	oc = ft_subtraction(ray->orig, sh->pt_0);
-	if (ft_lenght(oc) < sh->diameter)
+	if (ft_dot_product(oc, oc) < sh->radius_sq)
 		ft_multi_scal(-1, oc);
 	b = 2 * ft_dot_product(oc, ray->dir);
-	c = ft_dot_product(oc, oc) - ft_sqr(sh->diameter / 2);
+	c = ft_dot_product(oc, oc) - sh->radius_sq;
 	calc.x = (b * b) - (4 * c);
 	if (calc.x < 0 && (ray->lenght = -1))
 		return;

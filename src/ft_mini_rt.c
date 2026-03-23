@@ -106,6 +106,8 @@ int main(int ac, char **av)
 	if (close(win.fd) < 0)
 		return (ft_error(2, &win, "close"));
 	ft_check_parsing(&win);
+	ft_precompute_shapes(&win);
+	ft_build_scene_bvh(&win);
 	win.cur_cam = win.beg_cam;
 	if (!(win.mlx_ptr = mlx_init()))
 		return (check = ft_error(2, &win, "initialize mlx"));

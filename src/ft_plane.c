@@ -52,10 +52,8 @@ void ft_plane_norm(t_shape *sh)
 void ft_intersect_ray_plan(t_shape *sh, t_ray *ray)
 {
 	double t;
-	double d;
 
-	d = -ft_dot_product(sh->ori, sh->pt_0);
-	t = -(ft_dot_product(sh->ori, ray->orig) + d) /
+	t = -(ft_dot_product(sh->ori, ray->orig) + sh->plane_d) /
 		ft_dot_product(sh->ori, ray->dir);
 	if (t > 0.0001)
 	{
