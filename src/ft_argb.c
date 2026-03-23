@@ -49,13 +49,6 @@ t_argb ft_albedo(t_pt a, t_argb col)
 	c.r = (a.x * col.r / 255);
 	c.g = (a.y * col.g / 255);
 	c.b = (a.z * col.b / 255);
-	if (col.a != 0)
-	{
-		col.a = (col.a == 1) ? 2 : col.a;
-		c.r /= col.a;
-		c.g /= col.a;
-		c.b /= col.a;
-	}
 	return (c);
 }
 

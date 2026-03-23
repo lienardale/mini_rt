@@ -91,7 +91,6 @@ t_argb ft_trace_ray_recursive(t_window *win, t_ray *ray, int depth)
 		min_sh->color = ft_get_shape_color(min_sh, ray);
 	if (min_sh->mat.bump_map)
 		ft_apply_bump_map(min_sh, ray);
-	min_sh->color.a = ft_lstsize_light(win);
 	color = ft_albedo(ft_pre_light(win, min_sh, min, ray), min_sh->color);
 	if (depth < MAX_REFLECT_DEPTH && min_sh->mat.reflectivity > 0.001)
 		ft_apply_reflection(win, ray, min_sh, min, &color, depth);
