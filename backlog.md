@@ -48,12 +48,12 @@
 
 ## 3. Implement Multithreading
 
-- [ ] Evaluate threading approaches: pthreads vs OpenMP for pixel-level parallelism
-- [ ] Partition the image into horizontal scanline bands (or tiles) for parallel rendering
-- [ ] Implement thread pool to avoid per-frame thread creation overhead
-- [ ] Ensure thread safety: scene data is read-only during rendering (no shared mutable state)
-- [ ] Handle pixel buffer write synchronization (each thread writes to its own region)
-- [ ] Add a `--threads N` CLI option or auto-detect available CPU cores
+- [x] Evaluate threading approaches: pthreads vs OpenMP for pixel-level parallelism
+- [x] Partition the image into horizontal scanline bands (or tiles) for parallel rendering
+- [x] Implement thread pool to avoid per-frame thread creation overhead
+- [x] Ensure thread safety: scene data is read-only during rendering (no shared mutable state)
+- [x] Handle pixel buffer write synchronization (each thread writes to its own region)
+- [x] Add a `--threads N` CLI option or auto-detect available CPU cores
 - [ ] Benchmark single-threaded vs multi-threaded rendering and document speedup
 - [ ] Consider GPU acceleration (OpenCL/Vulkan compute) as a future stretch goal
 
