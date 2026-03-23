@@ -6,7 +6,7 @@
 /*   By: alienard <alienard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/18 21:56:28 by alienard          #+#    #+#             */
-/*   Updated: 2020/02/27 17:46:22 by alienard         ###   ########.fr       */
+/*   Updated: 2026/03/23 00:00:00 by alienard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,22 @@ void ft_which_shape(t_shape *sh, t_ray *ray)
 		ft_intersect_ray_cylinder(sh, ray);
 	else if (sh->id == 't')
 		ft_intersect_ray_triangle(sh, ray);
+	else if (sh->id == 'o')
+		ft_intersect_ray_cone(sh, ray);
+	else if (sh->id == 'k')
+		ft_intersect_ray_disk(sh, ray);
+	else if (sh->id == 'u')
+		ft_intersect_ray_torus(sh, ray);
+	else if (sh->id == 'e')
+		ft_intersect_ray_ellipsoid(sh, ray);
+	else if (sh->id == 'b')
+		ft_intersect_ray_box(sh, ray);
+	else if (sh->id == 'h')
+		ft_intersect_ray_hyperboloid(sh, ray);
+	else if (sh->id == 'a')
+		ft_intersect_ray_paraboloid(sh, ray);
+	else if (sh->id == 'g')
+		ray->lenght = -1;
 }
 
 void ft_trace_shapes(t_shape *cur_shape, t_ray *ray, double *min,

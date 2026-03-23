@@ -28,6 +28,51 @@ TEST(test_which_id_triangle)
 	ASSERT_TRUE(ft_which_id("tr -1,0,0 1,0,0 0,1,0 0,0,255") == 't');
 }
 
+TEST(test_which_id_cone)
+{
+	ASSERT_TRUE(ft_which_id("co 0,0,0 0,1,0 1.0 3.0 0,255,0") == 'o');
+}
+
+TEST(test_which_id_disk)
+{
+	ASSERT_TRUE(ft_which_id("dk 0,0,0 0,0,1 2.0 255,0,0") == 'k');
+}
+
+TEST(test_which_id_ellipsoid)
+{
+	ASSERT_TRUE(ft_which_id("el 0,0,0 2,1,1 255,0,0") == 'e');
+}
+
+TEST(test_which_id_box)
+{
+	ASSERT_TRUE(ft_which_id("bx 0,0,0 2,2,2 255,0,0") == 'b');
+}
+
+TEST(test_which_id_torus)
+{
+	ASSERT_TRUE(ft_which_id("to 0,0,0 0,1,0 2.0 0.5 255,0,0") == 'u');
+}
+
+TEST(test_which_id_hyperboloid)
+{
+	ASSERT_TRUE(ft_which_id("hy 0,0,0 0,1,0 1,1,0 4.0 255,0,0") == 'h');
+}
+
+TEST(test_which_id_paraboloid)
+{
+	ASSERT_TRUE(ft_which_id("pa 0,0,0 0,1,0 0.5 4.0 255,0,0") == 'a');
+}
+
+TEST(test_which_id_mesh)
+{
+	ASSERT_TRUE(ft_which_id("me model.obj 0,0,0 255,0,0") == 'm');
+}
+
+TEST(test_which_id_csg)
+{
+	ASSERT_TRUE(ft_which_id("csg U 0 1 255,0,0") == 'g');
+}
+
 TEST(test_which_id_invalid)
 {
 	ASSERT_TRUE(ft_which_id("xx 0,0,0") == -1);
@@ -330,6 +375,15 @@ int main(void)
 	RUN_TEST(test_which_id_square);
 	RUN_TEST(test_which_id_cylinder);
 	RUN_TEST(test_which_id_triangle);
+	RUN_TEST(test_which_id_cone);
+	RUN_TEST(test_which_id_disk);
+	RUN_TEST(test_which_id_ellipsoid);
+	RUN_TEST(test_which_id_box);
+	RUN_TEST(test_which_id_torus);
+	RUN_TEST(test_which_id_hyperboloid);
+	RUN_TEST(test_which_id_paraboloid);
+	RUN_TEST(test_which_id_mesh);
+	RUN_TEST(test_which_id_csg);
 	RUN_TEST(test_which_id_invalid);
 
 	TEST_SUITE("ft_color_check");

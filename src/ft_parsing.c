@@ -60,15 +60,26 @@ int ft_shape_init(t_window *win, t_shape **begin, char *line)
 	i = 0;
 	if ((i = ft_which_id(line)) == -1)
 		return (ft_error(5, win, "shape"));
+	if (i == 'm')
+		return (ft_mesh_init(win, begin, line));
 	if (!(current = ft_calloc(1, sizeof(t_shape))))
 		return (ft_error(6, win, "shape"));
 	current->next = *begin;
 	*begin = current;
+	ft_material_default(&current->mat);
 	(i == 's') ? ft_sphere_init(win, &current, line) : 0;
 	(i == 'p') ? ft_plane_init(win, &current, line) : 0;
 	(i == 'q') ? ft_square_init(win, &current, line) : 0;
 	(i == 'y') ? ft_cylinder_init(win, &current, line) : 0;
 	(i == 't') ? ft_triangle_init(win, &current, line) : 0;
+	(i == 'o') ? ft_cone_init(win, &current, line) : 0;
+	(i == 'k') ? ft_disk_init(win, &current, line) : 0;
+	(i == 'u') ? ft_torus_init(win, &current, line) : 0;
+	(i == 'e') ? ft_ellipsoid_init(win, &current, line) : 0;
+	(i == 'b') ? ft_box_init(win, &current, line) : 0;
+	(i == 'h') ? ft_hyperboloid_init(win, &current, line) : 0;
+	(i == 'a') ? ft_paraboloid_init(win, &current, line) : 0;
+	(i == 'g') ? ft_csg_init(win, &current, line) : 0;
 	return (0);
 }
 

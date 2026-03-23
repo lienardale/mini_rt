@@ -6,7 +6,7 @@
 /*   By: alienard <alienard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/29 16:18:11 by alienard          #+#    #+#             */
-/*   Updated: 2022/06/14 16:33:43 by alienard         ###   ########.fr       */
+/*   Updated: 2026/03/23 00:00:00 by alienard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,14 @@
 
 #define RESOL 1
 #define MAX_THREADS 64
+#define MAX_REFLECT_DEPTH 4
+
+enum e_csg_op
+{
+	CSG_UNION = 0,
+	CSG_INTERSECT = 1,
+	CSG_DIFFERENCE = 2
+};
 
 typedef struct s_fileheader
 {
@@ -78,6 +86,31 @@ typedef struct s_argb
 	double g;
 	double b;
 } t_argb;
+
+typedef struct s_texture
+{
+	void *img;
+	char *data;
+	int width;
+	int height;
+	int bpp;
+	int line_len;
+	int endian;
+} t_texture;
+
+typedef struct s_material
+{
+	double reflectivity;
+	double transparency;
+	double refr_index;
+	double specular;
+	double shininess;
+	double tex_scale_u;
+	double tex_scale_v;
+	double bump_strength;
+	t_texture *texture;
+	t_texture *bump_map;
+} t_material;
 
 typedef struct s_cam
 {
@@ -133,6 +166,11 @@ typedef struct s_shape
 	t_pt cyl_top;
 	t_pt cyl_axis;
 	double cyl_axis_len_sq;
+	double cone_half_angle_sq;
+	int csg_op;
+	int csg_idx_a;
+	int csg_idx_b;
+	t_material mat;
 	struct s_shape *next;
 } t_shape;
 
@@ -173,6 +211,7 @@ void ft_parse_resol(int *res, t_window *win, char *line);
 void ft_parse_amb(int *amb, t_window *win, char *line);
 int ft_which_id(char *line);
 void ft_which_shape(t_shape *sh, t_ray *ray);
+void ft_which_shape_base(t_shape *sh, t_ray *ray);
 void ft_iterate_in_line(char **line);
 
 void ft_mlx_init(t_window *win, int ac, char **av);
@@ -191,6 +230,20 @@ int ft_plane_init(t_window *win, t_shape **current, char *line);
 int ft_square_init(t_window *win, t_shape **current, char *line);
 int ft_cylinder_init(t_window *win, t_shape **current, char *line);
 int ft_triangle_init(t_window *win, t_shape **current, char *line);
+int ft_cone_init(t_window *win, t_shape **current, char *line);
+int ft_disk_init(t_window *win, t_shape **current, char *line);
+int ft_torus_init(t_window *win, t_shape **current, char *line);
+int ft_ellipsoid_init(t_window *win, t_shape **current, char *line);
+int ft_box_init(t_window *win, t_shape **current, char *line);
+int ft_hyperboloid_init(t_window *win, t_shape **current, char *line);
+int ft_paraboloid_init(t_window *win, t_shape **current, char *line);
+int ft_csg_init(t_window *win, t_shape **current, char *line);
+int ft_mesh_init(t_window *win, t_shape **begin, char *line);
+int ft_load_obj_mesh(t_window *win, t_shape **begin, char *path,
+					 t_pt offset, t_argb color);
+void ft_mesh_create_triangles(t_window *win, t_shape **begin, t_pt *verts,
+							  int *faces, int fcount, t_pt offset,
+							  t_argb color);
 
 void ft_precompute_shape(t_shape *sh);
 void ft_precompute_shapes(t_window *win);
@@ -214,6 +267,13 @@ int ft_plane_check(t_window *win, t_shape **current);
 int ft_square_check(t_window *win, t_shape **current);
 int ft_cylinder_check(t_window *win, t_shape **current);
 int ft_triangle_check(t_window *win, t_shape **current);
+int ft_cone_check(t_window *win, t_shape **current);
+int ft_disk_check(t_window *win, t_shape **current);
+int ft_torus_check(t_window *win, t_shape **current);
+int ft_ellipsoid_check(t_window *win, t_shape **current);
+int ft_box_check(t_window *win, t_shape **current);
+int ft_hyperboloid_check(t_window *win, t_shape **current);
+int ft_paraboloid_check(t_window *win, t_shape **current);
 
 t_pt ft_pt_create(double x, double y, double z);
 void ft_swap_pt(t_pt *a, t_pt *b);
@@ -269,6 +329,9 @@ void ft_db_mult_to_add_pt(t_pt *a, double b, t_argb c);
 int ft_aff(t_window *win);
 void ft_ray(double x, double y, t_window *win, t_cam *cur_cam);
 t_argb ft_trace_ray(t_window *win, t_cam *cam);
+t_argb ft_trace_ray_recursive(t_window *win, t_ray *ray, int depth);
+void ft_apply_reflection(t_window *win, t_ray *ray, t_shape *sh,
+						 double t, t_argb *color, int depth);
 t_ray ft_shoot_ray(t_pt orig, t_pt dir, double t);
 t_ray ft_no_ray(void);
 void ft_trace_shapes(t_shape *cur_shape, t_ray *ray, double *min,
@@ -280,6 +343,38 @@ void ft_intersect_ray_plan(t_shape *sh, t_ray *ray);
 void ft_intersect_ray_square(t_shape *sh, t_ray *ray);
 void ft_intersect_ray_cylinder(t_shape *sh, t_ray *ray);
 void ft_intersect_ray_triangle(t_shape *sh, t_ray *ray);
+void ft_intersect_ray_cone(t_shape *sh, t_ray *ray);
+void ft_intersect_ray_disk(t_shape *sh, t_ray *ray);
+void ft_intersect_ray_torus(t_shape *sh, t_ray *ray);
+void ft_intersect_ray_ellipsoid(t_shape *sh, t_ray *ray);
+void ft_intersect_ray_box(t_shape *sh, t_ray *ray);
+void ft_intersect_ray_hyperboloid(t_shape *sh, t_ray *ray);
+void ft_intersect_ray_paraboloid(t_shape *sh, t_ray *ray);
+void ft_intersect_ray_csg(t_shape *sh, t_ray *ray, t_window *win);
+
+void ft_cone_solve(t_shape *sh, t_ray *ray, double a, t_pt bcd);
+void ft_cone_norm(t_shape *sh, t_ray *ray);
+void ft_ellipsoid_solve(t_shape *sh, t_ray *ray, double a, t_pt bc);
+void ft_ellipsoid_norm(t_shape *sh, t_ray *ray);
+void ft_box_compute_normal(t_shape *sh, t_ray *ray);
+void ft_torus_norm(t_shape *sh, t_ray *ray);
+void ft_torus_world_normal(t_shape *sh);
+int ft_quartic_inner(double a, double b, double cc, double d,
+					 double *cubic_roots, double *roots);
+void ft_hyperboloid_norm(t_shape *sh, t_ray *ray);
+void ft_hyperboloid_solve(t_shape *sh, t_ray *ray, t_pt o, t_pt d);
+void ft_hyperboloid_pick(t_shape *sh, t_ray *ray, double t0, double t1);
+void ft_paraboloid_norm(t_shape *sh, t_ray *ray);
+void ft_paraboloid_solve(t_shape *sh, t_ray *ray, t_pt o, t_pt d);
+void ft_paraboloid_pick(t_shape *sh, t_ray *ray, double t0, double t1);
+
+void ft_csg_combine(t_shape *sh, t_ray *ray, t_ray *ray_a, t_ray *ray_b,
+					t_shape *sa, t_shape *sb);
+void ft_csg_intersect(t_shape *sh, t_ray *ray, t_ray *ray_a, t_ray *ray_b,
+					  t_shape *sa, t_shape *sb);
+void ft_csg_difference(t_shape *sh, t_ray *ray, t_ray *ray_a, t_ray *ray_b,
+						t_shape *sa, t_shape *sb);
+t_shape *ft_get_shape_by_index(t_window *win, int idx);
 
 void ft_shape_norm(t_shape *sh, t_ray *ray);
 void ft_sphere_norm(t_shape *sh, t_ray *ray);
@@ -300,6 +395,24 @@ double ft_cylinder_calc_three(t_pt *calc, t_argb *dist, t_argb *dot,
 void ft_cylinder_calc_four(t_pt *calc, t_argb *dist, t_argb *dot);
 double ft_cylinder_calc_five(t_shape *sh, t_argb *dist, t_argb *dot,
 							 t_ray *ray);
+void ft_cylinder_cap_check(t_shape *sh, t_ray *ray, double *best_t);
+
+void ft_material_default(t_material *mat);
+int ft_parse_material(t_window *win, t_material *mat, char **line);
+t_argb ft_apply_specular(t_pt view, t_pt light_dir, t_pt normal,
+						 t_material *mat, t_argb light_col);
+t_pt ft_reflect_ray(t_pt dir, t_pt normal);
+t_pt ft_refract_ray(t_pt dir, t_pt normal, double eta);
+
+t_texture *ft_texture_load(char *path, void *mlx_ptr);
+void ft_texture_free(t_texture *tex, void *mlx_ptr);
+t_argb ft_texture_sample(t_texture *tex, double u, double v);
+t_argb ft_get_shape_color(t_shape *sh, t_ray *ray);
+void ft_uv_sphere(t_shape *sh, t_ray *ray, double *u, double *v);
+void ft_uv_plane(t_shape *sh, t_ray *ray, double *u, double *v);
+void ft_uv_cylinder(t_shape *sh, t_ray *ray, double *u, double *v);
+void ft_uv_generic(t_shape *sh, t_ray *ray, double *u, double *v);
+void ft_apply_bump_map(t_shape *sh, t_ray *ray);
 
 void *ft_render_band(void *arg);
 int ft_aff_threaded(t_window *win);

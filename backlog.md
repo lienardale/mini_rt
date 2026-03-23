@@ -62,22 +62,22 @@
 ## 4. Add More Shapes Handling
 
 ### New Primitives
-- [ ] **Cone** — similar to cylinder but with tapering radius
-- [ ] **Disk** — circular planar shape (useful for cylinder caps)
-- [ ] **Torus** — donut shape (quartic intersection equation)
-- [ ] **Ellipsoid** — generalized sphere with non-uniform scaling
-- [ ] **Box/Cube** — axis-aligned or oriented bounding box (ray-AABB intersection)
+- [x] **Cone** — similar to cylinder but with tapering radius
+- [x] **Disk** — circular planar shape (useful for cylinder caps)
+- [x] **Torus** — donut shape (quartic intersection equation)
+- [x] **Ellipsoid** — generalized sphere with non-uniform scaling
+- [x] **Box/Cube** — axis-aligned or oriented bounding box (ray-AABB intersection)
 
 ### Composite & Advanced Shapes
-- [ ] **Mesh support** — load triangle meshes from OBJ/PLY files
-- [ ] **Constructive Solid Geometry (CSG)** — union, intersection, difference of shapes
-- [ ] **Quadric surfaces** — generalized second-degree surfaces (hyperboloid, paraboloid)
+- [x] **Mesh support** — load triangle meshes from OBJ files
+- [x] **Constructive Solid Geometry (CSG)** — union, intersection, difference of shapes
+- [x] **Quadric surfaces** — generalized second-degree surfaces (hyperboloid, paraboloid)
 
 ### Shape Enhancements
-- [ ] Add proper cylinder caps (disk intersection at top and bottom)
-- [ ] Support per-shape material properties (reflectivity, transparency, refractive index)
-- [ ] Add texture mapping (UV coordinates per shape type)
-- [ ] Add normal mapping / bump mapping for surface detail
+- [x] Add proper cylinder caps (disk intersection at top and bottom)
+- [x] Support per-shape material properties (reflectivity, transparency, refractive index)
+- [x] Add texture mapping (UV coordinates per shape type)
+- [x] Add normal mapping / bump mapping for surface detail
 
 ---
 

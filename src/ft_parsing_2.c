@@ -23,10 +23,29 @@ int ft_which_id(char *line)
 	}
 	if (line[0] == 'c' && line[1] == 'y' && (ft_isspace(line[2])) == 1)
 		return ('y');
+	if (line[0] == 'c' && line[1] == 'o' && (ft_isspace(line[2])) == 1)
+		return ('o');
+	if (line[0] == 'c' && line[1] == 's' && line[2] == 'g'
+		&& (ft_isspace(line[3])) == 1)
+		return ('g');
 	if (line[0] == 't' && line[1] == 'r' && (ft_isspace(line[2])) == 1)
 		return ('t');
+	if (line[0] == 't' && line[1] == 'o' && (ft_isspace(line[2])) == 1)
+		return ('u');
 	if (line[0] == 'p' && line[1] == 'l' && (ft_isspace(line[2])) == 1)
 		return ('p');
+	if (line[0] == 'p' && line[1] == 'a' && (ft_isspace(line[2])) == 1)
+		return ('a');
+	if (line[0] == 'd' && line[1] == 'k' && (ft_isspace(line[2])) == 1)
+		return ('k');
+	if (line[0] == 'e' && line[1] == 'l' && (ft_isspace(line[2])) == 1)
+		return ('e');
+	if (line[0] == 'b' && line[1] == 'x' && (ft_isspace(line[2])) == 1)
+		return ('b');
+	if (line[0] == 'h' && line[1] == 'y' && (ft_isspace(line[2])) == 1)
+		return ('h');
+	if (line[0] == 'm' && line[1] == 'e' && (ft_isspace(line[2])) == 1)
+		return ('m');
 	return (-1);
 }
 
