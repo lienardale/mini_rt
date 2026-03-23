@@ -12,20 +12,35 @@
 
 #include "mini_rt.h"
 
+static double ft_gamma_correct(double c)
+{
+	if (c <= 0.0)
+		return (0.0);
+	if (c >= 255.0)
+		return (255.0);
+	return (255.0 * pow(c / 255.0, 1.0 / 2.2));
+}
+
 void ft_pix(int x, int y, t_window *w, t_argb color)
 {
 	int i;
 	int j;
+	unsigned char r;
+	unsigned char g;
+	unsigned char b;
 
+	r = (unsigned char)ft_gamma_correct(color.r);
+	g = (unsigned char)ft_gamma_correct(color.g);
+	b = (unsigned char)ft_gamma_correct(color.b);
 	i = 0;
 	while (i < w->resol)
 	{
 		j = 0;
 		while (j < w->resol)
 		{
-			w->data[((w->y - y - j - 1) * w->x + x + i) * 4 + 0] = color.b;
-			w->data[((w->y - y - j - 1) * w->x + x + i) * 4 + 1] = color.g;
-			w->data[((w->y - y - j - 1) * w->x + x + i) * 4 + 2] = color.r;
+			w->data[((w->y - y - j - 1) * w->x + x + i) * 4 + 0] = b;
+			w->data[((w->y - y - j - 1) * w->x + x + i) * 4 + 1] = g;
+			w->data[((w->y - y - j - 1) * w->x + x + i) * 4 + 2] = r;
 			j++;
 		}
 		i++;

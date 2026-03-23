@@ -318,7 +318,7 @@ t_pt ft_rot_angle(t_pt p, double a);
 t_pt ft_point_matrix_transl(t_pt p, t_mat m);
 
 t_pt ft_pre_light(t_window *win, t_shape *sh, double clos, t_ray *ray);
-t_pt ft_light(t_window *win, t_pt n, t_pt p, t_shape *sh);
+t_pt ft_light(t_window *win, t_pt n, t_pt p, t_shape *sh, t_pt view_dir);
 double ft_shadow(t_window *win, t_pt n, t_pt p, double light_dist);
 int ft_lstsize_light(t_window *win);
 t_argb ft_albedo(t_pt a, t_argb col);

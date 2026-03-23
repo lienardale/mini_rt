@@ -106,7 +106,7 @@ TEST(test_light_ambient_only)
 
 	t_pt n = ft_pt_create(0, 1, 0);
 	t_pt p = ft_pt_create(0, 0, 0);
-	t_pt result = ft_light(&win, n, p, &sh);
+	t_pt result = ft_light(&win, n, p, &sh, ft_pt_create(0, 0, 1));
 
 	ASSERT_DBL_EQ(0.5 + 0.5 * 255, result.x);
 	ASSERT_DBL_EQ(0.5 + 0.5 * 255, result.y);
@@ -136,7 +136,7 @@ TEST(test_light_with_source)
 
 	t_pt n = ft_pt_create(0, 1, 0);
 	t_pt p = ft_pt_create(0, 0, 0);
-	t_pt result = ft_light(&win, n, p, &sh);
+	t_pt result = ft_light(&win, n, p, &sh, ft_pt_create(0, 0, 1));
 
 	ASSERT_TRUE(result.x > 0);
 	ASSERT_TRUE(result.y > 0);
@@ -198,7 +198,7 @@ TEST(test_light_multiple_sources)
 
 	t_pt n = ft_pt_create(0, 1, 0);
 	t_pt p = ft_pt_create(0, 0, 0);
-	t_pt result = ft_light(&win, n, p, &sh);
+	t_pt result = ft_light(&win, n, p, &sh, ft_pt_create(0, 0, 1));
 	ASSERT_TRUE(result.x > 0);
 	ASSERT_TRUE(result.y > 0);
 }
@@ -226,7 +226,7 @@ TEST(test_light_behind_surface)
 
 	t_pt n = ft_pt_create(0, 1, 0);
 	t_pt p = ft_pt_create(0, 0, 0);
-	t_pt result = ft_light(&win, n, p, &sh);
+	t_pt result = ft_light(&win, n, p, &sh, ft_pt_create(0, 0, 1));
 	double ambient = 0.1 + 0.1 * 255;
 	ASSERT_DBL_EQ(ambient, result.x);
 }
