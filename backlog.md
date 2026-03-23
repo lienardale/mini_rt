@@ -14,7 +14,7 @@
 - [x] Add early termination in `ft_shadow()` when a shadow ray hits any object closer than the light
 - [x] Precompute and cache shape invariants (e.g., plane d-value, triangle edges/normals, sphere radius², cylinder axis) at parse time instead of per-ray
 - [x] Optimize math operations: reduce redundant dot products and vector computations in lighting (single light-distance computation, avoid re-normalizing already-normalized vectors)
-- [ ] Consider SIMD intrinsics for vector math operations (`ft_vectors.c`, `ft_scalar.c`)
+- [x] Add SSE2 SIMD intrinsics for vector math operations (`ft_vectors.c`, `ft_vectors_2.c`, `ft_scalar.c`)
 - [x] Optimize the resolution toggle ('r' key) to use progressive rendering (low-res preview then full-res refinement)
 
 ---
