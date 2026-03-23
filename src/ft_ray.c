@@ -47,8 +47,8 @@ void ft_ray(double i, double j, t_window *win, t_cam *cam)
 	s = 0;
 	while (s < 4)
 	{
-		sample = ft_ray_single(i + offsets[s % 2], j + offsets[s / 2], win,
-			cam);
+		sample =
+			ft_ray_single(i + offsets[s % 2], j + offsets[s / 2], win, cam);
 		color.r += sample.r;
 		color.g += sample.g;
 		color.b += sample.b;

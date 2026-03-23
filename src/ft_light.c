@@ -55,9 +55,9 @@ static double ft_soft_shadow_sample(t_window *win, t_pt l_vec, t_pt p,
 	s = 0;
 	while (s < 16)
 	{
-		offset = ft_addition(l_vec,
-			ft_addition(ft_multi_scal(((s % 4) - 1.5) * 0.15, perp1),
-						ft_multi_scal(((s / 4) - 1.5) * 0.15, perp2)));
+		offset = ft_addition(
+			l_vec, ft_addition(ft_multi_scal(((s % 4) - 1.5) * 0.15, perp1),
+							   ft_multi_scal(((s / 4) - 1.5) * 0.15, perp2)));
 		offset = ft_normal_vect(offset);
 		if (ft_shadow(win, offset, p, light_dist) > 0.001)
 			total += 1.0;
@@ -91,7 +91,7 @@ t_pt ft_light(t_window *win, t_pt n, t_pt p, t_shape *sh, t_pt view_dir)
 			{
 				n_dot_l = cur_light->light_ratio * n_dot_l / ft_lenght(n);
 				ft_db_mult_to_add_pt(&i, n_dot_l * shadow_factor,
-					cur_light->col);
+									 cur_light->col);
 				ft_add_specular(&i, l_vec, n, view_dir, sh, cur_light->col);
 			}
 		}
