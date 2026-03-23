@@ -56,8 +56,8 @@ static double ft_soft_shadow_sample(t_window *win, t_pt l_vec, t_pt p,
 	while (s < 16)
 	{
 		offset = ft_addition(
-			l_vec, ft_addition(ft_multi_scal(((s % 4) - 1.5) * 0.15, perp1),
-							   ft_multi_scal(((s / 4) - 1.5) * 0.15, perp2)));
+			l_vec, ft_addition(ft_multi_scal(((s % 4) - 1.5) * 0.02, perp1),
+							   ft_multi_scal(((s / 4) - 1.5) * 0.02, perp2)));
 		offset = ft_normal_vect(offset);
 		if (ft_shadow(win, offset, p, light_dist) > 0.001)
 			total += 1.0;
@@ -130,6 +130,8 @@ double ft_shadow(t_window *win, t_pt n, t_pt p, double light_dist)
 	{
 		min = light_dist;
 		ft_bvh_trace(win->bvh, &ray, &min, &min_sh);
+		if (min_sh == NULL)
+			return (1.0);
 		return (min - light_dist);
 	}
 	min = INFINITY;
