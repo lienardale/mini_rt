@@ -25,6 +25,11 @@ result*
 /ftprintfdestr*
 miniRT
 run_tests
+run_test_*
+cov_test_*
+coverage/
+*.gcno
+*.gcda
 minilibx*
 *.dSYM/
 ft_mini_rt copy.c

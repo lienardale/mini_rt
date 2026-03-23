@@ -23,3 +23,66 @@ jobs:
 
       - name: Run unit tests
         run: make test
+
+  coverage:
+    runs-on: ubuntu-latest
+    needs: build-and-test
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libx11-dev libxext-dev zlib1g-dev lcov
+
+      - name: Generate coverage report
+        run: make coverage
+
+      - name: Upload coverage artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: coverage/html/
+
+  static-analysis:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install cppcheck
+        run: sudo apt-get update && sudo apt-get install -y cppcheck
+
+      - name: Run cppcheck
+        run: |
+          cppcheck --enable=warning,style,performance \
+            --suppress=missingIncludeSystem \
+            --error-exitcode=0 \
+            -I includes -I libft \
+            src/
+
+  valgrind:
+    runs-on: ubuntu-latest
+    needs: build-and-test
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libx11-dev libxext-dev zlib1g-dev valgrind
+
+      - name: Build tests
+        run: |
+          make -C libft
+          gcc -Wall -Wextra -Werror -g3 \
+            -I includes -Ilibft -Imlx_linux -Itests \
+            tests/test_math.c \
+            src/ft_vectors.c src/ft_vectors_2.c src/ft_scalar.c \
+            src/ft_matrix.c src/ft_pt.c src/ft_argb.c src/ft_cam.c \
+            -Llibft -lft -lm -o run_test_math
+
+      - name: Run Valgrind on tests
+        run: valgrind --leak-check=full --error-exitcode=1 ./run_test_math
