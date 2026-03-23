@@ -29,6 +29,7 @@ int ft_window_init(t_window *win)
 	win->ratio = -1;
 	win->resol = RESOL;
 	win->bvh = NULL;
+	win->num_threads = 1;
 	return (0);
 }
 

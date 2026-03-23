@@ -20,12 +20,14 @@
 #include "mlx.h"
 #include <fcntl.h>
 #include <math.h>
+#include <pthread.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
 
 #define RESOL 1
+#define MAX_THREADS 64
 
 typedef struct s_fileheader
 {
@@ -155,7 +157,16 @@ typedef struct s_window
 	t_shape *beg_sh;
 	t_light *beg_light;
 	t_bvh_node *bvh;
+	int num_threads;
 } t_window;
+
+typedef struct s_thread_data
+{
+	t_window *win;
+	t_cam *cam;
+	int y_start;
+	int y_end;
+} t_thread_data;
 
 void ft_parse(int *check, t_window *win, int fd);
 void ft_parse_resol(int *res, t_window *win, char *line);
@@ -289,6 +300,9 @@ double ft_cylinder_calc_three(t_pt *calc, t_argb *dist, t_argb *dot,
 void ft_cylinder_calc_four(t_pt *calc, t_argb *dist, t_argb *dot);
 double ft_cylinder_calc_five(t_shape *sh, t_argb *dist, t_argb *dot,
 							 t_ray *ray);
+
+int ft_aff_threaded(t_window *win);
+int ft_get_num_cores(void);
 
 int ft_save(t_window *win);
 int ft_file_header(int fd, t_window *rt);

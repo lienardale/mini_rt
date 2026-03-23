@@ -66,6 +66,7 @@ SRC_NAME =		ft_mini_rt.c \
 			ft_precompute.c \
 			ft_bvh.c \
 			ft_bvh_2.c \
+			ft_threads.c \
 			ft_close.c \
 			ft_save.c \
 			ft_error.c
@@ -94,7 +95,7 @@ $(OBJ_DIR):
 
 
 $(NAME):	$(OBJ)
-			$(CC) $(CFLAGS) -o $(NAME) $(OBJ) $(INC) $(LIB_INC) $(MLX_INC) $(MLX_LIBS)
+			$(CC) $(CFLAGS) -o $(NAME) $(OBJ) $(INC) $(LIB_INC) $(MLX_INC) $(MLX_LIBS) -lpthread
 
 $(MLX):
 		@make -C $(MLX_DIR) $(MLX_LIBS)

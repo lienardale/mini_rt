@@ -18,6 +18,8 @@ int ft_aff(t_window *win)
 	double j;
 	t_cam *cam;
 
+	if (win->num_threads > 1)
+		return (ft_aff_threaded(win));
 	if (win->img_ptr)
 		mlx_destroy_image(win->mlx_ptr, win->img_ptr);
 	win->img_ptr = mlx_new_image(win->mlx_ptr, win->x, win->y);
@@ -36,7 +38,6 @@ int ft_aff(t_window *win)
 		j += win->resol;
 	}
 	mlx_put_image_to_window(win->mlx_ptr, win->win_ptr, win->img_ptr, 0, 0);
-	// return (ft_error(2, win, "put img to window"));
 	return (0);
 }
 
@@ -87,18 +88,54 @@ void ft_mlx_init(t_window *win, int ac, char **av)
 	mlx_loop(win->mlx_ptr);
 }
 
+static void ft_parse_threads(t_window *win, int ac, char **av)
+{
+	int i;
+
+	i = 2;
+	while (i < ac)
+	{
+		if (ft_strncmp("--threads", av[i], 10) == 0 && i + 1 < ac)
+		{
+			win->num_threads = ft_atoi(av[i + 1]);
+			if (win->num_threads < 1)
+				win->num_threads = 1;
+			if (win->num_threads > MAX_THREADS)
+				win->num_threads = MAX_THREADS;
+			return;
+		}
+		else if (ft_strncmp("--threads=auto", av[i], 15) == 0)
+		{
+			win->num_threads = ft_get_num_cores();
+			return;
+		}
+		i++;
+	}
+	win->num_threads = ft_get_num_cores();
+}
+
+static int ft_valid_arg(char *arg)
+{
+	if (ft_strncmp("-save", arg, 6) == 0)
+		return (1);
+	if (ft_strncmp("--threads", arg, 9) == 0)
+		return (1);
+	return (0);
+}
+
 int main(int ac, char **av)
 {
 	t_window win;
 	int check;
 
 	ft_window_init(&win);
-	if (ac > 3 || !av[1] || (ft_strrchr(av[1], '.')) == NULL)
+	if (ac < 2 || !av[1] || (ft_strrchr(av[1], '.')) == NULL)
 		return (ft_error(0, &win, "arguments"));
 	if (ft_strncmp("rt\0", ft_strrchr(av[1], '.') + 1, 3) != 0)
 		ft_error(1, &win, ".rt");
-	if (ac == 3 && ft_strncmp("-save", av[2], ft_strlen(av[2])) != 0)
+	if (ac == 3 && !ft_valid_arg(av[2]))
 		ft_error(0, &win, "arguments");
+	ft_parse_threads(&win, ac, av);
 	if ((win.fd = open(av[1], O_RDONLY)) < 0)
 		return (ft_error(2, &win, "open"));
 	ft_parse(&check, &win, win.fd);
