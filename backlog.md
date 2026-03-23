@@ -84,24 +84,24 @@
 ## 5. Generate Configuration for Complex and Pretty Renders
 
 ### Scene Generator Tool
-- [ ] Build a CLI scene generator (`gen_scene`) that outputs valid `.rt` files
-- [ ] Support procedural placement: grids, spirals, random scatter with seed
-- [ ] Include preset scenes: Cornell box, spheres on checkerboard, solar system, etc.
-- [ ] Add material/color palettes for visually appealing outputs
-- [ ] Support parametric generation (number of objects, scene bounds, randomness)
+- [x] Build a CLI scene generator (`gen_scene`) that outputs valid `.rt` files
+- [x] Support procedural placement: grids, spirals, random scatter with seed
+- [x] Include preset scenes: Cornell box, spheres on checkerboard, solar system, etc.
+- [x] Add material/color palettes for visually appealing outputs
+- [x] Support parametric generation (number of objects, scene bounds, randomness)
 
 ### Enhanced Rendering Features (prerequisites for pretty output)
-- [ ] Implement specular highlights (complete Phong or Blinn-Phong model)
-- [ ] Add reflection rays (recursive ray tracing, configurable depth)
-- [ ] Add refraction/transparency (Snell's law, Fresnel equations)
-- [ ] Implement soft shadows (area lights with multiple sample rays)
-- [ ] Add anti-aliasing (supersampling or stochastic sampling per pixel)
-- [ ] Implement gamma correction for accurate color output
+- [x] Implement specular highlights (complete Phong or Blinn-Phong model)
+- [x] Add reflection rays (recursive ray tracing, configurable depth)
+- [x] Add refraction/transparency (Snell's law, Fresnel equations)
+- [x] Implement soft shadows (area lights with multiple sample rays)
+- [x] Add anti-aliasing (supersampling or stochastic sampling per pixel)
+- [x] Implement gamma correction for accurate color output
 
 ### Gallery & Showcase
-- [ ] Create a `gallery/` directory with curated high-quality scene files
-- [ ] Render reference images at high resolution for each gallery scene
-- [ ] Document each scene's features and rendering time
+- [x] Create a `gallery/` directory with curated high-quality scene files
+- [x] Render reference images at high resolution for each gallery scene
+- [x] Document each scene's features and rendering time
 
 ---
 

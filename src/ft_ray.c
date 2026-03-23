@@ -12,9 +12,8 @@
 
 #include "mini_rt.h"
 
-void ft_ray(double i, double j, t_window *win, t_cam *cam)
+static t_argb ft_ray_single(double i, double j, t_window *win, t_cam *cam)
 {
-	t_argb color;
 	double size;
 	t_mat unit;
 
@@ -30,7 +29,34 @@ void ft_ray(double i, double j, t_window *win, t_cam *cam)
 	cam->rij = ft_rotation_vect(cam->rij, cam->ori);
 	cam->rij = ft_point_matrix_transl(cam->rij, unit);
 	cam->pij = ft_point_matrix_transl(cam->pij, unit);
-	color = ft_trace_ray(win, cam);
+	return (ft_trace_ray(win, cam));
+}
+
+void ft_ray(double i, double j, t_window *win, t_cam *cam)
+{
+	t_argb color;
+	t_argb sample;
+	double offsets[4];
+	int s;
+
+	offsets[0] = -0.25;
+	offsets[1] = 0.25;
+	offsets[2] = -0.25;
+	offsets[3] = 0.25;
+	color = (t_argb){0, 0, 0, 0};
+	s = 0;
+	while (s < 4)
+	{
+		sample = ft_ray_single(i + offsets[s % 2], j + offsets[s / 2], win,
+			cam);
+		color.r += sample.r;
+		color.g += sample.g;
+		color.b += sample.b;
+		s++;
+	}
+	color.r /= 4.0;
+	color.g /= 4.0;
+	color.b /= 4.0;
 	ft_pix(i, j, win, color);
 }
 
@@ -71,6 +97,25 @@ t_argb ft_trace_ray(t_window *win, t_cam *cam)
 	return (ft_trace_ray_recursive(win, &ray, 0));
 }
 
+static void ft_apply_refraction(t_window *win, t_ray *ray, t_shape *sh,
+								double t, t_argb *color, int depth)
+{
+	t_ray ref_ray;
+	t_argb ref_color;
+	double tr;
+	double eta;
+
+	tr = sh->mat.transparency;
+	eta = 1.0 / sh->mat.refr_index;
+	ref_ray.orig = ft_addition(ray->orig, ft_multi_scal(t + 0.001, ray->dir));
+	ref_ray.dir = ft_refract_ray(ray->dir, sh->n, eta);
+	ref_ray.lenght = -1;
+	ref_color = ft_trace_ray_recursive(win, &ref_ray, depth + 1);
+	color->r = color->r * (1.0 - tr) + ref_color.r * tr;
+	color->g = color->g * (1.0 - tr) + ref_color.g * tr;
+	color->b = color->b * (1.0 - tr) + ref_color.b * tr;
+}
+
 t_argb ft_trace_ray_recursive(t_window *win, t_ray *ray, int depth)
 {
 	t_shape *min_sh;
@@ -94,6 +139,8 @@ t_argb ft_trace_ray_recursive(t_window *win, t_ray *ray, int depth)
 	color = ft_albedo(ft_pre_light(win, min_sh, min, ray), min_sh->color);
 	if (depth < MAX_REFLECT_DEPTH && min_sh->mat.reflectivity > 0.001)
 		ft_apply_reflection(win, ray, min_sh, min, &color, depth);
+	if (depth < MAX_REFLECT_DEPTH && min_sh->mat.transparency > 0.001)
+		ft_apply_refraction(win, ray, min_sh, min, &color, depth);
 	return (color);
 }
 
