@@ -32,6 +32,13 @@ void	ft_cleanup(t_window *win)
 		mlx_destroy_image(win->mlx_ptr, win->img_ptr);
 	if (win->mlx_ptr && win->win_ptr)
 		mlx_destroy_window(win->mlx_ptr, win->win_ptr);
+#ifdef Linux
+	if (win->mlx_ptr)
+	{
+		mlx_destroy_display(win->mlx_ptr);
+		free(win->mlx_ptr);
+	}
+#endif
 	if (win->fd >= 0)
 		close(win->fd);
 }

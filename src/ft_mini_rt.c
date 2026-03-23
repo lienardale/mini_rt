@@ -18,6 +18,8 @@ int		ft_aff(t_window *win)
 	double	j;
 	t_cam	*cam;
 
+	if (win->img_ptr)
+		mlx_destroy_image(win->mlx_ptr, win->img_ptr);
 	win->img_ptr = mlx_new_image(win->mlx_ptr, win->x, win->y);
 	win->data = mlx_get_data_addr(win->img_ptr, &(win->depth),
 								&(win->size_line), &(win->endian));
