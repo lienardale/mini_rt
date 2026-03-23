@@ -24,6 +24,24 @@ jobs:
       - name: Run unit tests
         run: make test
 
+  regression:
+    runs-on: ubuntu-latest
+    needs: build-and-test
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libx11-dev libxext-dev zlib1g-dev xvfb
+
+      - name: Build project
+        run: make all
+
+      - name: Run BMP regression tests
+        run: xvfb-run make regression
+
   coverage:
     runs-on: ubuntu-latest
     needs: build-and-test
@@ -38,6 +56,16 @@ jobs:
 
       - name: Generate coverage report
         run: make coverage
+
+      - name: Check coverage threshold
+        run: |
+          COVERAGE=$(lcov --summary coverage/coverage.info 2>&1 | grep 'lines' | grep -oP '[\d.]+%' | head -1 | tr -d '%')
+          echo "Line coverage: ${COVERAGE}%"
+          if [ "$(echo "$COVERAGE < 50" | bc -l)" -eq 1 ]; then
+            echo "FAIL: Coverage ${COVERAGE}% is below 50% threshold"
+            exit 1
+          fi
+          echo "PASS: Coverage ${COVERAGE}% meets 50% minimum threshold"
 
       - name: Upload coverage artifact
         uses: actions/upload-artifact@v4
@@ -61,6 +89,22 @@ jobs:
             --error-exitcode=0 \
             -I includes -I libft \
             src/
+
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check formatting with clang-format
+        run: |
+          clang-format --version
+          clang-format --dry-run --Werror src/*.c includes/*.h 2>&1 || {
+            echo ""
+            echo "Formatting issues found. Run 'clang-format -i src/*.c includes/*.h' to fix."
+            exit 1
+          }
+          echo "All files properly formatted."
 
   valgrind:
     runs-on: ubuntu-latest
