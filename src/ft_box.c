@@ -25,6 +25,7 @@ int ft_box_init(t_window *win, t_shape **cur, char *line)
 								  : ft_error(7, win, "box dimensions");
 	check = (ft_isdigit(*line) == 1) ? ft_color_init(win, &(*cur)->color, &line)
 									 : ft_error(7, win, "box color");
+	ft_parse_material(win, &(*cur)->mat, &line);
 	if (check == 0)
 		check =
 			(*line == '\0') ? ft_box_check(win, cur) : ft_error(4, win, "box");

@@ -32,6 +32,7 @@ int ft_hyperboloid_init(t_window *win, t_shape **cur, char *line)
 	ft_iterate_in_line(&line);
 	check = (ft_isdigit(*line) == 1) ? ft_color_init(win, &(*cur)->color, &line)
 									 : ft_error(7, win, "hyperboloid color");
+	ft_parse_material(win, &(*cur)->mat, &line);
 	if (check == 0)
 		check = (*line == '\0') ? ft_hyperboloid_check(win, cur)
 								: ft_error(4, win, "hyperboloid");

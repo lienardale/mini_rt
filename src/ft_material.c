@@ -26,37 +26,41 @@ void ft_material_default(t_material *mat)
 	mat->bump_strength = 1.0;
 }
 
+static int ft_parse_mat_prop(t_material *mat, char **line)
+{
+	if (ft_strncmp(*line, "refl:", 5) == 0)
+	{
+		*line += 5;
+		mat->reflectivity = ft_atof(*line);
+	}
+	else if (ft_strncmp(*line, "trans:", 6) == 0)
+	{
+		*line += 6;
+		mat->transparency = ft_atof(*line);
+	}
+	else if (ft_strncmp(*line, "ior:", 4) == 0)
+	{
+		*line += 4;
+		mat->refr_index = ft_atof(*line);
+	}
+	else if (ft_strncmp(*line, "spec:", 5) == 0)
+	{
+		*line += 5;
+		mat->specular = ft_atof(*line);
+	}
+	else
+		return (0);
+	ft_iterate_in_line(line);
+	return (1);
+}
+
 int ft_parse_material(t_window *win, t_material *mat, char **line)
 {
 	(void)win;
 	while ((ft_isspace(**line)) == 1)
 		(*line)++;
-	if (**line == '\0')
-		return (0);
-	if (ft_strncmp(*line, "refl:", 5) == 0)
-	{
-		*line += 5;
-		mat->reflectivity = ft_atof(*line);
-		ft_iterate_in_line(line);
-	}
-	if (ft_strncmp(*line, "trans:", 6) == 0)
-	{
-		*line += 6;
-		mat->transparency = ft_atof(*line);
-		ft_iterate_in_line(line);
-	}
-	if (ft_strncmp(*line, "ior:", 4) == 0)
-	{
-		*line += 4;
-		mat->refr_index = ft_atof(*line);
-		ft_iterate_in_line(line);
-	}
-	if (ft_strncmp(*line, "spec:", 5) == 0)
-	{
-		*line += 5;
-		mat->specular = ft_atof(*line);
-		ft_iterate_in_line(line);
-	}
+	while (**line != '\0' && ft_parse_mat_prop(mat, line))
+		;
 	return (0);
 }
 
