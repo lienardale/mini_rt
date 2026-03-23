@@ -26,23 +26,23 @@ t_pt ft_light(t_window *win, t_pt n, t_pt p, t_shape *sh)
 {
 	t_light *cur_light;
 	t_pt i;
-	t_pt l;
+	t_pt l_vec;
 	double n_dot_l;
-	double min;
+	double light_dist;
 
+	(void)sh;
 	i = ft_add_scal(win->ratio, (t_pt){0, 0, 0});
 	ft_db_mult_to_add_pt(&i, win->ratio, win->col);
 	cur_light = win->beg_light;
 	while (cur_light)
 	{
-		l = ft_normal_vect(ft_subtraction(cur_light->coord, p));
-		n_dot_l = ft_dot_product(n, l);
-		min = ft_shadow(win, l, p, sh);
-		min = min - ft_lenght(ft_subtraction(cur_light->coord, p));
-		if (n_dot_l > 0.001 && min > 0.001)
+		l_vec = ft_subtraction(cur_light->coord, p);
+		light_dist = ft_lenght(l_vec);
+		l_vec = ft_div_scal(light_dist, l_vec);
+		n_dot_l = ft_dot_product(n, l_vec);
+		if (n_dot_l > 0.001 && ft_shadow(win, l_vec, p, light_dist) > 0.001)
 		{
-			n_dot_l = cur_light->light_ratio * n_dot_l /
-					  (ft_lenght(l) * ft_lenght(n));
+			n_dot_l = cur_light->light_ratio * n_dot_l / ft_lenght(n);
 			ft_db_mult_to_add_pt(&i, n_dot_l, cur_light->col);
 		}
 		cur_light = cur_light->next;
@@ -65,24 +65,35 @@ int ft_lstsize_light(t_window *win)
 	return (len);
 }
 
-double ft_shadow(t_window *win, t_pt n, t_pt p, t_shape *sh)
+double ft_shadow(t_window *win, t_pt n, t_pt p, double light_dist)
 {
 	t_shape *cur_shape;
+	t_shape *min_sh;
 	double min;
 	t_ray ray;
 
 	ray.orig = p;
 	ray.dir = n;
 	ray.lenght = -1;
-	cur_shape = win->beg_sh;
+	min_sh = NULL;
+	if (win->bvh)
+	{
+		min = light_dist;
+		ft_bvh_trace(win->bvh, &ray, &min, &min_sh);
+		return (min - light_dist);
+	}
 	min = INFINITY;
-	(void)sh;
+	cur_shape = win->beg_sh;
 	while (cur_shape)
 	{
 		ft_which_shape(cur_shape, &ray);
 		if (ray.lenght > 0.0001 && ray.lenght < min)
+		{
 			min = ray.lenght;
+			if (min < light_dist)
+				return (min - light_dist);
+		}
 		cur_shape = cur_shape->next;
 	}
-	return (min);
+	return (min - light_dist);
 }

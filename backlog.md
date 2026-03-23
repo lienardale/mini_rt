@@ -10,12 +10,12 @@
 - [x] Remove leftover debug `printf` in `ft_mouse()` (ft_event.c) and `ft_check_resol()` (ft_check_parsing.c)
 
 ### Performance Optimization
-- [ ] Implement bounding volume hierarchy (BVH) or spatial partitioning to avoid testing every shape per ray
-- [ ] Add early termination in `ft_trace_ray()` when a shadow ray hits any object (no need for closest)
-- [ ] Precompute and cache shape invariants (e.g., plane normals, triangle edges) at parse time instead of per-ray
-- [ ] Profile hot paths (intersection functions) and optimize math operations (reduce redundant dot products)
+- [x] Implement bounding volume hierarchy (BVH) or spatial partitioning to avoid testing every shape per ray
+- [x] Add early termination in `ft_shadow()` when a shadow ray hits any object closer than the light
+- [x] Precompute and cache shape invariants (e.g., plane d-value, triangle edges/normals, sphere radius², cylinder axis) at parse time instead of per-ray
+- [x] Optimize math operations: reduce redundant dot products and vector computations in lighting (single light-distance computation, avoid re-normalizing already-normalized vectors)
 - [ ] Consider SIMD intrinsics for vector math operations (`ft_vectors.c`, `ft_scalar.c`)
-- [ ] Optimize the resolution toggle ('r' key) to use progressive rendering instead of full re-render
+- [x] Optimize the resolution toggle ('r' key) to use progressive rendering (low-res preview then full-res refinement)
 
 ---
 

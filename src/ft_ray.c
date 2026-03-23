@@ -44,26 +44,18 @@ void ft_init_ray_cam(t_cam *cam, t_ray *ray)
 
 t_argb ft_trace_ray(t_window *win, t_cam *cam)
 {
-	t_shape *cur_shape;
 	t_shape *min_sh;
 	double min;
 	t_ray ray;
 	t_argb black;
 
-	cur_shape = win->beg_sh;
 	min_sh = NULL;
 	min = INFINITY;
 	ft_init_ray_cam(cam, &ray);
-	while (cur_shape)
-	{
-		ft_which_shape(cur_shape, &ray);
-		if (ray.lenght > 0.0001 && ray.lenght < min)
-		{
-			min = ray.lenght;
-			min_sh = cur_shape;
-		}
-		cur_shape = cur_shape->next;
-	}
+	if (win->bvh)
+		ft_bvh_trace(win->bvh, &ray, &min, &min_sh);
+	else
+		ft_trace_shapes(win->beg_sh, &ray, &min, &min_sh);
 	if (min_sh == NULL)
 		return (black = (t_argb){0, 0, 0, 0});
 	min_sh->color.a = ft_lstsize_light(win);

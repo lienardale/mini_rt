@@ -95,6 +95,20 @@ typedef struct s_light
 	struct s_light *next;
 } t_light;
 
+typedef struct s_aabb
+{
+	t_pt min;
+	t_pt max;
+} t_aabb;
+
+typedef struct s_bvh_node
+{
+	t_aabb box;
+	struct s_bvh_node *left;
+	struct s_bvh_node *right;
+	struct s_shape *shape;
+} t_bvh_node;
+
 typedef struct s_shape
 {
 	int id;
@@ -108,6 +122,15 @@ typedef struct s_shape
 	int in;
 	double diameter;
 	double height;
+	double radius_sq;
+	double plane_d;
+	t_pt tri_edge0;
+	t_pt tri_edge1;
+	t_pt tri_edge2;
+	t_pt tri_norm;
+	t_pt cyl_top;
+	t_pt cyl_axis;
+	double cyl_axis_len_sq;
 	struct s_shape *next;
 } t_shape;
 
@@ -131,6 +154,7 @@ typedef struct s_window
 	t_cam *cur_cam;
 	t_shape *beg_sh;
 	t_light *beg_light;
+	t_bvh_node *bvh;
 } t_window;
 
 void ft_parse(int *check, t_window *win, int fd);
@@ -157,6 +181,14 @@ int ft_square_init(t_window *win, t_shape **current, char *line);
 int ft_cylinder_init(t_window *win, t_shape **current, char *line);
 int ft_triangle_init(t_window *win, t_shape **current, char *line);
 
+void ft_precompute_shape(t_shape *sh);
+void ft_precompute_shapes(t_window *win);
+int ft_aabb_hit(t_aabb *box, t_ray *ray, double t_max);
+t_aabb ft_shape_aabb(t_shape *sh);
+t_bvh_node *ft_bvh_build(t_shape **shapes, int count);
+void ft_bvh_trace(t_bvh_node *node, t_ray *ray, double *min, t_shape **min_sh);
+void ft_bvh_free(t_bvh_node *node);
+void ft_build_scene_bvh(t_window *win);
 void ft_check_parsing(t_window *win);
 int ft_check_resol(t_window *win);
 int ft_check_amb_light(t_window *win);
@@ -216,7 +248,7 @@ t_pt ft_point_matrix_transl(t_pt p, t_mat m);
 
 t_pt ft_pre_light(t_window *win, t_shape *sh, double clos, t_ray *ray);
 t_pt ft_light(t_window *win, t_pt n, t_pt p, t_shape *sh);
-double ft_shadow(t_window *win, t_pt n, t_pt p, t_shape *sh);
+double ft_shadow(t_window *win, t_pt n, t_pt p, double light_dist);
 int ft_lstsize_light(t_window *win);
 t_argb ft_albedo(t_pt a, t_argb col);
 t_argb ft_multi_argb(t_argb a, t_argb col);
@@ -228,6 +260,8 @@ void ft_ray(double x, double y, t_window *win, t_cam *cur_cam);
 t_argb ft_trace_ray(t_window *win, t_cam *cam);
 t_ray ft_shoot_ray(t_pt orig, t_pt dir, double t);
 t_ray ft_no_ray(void);
+void ft_trace_shapes(t_shape *cur_shape, t_ray *ray, double *min,
+					 t_shape **min_sh);
 void ft_init_ray_cam(t_cam *cam, t_ray *ray);
 
 void ft_intersect_ray_sphere(t_shape *sh, t_ray *ray);

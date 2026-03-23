@@ -9,6 +9,7 @@ static t_shape	make_sphere(t_pt center, double diameter)
 	sh.id = 's';
 	sh.pt_0 = center;
 	sh.diameter = diameter;
+	ft_precompute_shape(&sh);
 	return (sh);
 }
 
@@ -20,6 +21,7 @@ static t_shape	make_plane(t_pt point, t_pt ori)
 	sh.id = 'p';
 	sh.pt_0 = point;
 	sh.ori = ori;
+	ft_precompute_shape(&sh);
 	return (sh);
 }
 
@@ -32,6 +34,7 @@ static t_shape	make_triangle(t_pt p0, t_pt p1, t_pt p2)
 	sh.pt_0 = p0;
 	sh.pt_1 = p1;
 	sh.pt_2 = p2;
+	ft_precompute_shape(&sh);
 	return (sh);
 }
 
@@ -44,6 +47,7 @@ static t_shape	make_square(t_pt center, t_pt ori, double side)
 	sh.pt_0 = center;
 	sh.ori = ori;
 	sh.height = side;
+	ft_precompute_shape(&sh);
 	return (sh);
 }
 
@@ -57,6 +61,7 @@ static t_shape	make_cylinder(t_pt center, t_pt axis, double diam, double h)
 	sh.ori = axis;
 	sh.diameter = diam;
 	sh.height = h;
+	ft_precompute_shape(&sh);
 	return (sh);
 }
 

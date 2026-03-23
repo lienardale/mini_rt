@@ -63,6 +63,9 @@ SRC_NAME =		ft_mini_rt.c \
 			ft_ray.c \
 			ft_ray_2.c \
 			ft_pt.c \
+			ft_precompute.c \
+			ft_bvh.c \
+			ft_bvh_2.c \
 			ft_close.c \
 			ft_save.c \
 			ft_error.c
@@ -122,14 +125,16 @@ TEST_MATH_SRCS = ft_vectors.c ft_vectors_2.c ft_scalar.c ft_matrix.c \
 
 TEST_INTERSECT_SRCS = $(TEST_MATH_SRCS) ft_sphere.c ft_plane.c ft_square.c \
 					  ft_cylinder.c ft_cylinder_2.c ft_triangle.c \
-					  ft_ray_2.c ft_ray.c ft_light.c \
+					  ft_ray_2.c ft_ray.c ft_light.c ft_precompute.c \
+					  ft_bvh.c ft_bvh_2.c \
 					  ft_parsing.c ft_parsing_2.c ft_check_parsing.c \
 					  ft_check_parsing_2.c ft_bzero_struct.c
 
 TEST_PARSING_SRCS = $(TEST_MATH_SRCS) ft_parsing.c ft_parsing_2.c \
 					ft_check_parsing.c ft_check_parsing_2.c ft_bzero_struct.c \
 					ft_sphere.c ft_plane.c ft_square.c ft_cylinder.c \
-					ft_cylinder_2.c ft_triangle.c
+					ft_cylinder_2.c ft_triangle.c ft_precompute.c \
+					ft_bvh.c ft_bvh_2.c ft_ray_2.c
 
 TEST_DIR = tests
 
