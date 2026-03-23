@@ -48,6 +48,19 @@ static void ft_precompute_cylinder(t_shape *sh)
 	sh->cyl_axis_len_sq = ft_dot_product(sh->cyl_axis, sh->cyl_axis);
 }
 
+static void ft_precompute_cone(t_shape *sh)
+{
+	double half_angle;
+
+	half_angle = atan2(sh->diameter / 2.0, sh->height);
+	sh->cone_half_angle_sq = tan(half_angle) * tan(half_angle);
+}
+
+static void ft_precompute_disk(t_shape *sh)
+{
+	sh->radius_sq = ft_sqr(sh->diameter / 2.0);
+}
+
 void ft_precompute_shape(t_shape *sh)
 {
 	if (sh->id == 's')
@@ -60,6 +73,10 @@ void ft_precompute_shape(t_shape *sh)
 		ft_precompute_cylinder(sh);
 	else if (sh->id == 'q')
 		ft_precompute_plane(sh);
+	else if (sh->id == 'o')
+		ft_precompute_cone(sh);
+	else if (sh->id == 'k')
+		ft_precompute_disk(sh);
 }
 
 void ft_precompute_shapes(t_window *win)

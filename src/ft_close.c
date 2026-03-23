@@ -90,6 +90,10 @@ int ft_free_lst_sh(t_window *win)
 	while (win->beg_sh)
 	{
 		tmp_s = win->beg_sh->next;
+		if (win->beg_sh->mat.texture)
+			ft_texture_free(win->beg_sh->mat.texture, win->mlx_ptr);
+		if (win->beg_sh->mat.bump_map)
+			ft_texture_free(win->beg_sh->mat.bump_map, win->mlx_ptr);
 		free(win->beg_sh);
 		win->beg_sh = tmp_s;
 	}

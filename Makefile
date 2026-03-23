@@ -54,6 +54,18 @@ SRC_NAME =		ft_mini_rt.c \
 			ft_cylinder.c \
 			ft_cylinder_2.c \
 			ft_triangle.c \
+			ft_cone.c \
+			ft_disk.c \
+			ft_torus.c \
+			ft_ellipsoid.c \
+			ft_box.c \
+			ft_quadric.c \
+			ft_paraboloid.c \
+			ft_csg.c \
+			ft_mesh.c \
+			ft_material.c \
+			ft_texture.c \
+			ft_bump.c \
 			ft_argb.c \
 			ft_event.c \
 			ft_vectors.c \
@@ -124,8 +136,13 @@ sanitize:	$(MLX)
 TEST_MATH_SRCS = ft_vectors.c ft_vectors_2.c ft_scalar.c ft_matrix.c \
 				 ft_pt.c ft_argb.c ft_cam.c
 
-TEST_INTERSECT_SRCS = $(TEST_MATH_SRCS) ft_sphere.c ft_plane.c ft_square.c \
-					  ft_cylinder.c ft_cylinder_2.c ft_triangle.c \
+SHAPE_SRCS = ft_sphere.c ft_plane.c ft_square.c \
+			 ft_cylinder.c ft_cylinder_2.c ft_triangle.c \
+			 ft_cone.c ft_disk.c ft_torus.c ft_ellipsoid.c \
+			 ft_box.c ft_quadric.c ft_paraboloid.c ft_csg.c \
+			 ft_mesh.c ft_material.c ft_texture.c ft_bump.c
+
+TEST_INTERSECT_SRCS = $(TEST_MATH_SRCS) $(SHAPE_SRCS) \
 					  ft_ray_2.c ft_ray.c ft_light.c ft_precompute.c \
 					  ft_bvh.c ft_bvh_2.c \
 					  ft_parsing.c ft_parsing_2.c ft_check_parsing.c \
@@ -133,8 +150,7 @@ TEST_INTERSECT_SRCS = $(TEST_MATH_SRCS) ft_sphere.c ft_plane.c ft_square.c \
 
 TEST_PARSING_SRCS = $(TEST_MATH_SRCS) ft_parsing.c ft_parsing_2.c \
 					ft_check_parsing.c ft_check_parsing_2.c ft_bzero_struct.c \
-					ft_sphere.c ft_plane.c ft_square.c ft_cylinder.c \
-					ft_cylinder_2.c ft_triangle.c ft_precompute.c \
+					$(SHAPE_SRCS) ft_precompute.c \
 					ft_bvh.c ft_bvh_2.c ft_ray_2.c
 
 TEST_DIR = tests
@@ -206,8 +222,7 @@ lint:
 			@clang-format --dry-run --Werror src/*.c includes/*.h 2>&1 \
 				&& echo "Lint: OK" || echo "Lint: formatting issues found"
 
-TEST_BENCH_SRCS = $(TEST_MATH_SRCS) ft_sphere.c ft_plane.c ft_square.c \
-				  ft_cylinder.c ft_cylinder_2.c ft_triangle.c \
+TEST_BENCH_SRCS = $(TEST_MATH_SRCS) $(SHAPE_SRCS) \
 				  ft_ray_2.c ft_ray.c ft_light.c ft_precompute.c \
 				  ft_bvh.c ft_bvh_2.c ft_bzero_struct.c \
 				  ft_parsing.c ft_parsing_2.c ft_check_parsing.c \
