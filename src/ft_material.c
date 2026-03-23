@@ -102,8 +102,8 @@ t_pt ft_refract_ray(t_pt dir, t_pt normal, double eta)
 	sin2_t = eta * eta * (1.0 - cos_i * cos_i);
 	if (sin2_t > 1.0)
 		return (ft_reflect_ray(dir, normal));
-	refracted = ft_addition(ft_multi_scal(eta, dir),
-							ft_multi_scal(eta * cos_i - sqrt(1.0 - sin2_t),
-										  normal));
+	refracted =
+		ft_addition(ft_multi_scal(eta, dir),
+					ft_multi_scal(eta * cos_i - sqrt(1.0 - sin2_t), normal));
 	return (ft_normal_vect(refracted));
 }

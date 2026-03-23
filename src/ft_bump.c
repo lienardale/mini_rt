@@ -20,7 +20,8 @@ static double ft_bump_height(t_texture *bump, double u, double v)
 	return ((c.r + c.g + c.b) / (3.0 * 255.0));
 }
 
-static void ft_get_tangent_bitangent(t_pt normal, t_pt *tangent, t_pt *bitangent)
+static void ft_get_tangent_bitangent(t_pt normal, t_pt *tangent,
+									 t_pt *bitangent)
 {
 	if (fabs(normal.x) < 0.9)
 		*tangent = ft_normal_vect(ft_cross_product(normal, (t_pt){1, 0, 0}));
@@ -56,10 +57,9 @@ void ft_apply_bump_map(t_shape *sh, t_ray *ray)
 	du = ft_bump_height(sh->mat.bump_map, u + step, v) - h_center;
 	dv = ft_bump_height(sh->mat.bump_map, u, v + step) - h_center;
 	ft_get_tangent_bitangent(sh->n, &tangent, &bitangent);
-	perturbed = ft_addition(sh->n,
-							ft_addition(ft_multi_scal(-du * sh->mat.bump_strength,
-													  tangent),
-										ft_multi_scal(-dv * sh->mat.bump_strength,
-													  bitangent)));
+	perturbed = ft_addition(
+		sh->n,
+		ft_addition(ft_multi_scal(-du * sh->mat.bump_strength, tangent),
+					ft_multi_scal(-dv * sh->mat.bump_strength, bitangent)));
 	sh->n = ft_normal_vect(perturbed);
 }

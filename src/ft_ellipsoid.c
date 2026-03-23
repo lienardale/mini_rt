@@ -23,9 +23,8 @@ int ft_ellipsoid_init(t_window *win, t_shape **cur, char *line)
 								  : ft_error(7, win, "ellipsoid center");
 	check = (ft_isnum(line) == 1) ? ft_point_init(win, &(*cur)->pt_1, &line)
 								  : ft_error(7, win, "ellipsoid radii");
-	check = (ft_isdigit(*line) == 1)
-				? ft_color_init(win, &(*cur)->color, &line)
-				: ft_error(7, win, "ellipsoid color");
+	check = (ft_isdigit(*line) == 1) ? ft_color_init(win, &(*cur)->color, &line)
+									 : ft_error(7, win, "ellipsoid color");
 	if (check == 0)
 		check = (*line == '\0') ? ft_ellipsoid_check(win, cur)
 								: ft_error(4, win, "ellipsoid");
@@ -38,8 +37,7 @@ int ft_ellipsoid_check(t_window *win, t_shape **cur)
 
 	if (!cur || !(*cur))
 		return (ft_error(17, win, ""));
-	if ((*cur)->pt_1.x <= 0.0 || (*cur)->pt_1.y <= 0.0
-		|| (*cur)->pt_1.z <= 0.0)
+	if ((*cur)->pt_1.x <= 0.0 || (*cur)->pt_1.y <= 0.0 || (*cur)->pt_1.z <= 0.0)
 		return (ft_error(20, win, ""));
 	check = ft_pt_check(win, (*cur)->pt_0);
 	check = (check == 0) ? ft_color_check(win, (*cur)->color) : check;
@@ -77,8 +75,8 @@ void ft_intersect_ray_ellipsoid(t_shape *sh, t_ray *ray)
 	oc_s.z = oc.z / sh->pt_1.z;
 	a = ft_dot_product(d_s, d_s);
 	b = 2.0 * ft_dot_product(oc_s, d_s);
-	ft_ellipsoid_solve(sh, ray, a, (t_pt){b, ft_dot_product(oc_s, oc_s) - 1.0,
-										   0});
+	ft_ellipsoid_solve(sh, ray, a,
+					   (t_pt){b, ft_dot_product(oc_s, oc_s) - 1.0, 0});
 }
 
 void ft_ellipsoid_solve(t_shape *sh, t_ray *ray, double a, t_pt bc)

@@ -32,9 +32,8 @@ int ft_paraboloid_init(t_window *win, t_shape **cur, char *line)
 		((ft_isdigit(*line) == 1) ? ft_atof(line)
 								  : ft_error(7, win, "paraboloid height"));
 	ft_iterate_in_line(&line);
-	check = (ft_isdigit(*line) == 1)
-				? ft_color_init(win, &(*cur)->color, &line)
-				: ft_error(7, win, "paraboloid color");
+	check = (ft_isdigit(*line) == 1) ? ft_color_init(win, &(*cur)->color, &line)
+									 : ft_error(7, win, "paraboloid color");
 	if (check == 0)
 		check = (*line == '\0') ? ft_paraboloid_check(win, cur)
 								: ft_error(4, win, "paraboloid");

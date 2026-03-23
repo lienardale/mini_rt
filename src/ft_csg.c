@@ -48,9 +48,8 @@ int ft_csg_init(t_window *win, t_shape **cur, char *line)
 		line++;
 	while ((ft_isspace(*line)) == 1)
 		line++;
-	check = (ft_isdigit(*line) == 1)
-				? ft_color_init(win, &(*cur)->color, &line)
-				: ft_error(7, win, "csg color");
+	check = (ft_isdigit(*line) == 1) ? ft_color_init(win, &(*cur)->color, &line)
+									 : ft_error(7, win, "csg color");
 	if (check == 0 && *line != '\0')
 		check = ft_error(4, win, "csg");
 	return (check);
@@ -167,7 +166,7 @@ void ft_csg_intersect(t_shape *sh, t_ray *ray, t_ray *ray_a, t_ray *ray_b,
 }
 
 void ft_csg_difference(t_shape *sh, t_ray *ray, t_ray *ray_a, t_ray *ray_b,
-						t_shape *sa, t_shape *sb)
+					   t_shape *sa, t_shape *sb)
 {
 	t_pt pa;
 

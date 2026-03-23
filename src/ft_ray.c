@@ -97,8 +97,8 @@ t_argb ft_trace_ray_recursive(t_window *win, t_ray *ray, int depth)
 	return (color);
 }
 
-void ft_apply_reflection(t_window *win, t_ray *ray, t_shape *sh,
-						 double t, t_argb *color, int depth)
+void ft_apply_reflection(t_window *win, t_ray *ray, t_shape *sh, double t,
+						 t_argb *color, int depth)
 {
 	t_ray ref_ray;
 	t_argb ref_color;

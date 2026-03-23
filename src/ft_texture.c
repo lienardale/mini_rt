@@ -25,8 +25,8 @@ t_texture *ft_texture_load(char *path, void *mlx_ptr)
 		free(tex);
 		return (NULL);
 	}
-	tex->data = mlx_get_data_addr(tex->img, &tex->bpp, &tex->line_len,
-								  &tex->endian);
+	tex->data =
+		mlx_get_data_addr(tex->img, &tex->bpp, &tex->line_len, &tex->endian);
 	return (tex);
 }
 
@@ -112,7 +112,8 @@ void ft_uv_cylinder(t_shape *sh, t_ray *ray, double *u, double *v)
 	else
 		right = ft_normal_vect(ft_cross_product(sh->ori, (t_pt){0, 1, 0}));
 	*u = 0.5 + atan2(ft_dot_product(d, ft_cross_product(right, sh->ori)),
-					  ft_dot_product(d, right)) / (2.0 * M_PI);
+					 ft_dot_product(d, right)) /
+				   (2.0 * M_PI);
 	*u *= sh->mat.tex_scale_u;
 	*v *= sh->mat.tex_scale_v;
 }
