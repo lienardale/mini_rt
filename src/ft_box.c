@@ -26,8 +26,8 @@ int ft_box_init(t_window *win, t_shape **cur, char *line)
 	check = (ft_isdigit(*line) == 1) ? ft_color_init(win, &(*cur)->color, &line)
 									 : ft_error(7, win, "box color");
 	if (check == 0)
-		check = (*line == '\0') ? ft_box_check(win, cur)
-								: ft_error(4, win, "box");
+		check =
+			(*line == '\0') ? ft_box_check(win, cur) : ft_error(4, win, "box");
 	return (check == 0 ? 0 : ft_error(check, win, "box"));
 }
 
@@ -37,8 +37,7 @@ int ft_box_check(t_window *win, t_shape **cur)
 
 	if (!cur || !(*cur))
 		return (ft_error(17, win, ""));
-	if ((*cur)->pt_1.x <= 0.0 || (*cur)->pt_1.y <= 0.0
-		|| (*cur)->pt_1.z <= 0.0)
+	if ((*cur)->pt_1.x <= 0.0 || (*cur)->pt_1.y <= 0.0 || (*cur)->pt_1.z <= 0.0)
 		return (ft_error(20, win, ""));
 	check = ft_pt_check(win, (*cur)->pt_0);
 	check = (check == 0) ? ft_color_check(win, (*cur)->color) : check;

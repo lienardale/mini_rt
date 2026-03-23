@@ -41,8 +41,8 @@ static t_aabb ft_aabb_sphere_cone_disk(t_shape *sh)
 	{
 		r = sh->diameter / 2.0;
 		box.min = ft_sub_scal(r, sh->pt_0);
-		box.max = ft_add_scal(r, ft_addition(sh->pt_0,
-				ft_multi_scal(sh->height, sh->ori)));
+		box.max = ft_add_scal(
+			r, ft_addition(sh->pt_0, ft_multi_scal(sh->height, sh->ori)));
 		box.min.x = ft_dmin(box.min.x, sh->pt_0.x - r);
 		box.min.y = ft_dmin(box.min.y, sh->pt_0.y - r);
 		box.min.z = ft_dmin(box.min.z, sh->pt_0.z - r);
@@ -54,18 +54,12 @@ static t_aabb ft_aabb_triangle(t_shape *sh)
 {
 	t_aabb box;
 
-	box.min.x =
-		ft_dmin(sh->pt_0.x, ft_dmin(sh->pt_1.x, sh->pt_2.x)) - 0.001;
-	box.min.y =
-		ft_dmin(sh->pt_0.y, ft_dmin(sh->pt_1.y, sh->pt_2.y)) - 0.001;
-	box.min.z =
-		ft_dmin(sh->pt_0.z, ft_dmin(sh->pt_1.z, sh->pt_2.z)) - 0.001;
-	box.max.x =
-		ft_dmax(sh->pt_0.x, ft_dmax(sh->pt_1.x, sh->pt_2.x)) + 0.001;
-	box.max.y =
-		ft_dmax(sh->pt_0.y, ft_dmax(sh->pt_1.y, sh->pt_2.y)) + 0.001;
-	box.max.z =
-		ft_dmax(sh->pt_0.z, ft_dmax(sh->pt_1.z, sh->pt_2.z)) + 0.001;
+	box.min.x = ft_dmin(sh->pt_0.x, ft_dmin(sh->pt_1.x, sh->pt_2.x)) - 0.001;
+	box.min.y = ft_dmin(sh->pt_0.y, ft_dmin(sh->pt_1.y, sh->pt_2.y)) - 0.001;
+	box.min.z = ft_dmin(sh->pt_0.z, ft_dmin(sh->pt_1.z, sh->pt_2.z)) - 0.001;
+	box.max.x = ft_dmax(sh->pt_0.x, ft_dmax(sh->pt_1.x, sh->pt_2.x)) + 0.001;
+	box.max.y = ft_dmax(sh->pt_0.y, ft_dmax(sh->pt_1.y, sh->pt_2.y)) + 0.001;
+	box.max.z = ft_dmax(sh->pt_0.z, ft_dmax(sh->pt_1.z, sh->pt_2.z)) + 0.001;
 	return (box);
 }
 

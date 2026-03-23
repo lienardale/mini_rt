@@ -239,8 +239,8 @@ int ft_hyperboloid_init(t_window *win, t_shape **current, char *line);
 int ft_paraboloid_init(t_window *win, t_shape **current, char *line);
 int ft_csg_init(t_window *win, t_shape **current, char *line);
 int ft_mesh_init(t_window *win, t_shape **begin, char *line);
-int ft_load_obj_mesh(t_window *win, t_shape **begin, char *path,
-					 t_pt offset, t_argb color);
+int ft_load_obj_mesh(t_window *win, t_shape **begin, char *path, t_pt offset,
+					 t_argb color);
 void ft_mesh_create_triangles(t_window *win, t_shape **begin, t_pt *verts,
 							  int *faces, int fcount, t_pt offset,
 							  t_argb color);
@@ -330,8 +330,8 @@ int ft_aff(t_window *win);
 void ft_ray(double x, double y, t_window *win, t_cam *cur_cam);
 t_argb ft_trace_ray(t_window *win, t_cam *cam);
 t_argb ft_trace_ray_recursive(t_window *win, t_ray *ray, int depth);
-void ft_apply_reflection(t_window *win, t_ray *ray, t_shape *sh,
-						 double t, t_argb *color, int depth);
+void ft_apply_reflection(t_window *win, t_ray *ray, t_shape *sh, double t,
+						 t_argb *color, int depth);
 t_ray ft_shoot_ray(t_pt orig, t_pt dir, double t);
 t_ray ft_no_ray(void);
 void ft_trace_shapes(t_shape *cur_shape, t_ray *ray, double *min,
@@ -373,7 +373,7 @@ void ft_csg_combine(t_shape *sh, t_ray *ray, t_ray *ray_a, t_ray *ray_b,
 void ft_csg_intersect(t_shape *sh, t_ray *ray, t_ray *ray_a, t_ray *ray_b,
 					  t_shape *sa, t_shape *sb);
 void ft_csg_difference(t_shape *sh, t_ray *ray, t_ray *ray_a, t_ray *ray_b,
-						t_shape *sa, t_shape *sb);
+					   t_shape *sa, t_shape *sb);
 t_shape *ft_get_shape_by_index(t_window *win, int idx);
 
 void ft_shape_norm(t_shape *sh, t_ray *ray);

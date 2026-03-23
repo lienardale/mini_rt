@@ -84,8 +84,8 @@ void ft_cylinder_cap_check(t_shape *sh, t_ray *ray, double *best_t)
 		denom = ft_dot_product(sh->ori, ray->dir);
 		if (fabs(denom) < 1e-8)
 			continue;
-		t = ft_dot_product(ft_subtraction(cap_center, ray->orig), sh->ori)
-			/ denom;
+		t = ft_dot_product(ft_subtraction(cap_center, ray->orig), sh->ori) /
+			denom;
 		if (t < 0.0001 || t >= *best_t)
 			continue;
 		p = ft_addition(ray->orig, ft_multi_scal(t, ray->dir));

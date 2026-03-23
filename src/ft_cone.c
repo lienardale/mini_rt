@@ -80,15 +80,14 @@ void ft_intersect_ray_cone(t_shape *sh, t_ray *ray)
 	double disc;
 
 	oc = ft_subtraction(ray->orig, sh->pt_0);
-	a = ft_dot_product(ray->dir, ray->dir)
-		- (1.0 + sh->cone_half_angle_sq)
-			  * ft_sqr(ft_dot_product(ray->dir, sh->ori));
-	b = 2.0 * (ft_dot_product(oc, ray->dir)
-				- (1.0 + sh->cone_half_angle_sq)
-					  * ft_dot_product(oc, sh->ori)
-					  * ft_dot_product(ray->dir, sh->ori));
-	c = ft_dot_product(oc, oc)
-		- (1.0 + sh->cone_half_angle_sq) * ft_sqr(ft_dot_product(oc, sh->ori));
+	a = ft_dot_product(ray->dir, ray->dir) -
+		(1.0 + sh->cone_half_angle_sq) *
+			ft_sqr(ft_dot_product(ray->dir, sh->ori));
+	b = 2.0 * (ft_dot_product(oc, ray->dir) -
+			   (1.0 + sh->cone_half_angle_sq) * ft_dot_product(oc, sh->ori) *
+				   ft_dot_product(ray->dir, sh->ori));
+	c = ft_dot_product(oc, oc) -
+		(1.0 + sh->cone_half_angle_sq) * ft_sqr(ft_dot_product(oc, sh->ori));
 	disc = b * b - 4.0 * a * c;
 	if (disc < 0.0)
 	{

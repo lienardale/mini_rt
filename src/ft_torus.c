@@ -54,8 +54,7 @@ int ft_torus_check(t_window *win, t_shape **cur)
 	return (check);
 }
 
-static void ft_torus_transform_ray(t_shape *sh, t_ray *ray, t_pt *lo,
-									t_pt *ld)
+static void ft_torus_transform_ray(t_shape *sh, t_ray *ray, t_pt *lo, t_pt *ld)
 {
 	t_pt up;
 	t_pt right;
@@ -78,7 +77,7 @@ static void ft_torus_transform_ray(t_shape *sh, t_ray *ray, t_pt *lo,
 }
 
 static void ft_torus_build_quartic(double *c, t_pt lo, t_pt ld, double big_r,
-									double small_r)
+								   double small_r)
 {
 	double dd;
 	double oo;
@@ -93,11 +92,11 @@ static void ft_torus_build_quartic(double *c, t_pt lo, t_pt ld, double big_r,
 	big_r2 = big_r * big_r;
 	c[0] = dd * dd;
 	c[1] = 4.0 * dd * od;
-	c[2] = 2.0 * dd * (oo - r2 - big_r2) + 4.0 * od * od
-		+ 4.0 * big_r2 * ld.y * ld.y;
+	c[2] = 2.0 * dd * (oo - r2 - big_r2) + 4.0 * od * od +
+		   4.0 * big_r2 * ld.y * ld.y;
 	c[3] = 4.0 * od * (oo - r2 - big_r2) + 8.0 * big_r2 * lo.y * ld.y;
-	c[4] = (oo - r2 - big_r2) * (oo - r2 - big_r2)
-		- 4.0 * big_r2 * (r2 - lo.y * lo.y);
+	c[4] = (oo - r2 - big_r2) * (oo - r2 - big_r2) -
+		   4.0 * big_r2 * (r2 - lo.y * lo.y);
 }
 
 static int ft_solve_quadratic_local(double a, double b, double c, double *r)
@@ -172,8 +171,8 @@ int ft_quartic_inner(double a, double b, double cc, double d,
 	int n;
 	int count;
 
-	ft_solve_cubic(-b, a * cc - 4.0 * d,
-				   -a * a * d + 4.0 * b * d - cc * cc, cubic_roots);
+	ft_solve_cubic(-b, a * cc - 4.0 * d, -a * a * d + 4.0 * b * d - cc * cc,
+				   cubic_roots);
 	y = cubic_roots[0];
 	p = a * a / 4.0 - b + y;
 	q = y * y / 4.0 - d;

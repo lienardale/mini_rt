@@ -25,8 +25,8 @@ int ft_which_id(char *line)
 		return ('y');
 	if (line[0] == 'c' && line[1] == 'o' && (ft_isspace(line[2])) == 1)
 		return ('o');
-	if (line[0] == 'c' && line[1] == 's' && line[2] == 'g'
-		&& (ft_isspace(line[3])) == 1)
+	if (line[0] == 'c' && line[1] == 's' && line[2] == 'g' &&
+		(ft_isspace(line[3])) == 1)
 		return ('g');
 	if (line[0] == 't' && line[1] == 'r' && (ft_isspace(line[2])) == 1)
 		return ('t');

@@ -30,9 +30,8 @@ int ft_hyperboloid_init(t_window *win, t_shape **cur, char *line)
 	else
 		check = ft_error(7, win, "hyperboloid height");
 	ft_iterate_in_line(&line);
-	check = (ft_isdigit(*line) == 1)
-				? ft_color_init(win, &(*cur)->color, &line)
-				: ft_error(7, win, "hyperboloid color");
+	check = (ft_isdigit(*line) == 1) ? ft_color_init(win, &(*cur)->color, &line)
+									 : ft_error(7, win, "hyperboloid color");
 	if (check == 0)
 		check = (*line == '\0') ? ft_hyperboloid_check(win, cur)
 								: ft_error(4, win, "hyperboloid");
@@ -45,8 +44,7 @@ int ft_hyperboloid_check(t_window *win, t_shape **cur)
 
 	if (!cur || !(*cur))
 		return (ft_error(17, win, ""));
-	if ((*cur)->pt_1.x <= 0.0 || (*cur)->pt_1.y <= 0.0
-		|| (*cur)->height <= 0.0)
+	if ((*cur)->pt_1.x <= 0.0 || (*cur)->pt_1.y <= 0.0 || (*cur)->height <= 0.0)
 		return (ft_error(20, win, ""));
 	check = ft_pt_check(win, (*cur)->pt_0);
 	check = (check == 0) ? ft_color_check(win, (*cur)->color) : check;
@@ -124,10 +122,10 @@ void ft_hyperboloid_solve(t_shape *sh, t_ray *ray, t_pt o, t_pt d)
 	ax = sh->pt_1.x;
 	ay = sh->pt_1.y;
 	a = d.x * d.x / (ax * ax) + d.z * d.z / (ax * ax) - d.y * d.y / (ay * ay);
-	b = 2.0 * (o.x * d.x / (ax * ax) + o.z * d.z / (ax * ax)
-				- o.y * d.y / (ay * ay));
-	c = o.x * o.x / (ax * ax) + o.z * o.z / (ax * ax)
-		- o.y * o.y / (ay * ay) - 1.0;
+	b = 2.0 *
+		(o.x * d.x / (ax * ax) + o.z * d.z / (ax * ax) - o.y * d.y / (ay * ay));
+	c = o.x * o.x / (ax * ax) + o.z * o.z / (ax * ax) - o.y * o.y / (ay * ay) -
+		1.0;
 	disc = b * b - 4.0 * a * c;
 	if (disc < 0.0)
 	{
