@@ -180,10 +180,20 @@ coverage:	$(LIB)
 			@lcov --summary coverage/coverage.info 2>/dev/null || true
 			@echo "\nCoverage report: coverage/html/index.html"
 
+regression:	$(NAME)
+			@$(TEST_DIR)/regression/run_regression.sh
+
+regression-generate:	$(NAME)
+			@$(TEST_DIR)/regression/run_regression.sh --generate
+
+lint:
+			@clang-format --dry-run --Werror src/*.c includes/*.h 2>&1 \
+				&& echo "Lint: OK" || echo "Lint: formatting issues found"
+
 testclean:
 			$(RM) run_test_math run_test_intersections run_test_parsing
 			$(RM) cov_test_math cov_test_intersections cov_test_parsing
 			$(RM) -r coverage
 			$(RM) *.gcno *.gcda src/*.gcno src/*.gcda tests/*.gcno tests/*.gcda
 
-.PHONY:		re all clean fclean sanitize test testclean coverage
+.PHONY:		re all clean fclean sanitize test testclean coverage regression regression-generate lint
