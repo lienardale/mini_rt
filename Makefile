@@ -117,4 +117,21 @@ sanitize:	$(MLX)
 			$(RM) $(NAME)
 			$(MAKE) CFLAGS="$(SANFLAGS)" $(NAME)
 
-.PHONY:		re all clean fclean sanitize
+TEST_SRC_NAMES = ft_vectors.c ft_vectors_2.c ft_scalar.c ft_matrix.c \
+				 ft_pt.c ft_argb.c ft_cam.c
+
+TEST_SRCS = $(addprefix $(SRC_DIR)/,$(TEST_SRC_NAMES))
+TEST_DIR = tests
+TEST_BIN = run_tests
+
+test:		$(LIB)
+			$(CC) -Wall -Wextra -Werror -g3 \
+				-I includes -I$(LIBPATH) -I$(MLX_DIR) -I$(TEST_DIR) \
+				$(TEST_DIR)/test_math.c $(TEST_SRCS) \
+				$(LIB_INC) -lm \
+				-o $(TEST_BIN) && ./$(TEST_BIN)
+
+testclean:
+			$(RM) $(TEST_BIN)
+
+.PHONY:		re all clean fclean sanitize test testclean
