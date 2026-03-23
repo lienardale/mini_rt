@@ -117,21 +117,73 @@ sanitize:	$(MLX)
 			$(RM) $(NAME)
 			$(MAKE) CFLAGS="$(SANFLAGS)" $(NAME)
 
-TEST_SRC_NAMES = ft_vectors.c ft_vectors_2.c ft_scalar.c ft_matrix.c \
+TEST_MATH_SRCS = ft_vectors.c ft_vectors_2.c ft_scalar.c ft_matrix.c \
 				 ft_pt.c ft_argb.c ft_cam.c
 
-TEST_SRCS = $(addprefix $(SRC_DIR)/,$(TEST_SRC_NAMES))
+TEST_INTERSECT_SRCS = $(TEST_MATH_SRCS) ft_sphere.c ft_plane.c ft_square.c \
+					  ft_cylinder.c ft_cylinder_2.c ft_triangle.c \
+					  ft_ray_2.c ft_ray.c ft_light.c \
+					  ft_parsing.c ft_parsing_2.c ft_check_parsing.c \
+					  ft_check_parsing_2.c ft_bzero_struct.c
+
+TEST_PARSING_SRCS = $(TEST_MATH_SRCS) ft_parsing.c ft_parsing_2.c \
+					ft_check_parsing.c ft_check_parsing_2.c ft_bzero_struct.c \
+					ft_sphere.c ft_plane.c ft_square.c ft_cylinder.c \
+					ft_cylinder_2.c ft_triangle.c
+
 TEST_DIR = tests
-TEST_BIN = run_tests
+
+TEST_INC = -I includes -I$(LIBPATH) -I$(MLX_DIR) -I$(TEST_DIR)
+TEST_LINK = $(LIB_INC) -lm
 
 test:		$(LIB)
-			$(CC) -Wall -Wextra -Werror -g3 \
-				-I includes -I$(LIBPATH) -I$(MLX_DIR) -I$(TEST_DIR) \
-				$(TEST_DIR)/test_math.c $(TEST_SRCS) \
-				$(LIB_INC) -lm \
-				-o $(TEST_BIN) && ./$(TEST_BIN)
+			@echo "=== Running math tests ==="
+			@$(CC) -Wall -Wextra -Werror -g3 $(TEST_INC) \
+				$(TEST_DIR)/test_math.c \
+				$(addprefix $(SRC_DIR)/,$(TEST_MATH_SRCS)) \
+				$(TEST_LINK) -o run_test_math && ./run_test_math
+			@echo ""
+			@echo "=== Running intersection tests ==="
+			@$(CC) -Wall -Wextra -Werror -g3 $(TEST_INC) \
+				$(TEST_DIR)/test_intersections.c $(TEST_DIR)/test_stubs.c \
+				$(addprefix $(SRC_DIR)/,$(TEST_INTERSECT_SRCS)) \
+				$(TEST_LINK) -o run_test_intersections && ./run_test_intersections
+			@echo ""
+			@echo "=== Running parsing tests ==="
+			@$(CC) -Wall -Wextra -Werror -g3 $(TEST_INC) \
+				$(TEST_DIR)/test_parsing.c $(TEST_DIR)/test_stubs.c \
+				$(addprefix $(SRC_DIR)/,$(TEST_PARSING_SRCS)) \
+				$(TEST_LINK) -o run_test_parsing && ./run_test_parsing
+
+COV_FLAGS = -Wall -Wextra -g3 --coverage -fprofile-arcs -ftest-coverage
+
+coverage:	$(LIB)
+			@mkdir -p coverage
+			@$(CC) $(COV_FLAGS) $(TEST_INC) \
+				$(TEST_DIR)/test_math.c \
+				$(addprefix $(SRC_DIR)/,$(TEST_MATH_SRCS)) \
+				$(TEST_LINK) -o cov_test_math && ./cov_test_math
+			@$(CC) $(COV_FLAGS) $(TEST_INC) \
+				$(TEST_DIR)/test_intersections.c $(TEST_DIR)/test_stubs.c \
+				$(addprefix $(SRC_DIR)/,$(TEST_INTERSECT_SRCS)) \
+				$(TEST_LINK) -o cov_test_intersections && ./cov_test_intersections
+			@$(CC) $(COV_FLAGS) $(TEST_INC) \
+				$(TEST_DIR)/test_parsing.c $(TEST_DIR)/test_stubs.c \
+				$(addprefix $(SRC_DIR)/,$(TEST_PARSING_SRCS)) \
+				$(TEST_LINK) -o cov_test_parsing && ./cov_test_parsing
+			@lcov --capture --directory . --output-file coverage/coverage.info \
+				--ignore-errors mismatch 2>/dev/null
+			@lcov --remove coverage/coverage.info '*/libft/*' '*/tests/*' \
+				'/usr/*' --output-file coverage/coverage.info \
+				--ignore-errors unused 2>/dev/null
+			@genhtml coverage/coverage.info --output-directory coverage/html 2>/dev/null
+			@lcov --summary coverage/coverage.info 2>/dev/null || true
+			@echo "\nCoverage report: coverage/html/index.html"
 
 testclean:
-			$(RM) $(TEST_BIN)
+			$(RM) run_test_math run_test_intersections run_test_parsing
+			$(RM) cov_test_math cov_test_intersections cov_test_parsing
+			$(RM) -r coverage
+			$(RM) *.gcno *.gcda src/*.gcno src/*.gcda tests/*.gcno tests/*.gcda
 
-.PHONY:		re all clean fclean sanitize test testclean
+.PHONY:		re all clean fclean sanitize test testclean coverage

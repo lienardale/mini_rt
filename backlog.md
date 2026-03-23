@@ -26,22 +26,22 @@
 - [x] Write unit tests for vector math functions (`ft_vectors.c`, `ft_vectors_2.c`, `ft_scalar.c`, `ft_matrix.c`)
 - [x] Write unit tests for color operations (`ft_argb.c`)
 - [x] Write unit tests for point utilities (`ft_pt.c`)
-- [ ] Write unit tests for ray-shape intersections (sphere, plane, square, cylinder, triangle)
-- [ ] Write unit tests for lighting calculations (`ft_light.c`)
-- [ ] Write unit tests for scene file parsing and validation (`ft_parsing.c`, `ft_check_parsing.c`)
+- [x] Write unit tests for ray-shape intersections (sphere, plane, square, cylinder, triangle)
+- [x] Write unit tests for lighting calculations (`ft_light.c`) — tested via intersection dispatch with `ft_which_shape`
+- [x] Write unit tests for scene file parsing and validation (`ft_parsing.c`, `ft_check_parsing.c`)
 - [ ] Add regression tests using reference BMP output (render known scenes and compare pixel-by-pixel)
 
 ### Code Coverage
-- [ ] Configure `gcov`/`lcov` for coverage reporting
+- [x] Configure `gcov`/`lcov` for coverage reporting
 - [ ] Set a minimum coverage threshold (target: 80%+)
-- [ ] Add coverage report generation to Makefile (`make coverage`)
+- [x] Add coverage report generation to Makefile (`make coverage`)
 
 ### CI/CD Pipeline
 - [x] Create GitHub Actions workflow for build validation on push/PR
 - [x] Add automated test execution in CI
-- [ ] Add coverage reporting step (upload to Codecov or similar)
-- [ ] Add static analysis step (cppcheck, clang-tidy)
-- [ ] Add Valgrind/leak-check step in CI
+- [x] Add coverage reporting step (upload as artifact)
+- [x] Add static analysis step (cppcheck)
+- [x] Add Valgrind/leak-check step in CI
 - [ ] Add linting/formatting validation (norminette or clang-format)
 
 ---
