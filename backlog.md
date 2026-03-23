@@ -22,10 +22,10 @@
 ## 2. Unit Tests, Coverage & Pipeline Jobs
 
 ### Unit Test Framework
-- [ ] Choose and integrate a C testing framework (e.g., Unity, cmocka, or criterion)
-- [ ] Write unit tests for vector math functions (`ft_vectors.c`, `ft_vectors_2.c`, `ft_scalar.c`, `ft_matrix.c`)
-- [ ] Write unit tests for color operations (`ft_argb.c`)
-- [ ] Write unit tests for point utilities (`ft_pt.c`)
+- [x] Choose and integrate a C testing framework (custom lightweight header in `tests/minirt_test.h`)
+- [x] Write unit tests for vector math functions (`ft_vectors.c`, `ft_vectors_2.c`, `ft_scalar.c`, `ft_matrix.c`)
+- [x] Write unit tests for color operations (`ft_argb.c`)
+- [x] Write unit tests for point utilities (`ft_pt.c`)
 - [ ] Write unit tests for ray-shape intersections (sphere, plane, square, cylinder, triangle)
 - [ ] Write unit tests for lighting calculations (`ft_light.c`)
 - [ ] Write unit tests for scene file parsing and validation (`ft_parsing.c`, `ft_check_parsing.c`)

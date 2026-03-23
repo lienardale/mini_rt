@@ -1,4 +1,5 @@
 *test.c
+!tests/test_*.c
 *main.c
 *.o
 *.a
@@ -11,6 +12,8 @@ brouillon*
 *.txt
 *.sh
 test*
+!tests/
+!tests/**
 prog*
 sortie*
 bidule
@@ -21,6 +24,7 @@ result*
 .vscode/
 /ftprintfdestr*
 miniRT
+run_tests
 minilibx*
 *.dSYM/
 ft_mini_rt copy.c
