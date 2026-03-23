@@ -37,8 +37,8 @@
 - [ ] Add coverage report generation to Makefile (`make coverage`)
 
 ### CI/CD Pipeline
-- [ ] Create GitHub Actions workflow for build validation on push/PR
-- [ ] Add automated test execution in CI
+- [x] Create GitHub Actions workflow for build validation on push/PR
+- [x] Add automated test execution in CI
 - [ ] Add coverage reporting step (upload to Codecov or similar)
 - [ ] Add static analysis step (cppcheck, clang-tidy)
 - [ ] Add Valgrind/leak-check step in CI
