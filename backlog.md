@@ -54,8 +54,8 @@
 - [x] Ensure thread safety: scene data is read-only during rendering (no shared mutable state)
 - [x] Handle pixel buffer write synchronization (each thread writes to its own region)
 - [x] Add a `--threads N` CLI option or auto-detect available CPU cores
-- [ ] Benchmark single-threaded vs multi-threaded rendering and document speedup
-- [ ] Consider GPU acceleration (OpenCL/Vulkan compute) as a future stretch goal
+- [x] Benchmark single-threaded vs multi-threaded rendering and document speedup
+- [x] Consider GPU acceleration (OpenCL/Vulkan compute) as a future stretch goal
 
 ---
 

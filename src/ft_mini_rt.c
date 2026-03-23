@@ -73,13 +73,27 @@ void ft_parse(int *check, t_window *win, int fd)
 	ft_error_param(amb, res, win);
 }
 
+static int ft_has_save_flag(int ac, char **av)
+{
+	int i;
+
+	i = 2;
+	while (i < ac)
+	{
+		if (ft_strncmp("-save", av[i], 6) == 0)
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
 void ft_mlx_init(t_window *win, int ac, char **av)
 {
 	int ret;
 
 	mlx_key_hook(win->win_ptr, &ft_key, win);
 	mlx_mouse_hook(win->win_ptr, &ft_mouse, win);
-	if (ac == 3 && ft_strncmp("-save", av[2], ft_strlen(av[2])) == 0)
+	if (ft_has_save_flag(ac, av))
 	{
 		ret = ft_save(win);
 		ret == 0 ? ft_close(win) : ft_error(2, win, "save");
@@ -133,8 +147,19 @@ int main(int ac, char **av)
 		return (ft_error(0, &win, "arguments"));
 	if (ft_strncmp("rt\0", ft_strrchr(av[1], '.') + 1, 3) != 0)
 		ft_error(1, &win, ".rt");
-	if (ac == 3 && !ft_valid_arg(av[2]))
-		ft_error(0, &win, "arguments");
+	{
+		int arg_i;
+
+		arg_i = 2;
+		while (arg_i < ac)
+		{
+			if (!ft_valid_arg(av[arg_i]))
+				ft_error(0, &win, "arguments");
+			if (ft_strncmp("--threads", av[arg_i], 10) == 0)
+				arg_i++;
+			arg_i++;
+		}
+	}
 	ft_parse_threads(&win, ac, av);
 	if ((win.fd = open(av[1], O_RDONLY)) < 0)
 		return (ft_error(2, &win, "open"));

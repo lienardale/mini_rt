@@ -12,7 +12,7 @@
 
 #include "mini_rt.h"
 
-static void *ft_render_band(void *arg)
+void *ft_render_band(void *arg)
 {
 	t_thread_data *td;
 	t_cam local_cam;

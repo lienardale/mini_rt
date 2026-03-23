@@ -301,6 +301,7 @@ void ft_cylinder_calc_four(t_pt *calc, t_argb *dist, t_argb *dot);
 double ft_cylinder_calc_five(t_shape *sh, t_argb *dist, t_argb *dot,
 							 t_ray *ray);
 
+void *ft_render_band(void *arg);
 int ft_aff_threaded(t_window *win);
 int ft_get_num_cores(void);
 

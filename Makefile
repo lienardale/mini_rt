@@ -206,10 +206,24 @@ lint:
 			@clang-format --dry-run --Werror src/*.c includes/*.h 2>&1 \
 				&& echo "Lint: OK" || echo "Lint: formatting issues found"
 
+TEST_BENCH_SRCS = $(TEST_MATH_SRCS) ft_sphere.c ft_plane.c ft_square.c \
+				  ft_cylinder.c ft_cylinder_2.c ft_triangle.c \
+				  ft_ray_2.c ft_ray.c ft_light.c ft_precompute.c \
+				  ft_bvh.c ft_bvh_2.c ft_bzero_struct.c \
+				  ft_parsing.c ft_parsing_2.c ft_check_parsing.c \
+				  ft_check_parsing_2.c
+
+benchmark:	$(LIB)
+			@$(CC) -Wall -Wextra -Werror -g3 -ofast $(TEST_INC) \
+				$(TEST_DIR)/test_benchmark.c $(TEST_DIR)/test_stubs.c \
+				$(addprefix $(SRC_DIR)/,$(TEST_BENCH_SRCS)) \
+				$(TEST_LINK) -lpthread -o run_benchmark \
+				&& ./run_benchmark
+
 testclean:
-			$(RM) run_test_math run_test_intersections run_test_lighting run_test_parsing
+			$(RM) run_test_math run_test_intersections run_test_lighting run_test_parsing run_benchmark
 			$(RM) cov_test_math cov_test_intersections cov_test_lighting cov_test_parsing
 			$(RM) -r coverage
 			$(RM) *.gcno *.gcda src/*.gcno src/*.gcda tests/*.gcno tests/*.gcda
 
-.PHONY:		re all clean fclean sanitize test testclean coverage regression regression-generate lint
+.PHONY:		re all clean fclean sanitize test testclean coverage regression regression-generate lint benchmark
