@@ -511,6 +511,239 @@ TEST(test_paraboloid_hit)
 	ASSERT_TRUE(ray.lenght > 0);
 }
 
+/* ========== Additional cone tests ========== */
+
+TEST(test_cone_normal_direction)
+{
+	t_shape sh = make_cone(ft_pt_create(0, 0, -5), ft_pt_create(0, 1, 0),
+						   2.0, 3.0);
+	t_ray ray = make_ray(ft_pt_create(2, 1, -5), ft_pt_create(-1, 0, 0));
+	ft_intersect_ray_cone(&sh, &ray);
+	ASSERT_TRUE(ray.lenght > 0);
+	ASSERT_TRUE(ft_lenght(sh.n) > 0.9);
+	ASSERT_TRUE(ft_lenght(sh.n) < 1.1);
+}
+
+TEST(test_cone_behind_ray)
+{
+	t_shape sh = make_cone(ft_pt_create(0, 0, 5), ft_pt_create(0, 1, 0),
+						   2.0, 3.0);
+	t_ray ray = make_ray(ft_pt_create(0, 0, 0), ft_pt_create(0, 0, -1));
+	ft_intersect_ray_cone(&sh, &ray);
+	ASSERT_TRUE(ray.lenght < 0);
+}
+
+TEST(test_cone_dispatch)
+{
+	t_shape sh = make_cone(ft_pt_create(0, 0, -5), ft_pt_create(0, 1, 0),
+						   2.0, 3.0);
+	t_ray ray = make_ray(ft_pt_create(2, 1, -5), ft_pt_create(-1, 0, 0));
+	ft_which_shape(&sh, &ray);
+	ASSERT_TRUE(ray.lenght > 0);
+}
+
+/* ========== Additional disk tests ========== */
+
+TEST(test_disk_normal)
+{
+	t_shape sh = make_disk(ft_pt_create(0, 0, -5), ft_pt_create(0, 0, 1), 4.0);
+	t_ray ray = make_ray(ft_pt_create(0, 0, 0), ft_pt_create(0, 0, -1));
+	ft_intersect_ray_disk(&sh, &ray);
+	ASSERT_TRUE(ray.lenght > 0);
+	ASSERT_TRUE(fabs(sh.n.z) > 0.9);
+}
+
+/* ========== Additional ellipsoid tests ========== */
+
+TEST(test_ellipsoid_normal)
+{
+	t_shape sh = make_ellipsoid(ft_pt_create(0, 0, -5),
+								ft_pt_create(2, 1, 1));
+	t_ray ray = make_ray(ft_pt_create(0, 0, 0), ft_pt_create(0, 0, -1));
+	ft_intersect_ray_ellipsoid(&sh, &ray);
+	ASSERT_TRUE(ray.lenght > 0);
+	ASSERT_TRUE(ft_lenght(sh.n) > 0.9);
+}
+
+TEST(test_ellipsoid_behind_ray)
+{
+	t_shape sh = make_ellipsoid(ft_pt_create(0, 0, 5),
+								ft_pt_create(1, 1, 1));
+	t_ray ray = make_ray(ft_pt_create(0, 0, 0), ft_pt_create(0, 0, -1));
+	ft_intersect_ray_ellipsoid(&sh, &ray);
+	ASSERT_TRUE(ray.lenght < 0);
+}
+
+TEST(test_ellipsoid_dispatch)
+{
+	t_shape sh = make_ellipsoid(ft_pt_create(0, 0, -5),
+								ft_pt_create(2, 1, 1));
+	t_ray ray = make_ray(ft_pt_create(0, 0, 0), ft_pt_create(0, 0, -1));
+	ft_which_shape(&sh, &ray);
+	ASSERT_TRUE(ray.lenght > 0);
+}
+
+/* ========== Additional box tests ========== */
+
+TEST(test_box_behind_ray)
+{
+	t_shape sh = make_box(ft_pt_create(0, 0, 5), ft_pt_create(2, 2, 2));
+	t_ray ray = make_ray(ft_pt_create(0, 0, 0), ft_pt_create(0, 0, -1));
+	ft_intersect_ray_box(&sh, &ray);
+	ASSERT_TRUE(ray.lenght < 0);
+}
+
+TEST(test_box_hit_side_x)
+{
+	t_shape sh = make_box(ft_pt_create(5, 0, 0), ft_pt_create(2, 2, 2));
+	t_ray ray = make_ray(ft_pt_create(0, 0, 0), ft_pt_create(1, 0, 0));
+	ft_intersect_ray_box(&sh, &ray);
+	ASSERT_TRUE(ray.lenght > 0);
+	ASSERT_TRUE(fabs(sh.n.x) > 0.9);
+}
+
+TEST(test_box_hit_side_y)
+{
+	t_shape sh = make_box(ft_pt_create(0, 5, 0), ft_pt_create(2, 2, 2));
+	t_ray ray = make_ray(ft_pt_create(0, 0, 0), ft_pt_create(0, 1, 0));
+	ft_intersect_ray_box(&sh, &ray);
+	ASSERT_TRUE(ray.lenght > 0);
+	ASSERT_TRUE(fabs(sh.n.y) > 0.9);
+}
+
+/* ========== Additional torus tests ========== */
+
+TEST(test_torus_through_hole)
+{
+	t_shape sh = make_torus(ft_pt_create(0, 0, -5), ft_pt_create(0, 0, 1),
+							2.0, 0.3);
+	t_ray ray = make_ray(ft_pt_create(0, 0, 0), ft_pt_create(0, 0, -1));
+	ft_intersect_ray_torus(&sh, &ray);
+	ASSERT_TRUE(ray.lenght < 0);
+}
+
+TEST(test_torus_dispatch)
+{
+	t_shape sh = make_torus(ft_pt_create(0, 0, -5), ft_pt_create(0, 1, 0),
+							2.0, 0.5);
+	t_ray ray = make_ray(ft_pt_create(2, 0, -5), ft_pt_create(-1, 0, 0));
+	ft_which_shape(&sh, &ray);
+	ASSERT_TRUE(ray.lenght > 0);
+}
+
+/* ========== Additional hyperboloid tests ========== */
+
+TEST(test_hyperboloid_miss)
+{
+	t_shape sh = make_hyperboloid(ft_pt_create(0, 0, -5),
+								  ft_pt_create(0, 1, 0),
+								  ft_pt_create(1, 1, 0), 4.0);
+	t_ray ray = make_ray(ft_pt_create(0, 20, 0), ft_pt_create(0, 1, 0));
+	ft_intersect_ray_hyperboloid(&sh, &ray);
+	ASSERT_TRUE(ray.lenght < 0);
+}
+
+TEST(test_hyperboloid_dispatch)
+{
+	t_shape sh = make_hyperboloid(ft_pt_create(0, 0, -5),
+								  ft_pt_create(0, 1, 0),
+								  ft_pt_create(1, 1, 0), 4.0);
+	t_ray ray = make_ray(ft_pt_create(3, 0, -5), ft_pt_create(-1, 0, 0));
+	ft_which_shape(&sh, &ray);
+	ASSERT_TRUE(ray.lenght > 0);
+}
+
+/* ========== Additional paraboloid tests ========== */
+
+TEST(test_paraboloid_miss)
+{
+	t_shape sh = make_paraboloid(ft_pt_create(0, 0, -5),
+								 ft_pt_create(0, 1, 0), 1.0, 10.0);
+	t_ray ray = make_ray(ft_pt_create(0, 20, 0), ft_pt_create(0, 1, 0));
+	ft_intersect_ray_paraboloid(&sh, &ray);
+	ASSERT_TRUE(ray.lenght < 0);
+}
+
+TEST(test_paraboloid_dispatch)
+{
+	t_shape sh = make_paraboloid(ft_pt_create(0, 0, -5),
+								 ft_pt_create(0, 1, 0), 1.0, 10.0);
+	t_ray ray = make_ray(ft_pt_create(3, 2, -5), ft_pt_create(-1, 0, 0));
+	ft_which_shape(&sh, &ray);
+	ASSERT_TRUE(ray.lenght > 0);
+}
+
+/* ========== ft_trace_shapes tests ========== */
+
+TEST(test_trace_shapes_finds_closest)
+{
+	t_shape s1 = make_sphere(ft_pt_create(0, 0, -5), 2.0);
+	t_shape s2 = make_sphere(ft_pt_create(0, 0, -10), 2.0);
+	s1.next = &s2;
+	s2.next = NULL;
+
+	t_ray ray = make_ray(ft_pt_create(0, 0, 0), ft_pt_create(0, 0, -1));
+	double min = INFINITY;
+	t_shape *min_sh = NULL;
+	ft_trace_shapes(&s1, &ray, &min, &min_sh);
+	ASSERT_TRUE(min_sh == &s1);
+	ASSERT_DBL_EQ(4.0, min);
+}
+
+TEST(test_trace_shapes_empty)
+{
+	t_ray ray = make_ray(ft_pt_create(0, 0, 0), ft_pt_create(0, 0, -1));
+	double min = INFINITY;
+	t_shape *min_sh = NULL;
+	ft_trace_shapes(NULL, &ray, &min, &min_sh);
+	ASSERT_TRUE(min_sh == NULL);
+}
+
+/* ========== ft_precompute_shapes tests ========== */
+
+TEST(test_precompute_shapes_list)
+{
+	t_shape s1;
+	t_shape s2;
+	t_window win;
+
+	memset(&s1, 0, sizeof(t_shape));
+	memset(&s2, 0, sizeof(t_shape));
+	ft_window_init(&win);
+	s1.id = 's';
+	s1.pt_0 = ft_pt_create(0, 0, 0);
+	s1.diameter = 4.0;
+	s1.next = &s2;
+	s2.id = 'p';
+	s2.pt_0 = ft_pt_create(0, -1, 0);
+	s2.ori = ft_pt_create(0, 1, 0);
+	s2.next = NULL;
+	win.beg_sh = &s1;
+	ft_precompute_shapes(&win);
+	ASSERT_DBL_EQ(4.0, s1.radius_sq);
+	ASSERT_TRUE(fabs(s2.plane_d) > 0);
+}
+
+/* ========== Cylinder additional tests ========== */
+
+TEST(test_cylinder_along_axis)
+{
+	t_shape sh = make_cylinder(
+		ft_pt_create(0, -2, -5), ft_pt_create(0, 1, 0), 2.0, 4.0);
+	t_ray ray = make_ray(ft_pt_create(0, -10, -5), ft_pt_create(0, 1, 0));
+	ft_intersect_ray_cylinder(&sh, &ray);
+	ASSERT_TRUE(ray.lenght != 0);
+}
+
+TEST(test_cylinder_dispatch)
+{
+	t_shape sh = make_cylinder(
+		ft_pt_create(0, -2, -5), ft_pt_create(0, 1, 0), 2.0, 4.0);
+	t_ray ray = make_ray(ft_pt_create(5, 0, -5), ft_pt_create(-1, 0, 0));
+	ft_which_shape(&sh, &ray);
+	ASSERT_TRUE(ray.lenght > 0);
+}
+
 /* ========== Shape dispatch for new shapes ========== */
 
 TEST(test_which_shape_cone)
@@ -562,7 +795,17 @@ TEST(test_shoot_ray)
 	ASSERT_DBL_EQ(5.0, ray.lenght);
 }
 
+void	run_intersection_tests(void);
+
+#ifndef TEST_ALL
 int	main(void)
+{
+	run_intersection_tests();
+	TEST_REPORT();
+}
+#endif
+
+void	run_intersection_tests(void)
 {
 	TEST_SUITE("Sphere intersections");
 	RUN_TEST(test_sphere_hit_front);
@@ -594,30 +837,46 @@ int	main(void)
 	TEST_SUITE("Cone intersections");
 	RUN_TEST(test_cone_hit);
 	RUN_TEST(test_cone_miss);
+	RUN_TEST(test_cone_normal_direction);
+	RUN_TEST(test_cone_behind_ray);
+	RUN_TEST(test_cone_dispatch);
 
 	TEST_SUITE("Disk intersections");
 	RUN_TEST(test_disk_hit);
 	RUN_TEST(test_disk_miss_outside);
 	RUN_TEST(test_disk_parallel_miss);
+	RUN_TEST(test_disk_normal);
 
 	TEST_SUITE("Ellipsoid intersections");
 	RUN_TEST(test_ellipsoid_hit);
 	RUN_TEST(test_ellipsoid_miss);
+	RUN_TEST(test_ellipsoid_normal);
+	RUN_TEST(test_ellipsoid_behind_ray);
+	RUN_TEST(test_ellipsoid_dispatch);
 
 	TEST_SUITE("Box intersections");
 	RUN_TEST(test_box_hit);
 	RUN_TEST(test_box_miss);
 	RUN_TEST(test_box_normal);
+	RUN_TEST(test_box_behind_ray);
+	RUN_TEST(test_box_hit_side_x);
+	RUN_TEST(test_box_hit_side_y);
 
 	TEST_SUITE("Torus intersections");
 	RUN_TEST(test_torus_hit);
 	RUN_TEST(test_torus_miss);
+	RUN_TEST(test_torus_through_hole);
+	RUN_TEST(test_torus_dispatch);
 
 	TEST_SUITE("Hyperboloid intersections");
 	RUN_TEST(test_hyperboloid_hit);
+	RUN_TEST(test_hyperboloid_miss);
+	RUN_TEST(test_hyperboloid_dispatch);
 
 	TEST_SUITE("Paraboloid intersections");
 	RUN_TEST(test_paraboloid_hit);
+	RUN_TEST(test_paraboloid_miss);
+	RUN_TEST(test_paraboloid_dispatch);
 
 	TEST_SUITE("Shape dispatch & ray utilities");
 	RUN_TEST(test_which_shape_sphere);
@@ -629,5 +888,14 @@ int	main(void)
 	RUN_TEST(test_no_ray);
 	RUN_TEST(test_shoot_ray);
 
-	TEST_REPORT();
+	TEST_SUITE("ft_trace_shapes");
+	RUN_TEST(test_trace_shapes_finds_closest);
+	RUN_TEST(test_trace_shapes_empty);
+
+	TEST_SUITE("ft_precompute_shapes");
+	RUN_TEST(test_precompute_shapes_list);
+
+	TEST_SUITE("Cylinder additional");
+	RUN_TEST(test_cylinder_along_axis);
+	RUN_TEST(test_cylinder_dispatch);
 }

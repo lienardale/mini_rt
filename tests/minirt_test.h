@@ -7,9 +7,15 @@
 
 # define EPSILON 1e-6
 
+# ifdef TEST_ALL
+extern int g_tests_run;
+extern int g_tests_passed;
+extern int g_tests_failed;
+# else
 static int g_tests_run = 0;
 static int g_tests_passed = 0;
 static int g_tests_failed = 0;
+# endif
 
 # define TEST(name) static void name(void)
 

@@ -390,7 +390,17 @@ TEST(test_neg_is_scalar_minus_one)
 	ASSERT_PT_EQ(scal.x, scal.y, scal.z, neg);
 }
 
+void	run_math_tests(void);
+
+#ifndef TEST_ALL
 int	main(void)
+{
+	run_math_tests();
+	TEST_REPORT();
+}
+#endif
+
+void	run_math_tests(void)
 {
 	TEST_SUITE("ft_pt.c");
 	RUN_TEST(test_ft_sqr);
@@ -443,6 +453,4 @@ int	main(void)
 	RUN_TEST(test_addition_subtraction_inverse);
 	RUN_TEST(test_scalar_mult_div_inverse);
 	RUN_TEST(test_neg_is_scalar_minus_one);
-
-	TEST_REPORT();
 }
