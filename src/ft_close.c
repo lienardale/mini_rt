@@ -12,7 +12,7 @@
 
 #include "mini_rt.h"
 
-void	ft_cleanup(t_window *win)
+void ft_cleanup(t_window *win)
 {
 	if (win->line)
 	{
@@ -43,16 +43,16 @@ void	ft_cleanup(t_window *win)
 		close(win->fd);
 }
 
-int	ft_close(t_window *win)
+int ft_close(t_window *win)
 {
 	ft_cleanup(win);
 	exit(0);
 	return (0);
 }
 
-int	ft_free_lst_cam(t_window *win)
+int ft_free_lst_cam(t_window *win)
 {
-	t_cam	*tmp_c;
+	t_cam *tmp_c;
 
 	while (win->beg_cam)
 	{
@@ -64,9 +64,9 @@ int	ft_free_lst_cam(t_window *win)
 	return (0);
 }
 
-int	ft_free_lst_light(t_window *win)
+int ft_free_lst_light(t_window *win)
 {
-	t_light	*tmp_l;
+	t_light *tmp_l;
 
 	while (win->beg_light)
 	{
@@ -78,9 +78,9 @@ int	ft_free_lst_light(t_window *win)
 	return (0);
 }
 
-int	ft_free_lst_sh(t_window *win)
+int ft_free_lst_sh(t_window *win)
 {
-	t_shape	*tmp_s;
+	t_shape *tmp_s;
 
 	while (win->beg_sh)
 	{

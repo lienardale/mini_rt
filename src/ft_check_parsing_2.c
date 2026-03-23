@@ -12,14 +12,14 @@
 
 #include "mini_rt.h"
 
-int		ft_pt_check(t_window *win, t_pt pt)
+int ft_pt_check(t_window *win, t_pt pt)
 {
 	pt.x = pt.x;
 	(void)win;
 	return (0);
 }
 
-int		ft_ori_check(t_window *win, t_pt ori)
+int ft_ori_check(t_window *win, t_pt ori)
 {
 	(void)win;
 	if (-1 > ori.x || ori.x > 1)
@@ -31,7 +31,7 @@ int		ft_ori_check(t_window *win, t_pt ori)
 	return (0);
 }
 
-int		ft_color_check(t_window *win, t_argb color)
+int ft_color_check(t_window *win, t_argb color)
 {
 	(void)win;
 	if (0 > color.r || color.r > 255)
@@ -43,13 +43,13 @@ int		ft_color_check(t_window *win, t_argb color)
 	return (0);
 }
 
-void	ft_parse_resol(int *res, t_window *win, char *line)
+void ft_parse_resol(int *res, t_window *win, char *line)
 {
 	ft_resol_init(win, line);
 	(*res)++;
 }
 
-void	ft_parse_amb(int *amb, t_window *win, char *line)
+void ft_parse_amb(int *amb, t_window *win, char *line)
 {
 	ft_amb_light_init(win, line);
 	(*amb)++;

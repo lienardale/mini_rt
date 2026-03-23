@@ -12,7 +12,7 @@
 
 #include "mini_rt.h"
 
-int		ft_color_init(t_window *win, t_argb *col, char **l)
+int ft_color_init(t_window *win, t_argb *col, char **l)
 {
 	col->a = -1;
 	col->r = -1;
@@ -34,30 +34,27 @@ int		ft_color_init(t_window *win, t_argb *col, char **l)
 	return (ft_color_check(win, *col));
 }
 
-int		ft_point_init(t_window *win, t_pt *pt, char **l)
+int ft_point_init(t_window *win, t_pt *pt, char **l)
 {
 	pt->x = ((ft_isnum(*l) == 1) ? ft_atof(*l) : ft_error(7, win, "point"));
-	while (((ft_isdigit(**l)) == 1 || **l == '.' || **l == '-')
-		&& **l)
+	while (((ft_isdigit(**l)) == 1 || **l == '.' || **l == '-') && **l)
 		(*l)++;
 	(**l == ',') ? (*l)++ : 0;
 	pt->y = ((ft_isnum(*l) == 1) ? ft_atof(*l) : ft_error(7, win, "point"));
-	while (((ft_isdigit(**l)) == 1 || **l == '.' || **l == '-')
-		&& **l)
+	while (((ft_isdigit(**l)) == 1 || **l == '.' || **l == '-') && **l)
 		(*l)++;
 	(**l == ',') ? (*l)++ : 0;
 	pt->z = ((ft_isnum(*l) == 1) ? ft_atof(*l) : ft_error(7, win, "point"));
-	while (((ft_isdigit(**l)) == 1 || **l == '.' || **l == '-')
-		&& **l)
+	while (((ft_isdigit(**l)) == 1 || **l == '.' || **l == '-') && **l)
 		(*l)++;
 	while ((ft_isspace(**l)) == 1)
 		(*l)++;
 	return (ft_pt_check(win, *pt));
 }
 
-int		ft_shape_init(t_window *win, t_shape **begin, char *line)
+int ft_shape_init(t_window *win, t_shape **begin, char *line)
 {
-	int		i;
+	int i;
 	t_shape *current;
 
 	i = 0;
@@ -75,40 +72,38 @@ int		ft_shape_init(t_window *win, t_shape **begin, char *line)
 	return (0);
 }
 
-int		ft_amb_light_init(t_window *amb, char *line)
+int ft_amb_light_init(t_window *amb, char *line)
 {
-	while (*line && ((ft_isspace(*line)) == 1
-				|| (ft_isalpha(*line)) == 1))
+	while (*line && ((ft_isspace(*line)) == 1 || (ft_isalpha(*line)) == 1))
 		line++;
 	amb->ratio = (((ft_isdigit(*line)) == 1) ? ft_atof(line)
-		: ft_error(3, amb, "amb_light"));
+											 : ft_error(3, amb, "amb_light"));
 	while (((ft_isdigit(*line)) == 1 || *line == '.') && *line)
 		line++;
 	while (*line && (ft_isspace(*line)) == 1)
 		line++;
 	((ft_isdigit(*line)) == 1) ? ft_color_init(amb, &amb->col, &line)
-		: ft_error(3, amb, "amb_light");
+							   : ft_error(3, amb, "amb_light");
 	return ((*line == '\0') ? ft_check_amb_light(amb)
-		: ft_error(4, amb, "amb_light"));
+							: ft_error(4, amb, "amb_light"));
 }
 
-int		ft_resol_init(t_window *res, char *line)
+int ft_resol_init(t_window *res, char *line)
 {
-	while (*line && ((ft_isspace(*line)) == 1
-				|| (ft_isalpha(*line)) == 1))
+	while (*line && ((ft_isspace(*line)) == 1 || (ft_isalpha(*line)) == 1))
 		line++;
 	res->x = ((ft_isdigit(*line) == 1) ? ft_atoi(line)
-		: ft_error(3, res, "resolution"));
+									   : ft_error(3, res, "resolution"));
 	while ((ft_isdigit(*line)) == 1 && *line)
 		line++;
 	while (*line && (ft_isspace(*line)) == 1)
 		line++;
 	res->y = ((ft_isdigit(*line) == 1) ? ft_atoi(line)
-		: ft_error(3, res, "resolution"));
+									   : ft_error(3, res, "resolution"));
 	while (((ft_isdigit(*line)) == 1) && *line)
 		line++;
 	while ((ft_isspace(*line)) == 1)
 		line++;
 	return ((*line == '\0') ? ft_check_resol(res)
-		: ft_error(4, res, "resolution"));
+							: ft_error(4, res, "resolution"));
 }

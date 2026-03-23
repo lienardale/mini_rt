@@ -12,15 +12,15 @@
 
 #include "mini_rt.h"
 
-t_ray	ft_no_ray(void)
+t_ray ft_no_ray(void)
 {
-	t_ray	ray;
+	t_ray ray;
 
 	ray.lenght = -1;
 	return (ray);
 }
 
-void	ft_which_shape(t_shape *sh, t_ray *ray)
+void ft_which_shape(t_shape *sh, t_ray *ray)
 {
 	if (sh->id == 's')
 		ft_intersect_ray_sphere(sh, ray);

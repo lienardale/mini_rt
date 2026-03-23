@@ -12,9 +12,9 @@
 
 #include "mini_rt.h"
 
-t_pt	ft_point_matrix_transl(t_pt p, t_mat m)
+t_pt ft_point_matrix_transl(t_pt p, t_mat m)
 {
-	t_pt	n;
+	t_pt n;
 
 	n.x = p.x * m.x.x + p.y * m.y.x + p.z * m.z.x;
 	n.y = p.x * m.x.y + p.y * m.y.y + p.z * m.z.y;
@@ -22,9 +22,9 @@ t_pt	ft_point_matrix_transl(t_pt p, t_mat m)
 	return (n);
 }
 
-t_pt	ft_translation(t_pt coord, t_pt m1)
+t_pt ft_translation(t_pt coord, t_pt m1)
 {
-	t_pt	m2;
+	t_pt m2;
 
 	m2 = m1;
 	if (coord.x != 0)

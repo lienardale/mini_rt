@@ -149,6 +149,12 @@ test:		$(LIB)
 				$(addprefix $(SRC_DIR)/,$(TEST_INTERSECT_SRCS)) \
 				$(TEST_LINK) -o run_test_intersections && ./run_test_intersections
 			@echo ""
+			@echo "=== Running lighting tests ==="
+			@$(CC) -Wall -Wextra -Werror -g3 $(TEST_INC) \
+				$(TEST_DIR)/test_lighting.c $(TEST_DIR)/test_stubs.c \
+				$(addprefix $(SRC_DIR)/,$(TEST_INTERSECT_SRCS)) \
+				$(TEST_LINK) -o run_test_lighting && ./run_test_lighting
+			@echo ""
 			@echo "=== Running parsing tests ==="
 			@$(CC) -Wall -Wextra -Werror -g3 $(TEST_INC) \
 				$(TEST_DIR)/test_parsing.c $(TEST_DIR)/test_stubs.c \
@@ -167,6 +173,10 @@ coverage:	$(LIB)
 				$(TEST_DIR)/test_intersections.c $(TEST_DIR)/test_stubs.c \
 				$(addprefix $(SRC_DIR)/,$(TEST_INTERSECT_SRCS)) \
 				$(TEST_LINK) -o cov_test_intersections && ./cov_test_intersections
+			@$(CC) $(COV_FLAGS) $(TEST_INC) \
+				$(TEST_DIR)/test_lighting.c $(TEST_DIR)/test_stubs.c \
+				$(addprefix $(SRC_DIR)/,$(TEST_INTERSECT_SRCS)) \
+				$(TEST_LINK) -o cov_test_lighting && ./cov_test_lighting
 			@$(CC) $(COV_FLAGS) $(TEST_INC) \
 				$(TEST_DIR)/test_parsing.c $(TEST_DIR)/test_stubs.c \
 				$(addprefix $(SRC_DIR)/,$(TEST_PARSING_SRCS)) \
@@ -191,8 +201,8 @@ lint:
 				&& echo "Lint: OK" || echo "Lint: formatting issues found"
 
 testclean:
-			$(RM) run_test_math run_test_intersections run_test_parsing
-			$(RM) cov_test_math cov_test_intersections cov_test_parsing
+			$(RM) run_test_math run_test_intersections run_test_lighting run_test_parsing
+			$(RM) cov_test_math cov_test_intersections cov_test_lighting cov_test_parsing
 			$(RM) -r coverage
 			$(RM) *.gcno *.gcda src/*.gcno src/*.gcda tests/*.gcno tests/*.gcda
 

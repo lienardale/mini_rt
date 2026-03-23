@@ -12,9 +12,9 @@
 
 #include "mini_rt.h"
 
-t_pt	ft_multi_scal(double a, t_pt b)
+t_pt ft_multi_scal(double a, t_pt b)
 {
-	t_pt	c;
+	t_pt c;
 
 	c.x = (a * b.x);
 	c.y = (a * b.y);
@@ -22,9 +22,9 @@ t_pt	ft_multi_scal(double a, t_pt b)
 	return (c);
 }
 
-t_pt	ft_div_scal(double a, t_pt b)
+t_pt ft_div_scal(double a, t_pt b)
 {
-	t_pt	c;
+	t_pt c;
 
 	c.x = (b.x / a);
 	c.y = (b.y / a);
@@ -32,9 +32,9 @@ t_pt	ft_div_scal(double a, t_pt b)
 	return (c);
 }
 
-t_pt	ft_add_scal(double a, t_pt b)
+t_pt ft_add_scal(double a, t_pt b)
 {
-	t_pt	c;
+	t_pt c;
 
 	c.x = b.x + a;
 	c.y = b.y + a;
@@ -42,9 +42,9 @@ t_pt	ft_add_scal(double a, t_pt b)
 	return (c);
 }
 
-t_pt	ft_sub_scal(double a, t_pt b)
+t_pt ft_sub_scal(double a, t_pt b)
 {
-	t_pt	c;
+	t_pt c;
 
 	c.x = b.x - a;
 	c.y = b.y - a;

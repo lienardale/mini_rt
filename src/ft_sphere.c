@@ -12,15 +12,15 @@
 
 #include "mini_rt.h"
 
-int		ft_sphere_init(t_window *win, t_shape **cur, char *line)
+int ft_sphere_init(t_window *win, t_shape **cur, char *line)
 {
-	int	check;
+	int check;
 
 	(*cur)->id = 's';
 	while ((ft_isspace(*line)) == 1 || (ft_isalpha(*line)) == 1)
 		line++;
 	check = (ft_isnum(line) == 1) ? ft_point_init(win, &(*cur)->pt_0, &line)
-		: ft_error(7, win, "sphere point");
+								  : ft_error(7, win, "sphere point");
 	if (ft_isdigit(*line) == 1)
 		(*cur)->diameter = ft_atof(line);
 	else
@@ -30,14 +30,14 @@ int		ft_sphere_init(t_window *win, t_shape **cur, char *line)
 	while ((ft_isspace(*line)) == 1)
 		line++;
 	check = (ft_isdigit(*line) == 1) ? ft_color_init(win, &(*cur)->color, &line)
-		: ft_error(7, win, "sphere color");
+									 : ft_error(7, win, "sphere color");
 	if (check == 0)
 		check = (*line == '\0') ? ft_sphere_check(win, cur)
-			: ft_error(4, win, "sphere");
+								: ft_error(4, win, "sphere");
 	return (check == 0 ? 0 : ft_error(check, win, "sphere"));
 }
 
-int		ft_sphere_check(t_window *win, t_shape **current)
+int ft_sphere_check(t_window *win, t_shape **current)
 {
 	int check;
 
@@ -50,9 +50,9 @@ int		ft_sphere_check(t_window *win, t_shape **current)
 	return (check);
 }
 
-void	ft_sphere_norm(t_shape *sh, t_ray *ray)
+void ft_sphere_norm(t_shape *sh, t_ray *ray)
 {
-	t_pt	r;
+	t_pt r;
 
 	r = ft_addition(ray->orig, ft_multi_scal(ray->lenght, ray->dir));
 	r = ft_subtraction(r, sh->pt_0);
@@ -60,12 +60,12 @@ void	ft_sphere_norm(t_shape *sh, t_ray *ray)
 	sh->n = r;
 }
 
-void	ft_intersect_ray_sphere(t_shape *sh, t_ray *ray)
+void ft_intersect_ray_sphere(t_shape *sh, t_ray *ray)
 {
-	double	b;
-	double	c;
-	t_pt	calc;
-	t_pt	oc;
+	double b;
+	double c;
+	t_pt calc;
+	t_pt oc;
 
 	sh->in = 0;
 	oc = ft_subtraction(ray->orig, sh->pt_0);
@@ -75,7 +75,7 @@ void	ft_intersect_ray_sphere(t_shape *sh, t_ray *ray)
 	c = ft_dot_product(oc, oc) - ft_sqr(sh->diameter / 2);
 	calc.x = (b * b) - (4 * c);
 	if (calc.x < 0 && (ray->lenght = -1))
-		return ;
+		return;
 	calc.y = (-b - sqrt(calc.x)) / 2;
 	calc.z = (-b + sqrt(calc.x)) / 2;
 	if (calc.z > 0.0001 && calc.z < calc.y)

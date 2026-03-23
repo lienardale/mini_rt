@@ -12,22 +12,23 @@
 
 #include "mini_rt.h"
 
-void	ft_error_id(t_window *win)
+void ft_error_id(t_window *win)
 {
-	if (win->line){
+	if (win->line)
+	{
 		free(win->line);
 		win->line = NULL;
 	}
 	ft_error(5, win, "line");
 }
 
-void	ft_error_param(int amb, int res, t_window *win)
+void ft_error_param(int amb, int res, t_window *win)
 {
 	res != 1 ? ft_error(res, win, "resolution lines, should be one") : 0;
 	amb != 1 ? ft_error(amb, win, "ambient light lines, should be one") : 0;
 }
 
-int		ft_error(int error, t_window *win, const char *str)
+int ft_error(int error, t_window *win, const char *str)
 {
 	ft_printf("Error \n%d : ", error);
 	if (error == 0)

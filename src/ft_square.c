@@ -12,7 +12,7 @@
 
 #include "mini_rt.h"
 
-int		ft_square_init(t_window *win, t_shape **cur, char *line)
+int ft_square_init(t_window *win, t_shape **cur, char *line)
 {
 	int check;
 
@@ -20,9 +20,9 @@ int		ft_square_init(t_window *win, t_shape **cur, char *line)
 	while ((ft_isspace(*line)) == 1 || (ft_isalpha(*line)) == 1)
 		line++;
 	check = (ft_isnum(line) == 1) ? ft_point_init(win, &(*cur)->pt_0, &line)
-		: ft_error(7, win, "square point");
+								  : ft_error(7, win, "square point");
 	check = (ft_isnum(line) == 1) ? ft_point_init(win, &(*cur)->ori, &line)
-		: ft_error(7, win, "square orientation");
+								  : ft_error(7, win, "square orientation");
 	if (ft_isdigit(*line) == 1)
 		(*cur)->height = ft_atof(line);
 	else
@@ -32,14 +32,14 @@ int		ft_square_init(t_window *win, t_shape **cur, char *line)
 	while ((ft_isspace(*line)) == 1)
 		line++;
 	check = (ft_isdigit(*line) == 1) ? ft_color_init(win, &(*cur)->color, &line)
-		: ft_error(7, win, "square color");
+									 : ft_error(7, win, "square color");
 	if (check == 0)
 		check = (*line == '\0') ? ft_square_check(win, cur)
-			: ft_error(4, win, "square");
+								: ft_error(4, win, "square");
 	return (check == 0 ? 0 : ft_error(check, win, "square"));
 }
 
-int		ft_square_check(t_window *win, t_shape **current)
+int ft_square_check(t_window *win, t_shape **current)
 {
 	int check;
 
@@ -54,25 +54,25 @@ int		ft_square_check(t_window *win, t_shape **current)
 	return (check);
 }
 
-void	ft_square_norm(t_shape *sh)
+void ft_square_norm(t_shape *sh)
 {
 	sh->n = sh->ori;
 }
 
-void	ft_intersect_ray_square(t_shape *sh, t_ray *ray)
+void ft_intersect_ray_square(t_shape *sh, t_ray *ray)
 {
-	double	d;
-	double	t;
-	t_pt	r;
+	double d;
+	double t;
+	t_pt r;
 
 	sh->n = sh->ori;
 	t = -ft_dot_product(sh->n, sh->pt_0);
-	t = -(ft_dot_product(sh->n, ray->orig) + t) \
-		/ ft_dot_product(sh->n, ray->dir);
+	t = -(ft_dot_product(sh->n, ray->orig) + t) /
+		ft_dot_product(sh->n, ray->dir);
 	if (t < 0.0001)
 	{
 		ray->lenght = -1;
-		return ;
+		return;
 	}
 	r = ft_addition(ray->orig, ft_multi_scal(t, ray->dir));
 	if ((d = ft_is_in_square(ray, sh, r)) == 0)
@@ -86,10 +86,10 @@ void	ft_intersect_ray_square(t_shape *sh, t_ray *ray)
 		ray->lenght = -1;
 }
 
-double	ft_is_in_square(t_ray *ray, t_shape *sh, t_pt r)
+double ft_is_in_square(t_ray *ray, t_shape *sh, t_pt r)
 {
-	t_pt	tmp;
-	double	h;
+	t_pt tmp;
+	double h;
 
 	(void)ray;
 	h = sh->height / 2;

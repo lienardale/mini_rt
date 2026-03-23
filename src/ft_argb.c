@@ -12,10 +12,10 @@
 
 #include "mini_rt.h"
 
-void	ft_pix(int x, int y, t_window *w, t_argb color)
+void ft_pix(int x, int y, t_window *w, t_argb color)
 {
-	int	i;
-	int	j;
+	int i;
+	int j;
 
 	i = 0;
 	while (i < w->resol)
@@ -32,9 +32,9 @@ void	ft_pix(int x, int y, t_window *w, t_argb color)
 	}
 }
 
-t_argb	ft_multi_argb(t_argb a, t_argb col)
+t_argb ft_multi_argb(t_argb a, t_argb col)
 {
-	t_argb	c;
+	t_argb c;
 
 	c.r = (a.r * col.r);
 	c.g = (a.g * col.g);
@@ -42,9 +42,9 @@ t_argb	ft_multi_argb(t_argb a, t_argb col)
 	return (c);
 }
 
-t_argb	ft_albedo(t_pt a, t_argb col)
+t_argb ft_albedo(t_pt a, t_argb col)
 {
-	t_argb	c;
+	t_argb c;
 
 	c.r = (a.x * col.r / 255);
 	c.g = (a.y * col.g / 255);
@@ -59,7 +59,7 @@ t_argb	ft_albedo(t_pt a, t_argb col)
 	return (c);
 }
 
-void	ft_db_mult_to_add_pt(t_pt *a, double b, t_argb c)
+void ft_db_mult_to_add_pt(t_pt *a, double b, t_argb c)
 {
 	a->x += b * (c.r);
 	a->y += b * (c.g);
