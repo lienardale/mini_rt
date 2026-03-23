@@ -187,22 +187,15 @@ COV_FLAGS = -Wall -Wextra -g3 --coverage -fprofile-arcs -ftest-coverage
 
 coverage:	$(LIB)
 			@mkdir -p coverage
-			@$(CC) $(COV_FLAGS) $(TEST_INC) \
+			@$(CC) $(COV_FLAGS) -DTEST_ALL $(TEST_INC) \
+				$(TEST_DIR)/test_all.c \
 				$(TEST_DIR)/test_math.c \
-				$(addprefix $(SRC_DIR)/,$(TEST_MATH_SRCS)) \
-				$(TEST_LINK) -o cov_test_math && ./cov_test_math
-			@$(CC) $(COV_FLAGS) $(TEST_INC) \
-				$(TEST_DIR)/test_intersections.c $(TEST_DIR)/test_stubs.c \
+				$(TEST_DIR)/test_intersections.c \
+				$(TEST_DIR)/test_lighting.c \
+				$(TEST_DIR)/test_parsing.c \
+				$(TEST_DIR)/test_stubs.c \
 				$(addprefix $(SRC_DIR)/,$(TEST_INTERSECT_SRCS)) \
-				$(TEST_LINK) -o cov_test_intersections && ./cov_test_intersections
-			@$(CC) $(COV_FLAGS) $(TEST_INC) \
-				$(TEST_DIR)/test_lighting.c $(TEST_DIR)/test_stubs.c \
-				$(addprefix $(SRC_DIR)/,$(TEST_INTERSECT_SRCS)) \
-				$(TEST_LINK) -o cov_test_lighting && ./cov_test_lighting
-			@$(CC) $(COV_FLAGS) $(TEST_INC) \
-				$(TEST_DIR)/test_parsing.c $(TEST_DIR)/test_stubs.c \
-				$(addprefix $(SRC_DIR)/,$(TEST_PARSING_SRCS)) \
-				$(TEST_LINK) -o cov_test_parsing && ./cov_test_parsing
+				$(TEST_LINK) -o cov_test_all && ./cov_test_all
 			@lcov --capture --directory . --output-file coverage/coverage.info \
 				--ignore-errors mismatch 2>/dev/null
 			@lcov --remove coverage/coverage.info '*/libft/*' '*/tests/*' \
@@ -237,7 +230,7 @@ benchmark:	$(LIB)
 
 testclean:
 			$(RM) run_test_math run_test_intersections run_test_lighting run_test_parsing run_benchmark
-			$(RM) cov_test_math cov_test_intersections cov_test_lighting cov_test_parsing
+			$(RM) cov_test_math cov_test_intersections cov_test_lighting cov_test_parsing cov_test_all
 			$(RM) -r coverage
 			$(RM) *.gcno *.gcda src/*.gcno src/*.gcda tests/*.gcno tests/*.gcda
 

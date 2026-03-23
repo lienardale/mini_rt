@@ -344,6 +344,127 @@ TEST(test_check_light_bad_ratio)
 
 /* ========== ft_check_parsing (integration) ========== */
 
+/* ========== Shape init tests ========== */
+
+static t_shape	*alloc_shape(void)
+{
+	t_shape *sh;
+
+	sh = ft_calloc(1, sizeof(t_shape));
+	return (sh);
+}
+
+TEST(test_cone_init_valid)
+{
+	t_window win;
+	t_shape *sh;
+
+	ft_window_init(&win);
+	sh = alloc_shape();
+	char line[] = "co 0,0,-5 0,1,0 2.0 3.0 255,50,50";
+	int ret = ft_cone_init(&win, &sh, line);
+	ASSERT_TRUE(ret == 0);
+	ASSERT_TRUE(sh->id == 'o');
+	ASSERT_DBL_EQ(2.0, sh->diameter);
+	ASSERT_DBL_EQ(3.0, sh->height);
+	ASSERT_DBL_EQ(255.0, sh->color.r);
+	free(sh);
+}
+
+TEST(test_disk_init_valid)
+{
+	t_window win;
+	t_shape *sh;
+
+	ft_window_init(&win);
+	sh = alloc_shape();
+	char line[] = "dk 0,0,-5 0,0,1 4.0 200,100,50";
+	int ret = ft_disk_init(&win, &sh, line);
+	ASSERT_TRUE(ret == 0);
+	ASSERT_TRUE(sh->id == 'k');
+	ASSERT_DBL_EQ(4.0, sh->diameter);
+	free(sh);
+}
+
+TEST(test_torus_init_valid)
+{
+	t_window win;
+	t_shape *sh;
+
+	ft_window_init(&win);
+	sh = alloc_shape();
+	char line[] = "to 0,0,-5 0,1,0 2.0 0.5 255,0,255";
+	int ret = ft_torus_init(&win, &sh, line);
+	ASSERT_TRUE(ret == 0);
+	ASSERT_TRUE(sh->id == 'u');
+	ASSERT_DBL_EQ(2.0, sh->diameter);
+	ASSERT_DBL_EQ(0.5, sh->height);
+	free(sh);
+}
+
+TEST(test_ellipsoid_init_valid)
+{
+	t_window win;
+	t_shape *sh;
+
+	ft_window_init(&win);
+	sh = alloc_shape();
+	char line[] = "el 0,0,-5 2.0,1.0,1.0 100,200,50";
+	int ret = ft_ellipsoid_init(&win, &sh, line);
+	ASSERT_TRUE(ret == 0);
+	ASSERT_TRUE(sh->id == 'e');
+	ASSERT_DBL_EQ(100.0, sh->color.r);
+	free(sh);
+}
+
+TEST(test_box_init_valid)
+{
+	t_window win;
+	t_shape *sh;
+
+	ft_window_init(&win);
+	sh = alloc_shape();
+	char line[] = "bx 0,0,-5 2,2,2 255,128,0";
+	int ret = ft_box_init(&win, &sh, line);
+	ASSERT_TRUE(ret == 0);
+	ASSERT_TRUE(sh->id == 'b');
+	ASSERT_DBL_EQ(2.0, sh->pt_1.x);
+	free(sh);
+}
+
+TEST(test_hyperboloid_init_valid)
+{
+	t_window win;
+	t_shape *sh;
+
+	ft_window_init(&win);
+	sh = alloc_shape();
+	char line[] = "hy 0,0,-5 0,1,0 1.5,2.0,0 6.0 255,100,50";
+	int ret = ft_hyperboloid_init(&win, &sh, line);
+	ASSERT_TRUE(ret == 0);
+	ASSERT_TRUE(sh->id == 'h');
+	ASSERT_DBL_EQ(6.0, sh->height);
+	free(sh);
+}
+
+TEST(test_paraboloid_init_valid)
+{
+	t_window win;
+	t_shape *sh;
+
+	ft_window_init(&win);
+	sh = alloc_shape();
+	char line[] = "pa 0,0,-5 0,1,0 0.5 4.0 50,200,255";
+	int ret = ft_paraboloid_init(&win, &sh, line);
+	ASSERT_TRUE(ret == 0);
+	ASSERT_TRUE(sh->id == 'a');
+	ASSERT_DBL_EQ(0.5, sh->diameter);
+	ASSERT_DBL_EQ(4.0, sh->height);
+	free(sh);
+}
+
+/* ========== Full parsing integration ========== */
+
 TEST(test_check_parsing_full)
 {
 	t_window win;
@@ -367,7 +488,17 @@ TEST(test_check_parsing_full)
 	ASSERT_TRUE(win.y == 480);
 }
 
+void	run_parsing_tests(void);
+
+#ifndef TEST_ALL
 int main(void)
+{
+	run_parsing_tests();
+	TEST_REPORT();
+}
+#endif
+
+void	run_parsing_tests(void)
 {
 	TEST_SUITE("ft_which_id");
 	RUN_TEST(test_which_id_sphere);
@@ -427,8 +558,15 @@ int main(void)
 	RUN_TEST(test_check_light_null);
 	RUN_TEST(test_check_light_bad_ratio);
 
+	TEST_SUITE("Shape init parsing");
+	RUN_TEST(test_cone_init_valid);
+	RUN_TEST(test_disk_init_valid);
+	RUN_TEST(test_torus_init_valid);
+	RUN_TEST(test_ellipsoid_init_valid);
+	RUN_TEST(test_box_init_valid);
+	RUN_TEST(test_hyperboloid_init_valid);
+	RUN_TEST(test_paraboloid_init_valid);
+
 	TEST_SUITE("ft_check_parsing (integration)");
 	RUN_TEST(test_check_parsing_full);
-
-	TEST_REPORT();
 }
