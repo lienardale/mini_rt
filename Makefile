@@ -79,6 +79,8 @@ RM = 		rm -f
 
 CFLAGS =	-Wall -Wextra -Werror -g3 -ofast
 
+SANFLAGS =	-Wall -Wextra -Werror -g3 -fsanitize=address -fno-omit-frame-pointer
+
 all:		$(LIB) $(MLX) $(NAME)
 
 $(OBJ_DIR)/%.o : $(SRC_DIR)/%.c | $(OBJ_DIR)
@@ -108,4 +110,11 @@ fclean:		clean
 
 re:			fclean all
 
-.PHONY:		re all clean fclean
+sanitize:	$(MLX)
+			@make -C $(LIBPATH) fclean
+			@make -C $(LIBPATH)
+			$(RM) -r $(OBJ_DIR)
+			$(RM) $(NAME)
+			$(MAKE) CFLAGS="$(SANFLAGS)" $(NAME)
+
+.PHONY:		re all clean fclean sanitize

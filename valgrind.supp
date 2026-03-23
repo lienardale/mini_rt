@@ -1,0 +1,69 @@
+# Valgrind suppression file for miniRT
+# Suppresses known "still reachable" leaks from X11/MLX internals
+
+{
+   mlx_x11_display
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   ...
+   fun:XOpenDisplay
+}
+{
+   mlx_x11_intern_atom
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   ...
+   fun:XInternAtom
+}
+{
+   mlx_x11_create_gc
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   ...
+   fun:XCreateGC
+}
+{
+   mlx_x11_create_image
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   ...
+   fun:XCreateImage
+}
+{
+   mlx_x11_ext
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   ...
+   fun:XextAddDisplay
+}
+{
+   mlx_x11_render
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   ...
+   fun:XRenderQueryFormats
+}
+{
+   mlx_dlopen
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   ...
+   fun:dlopen*
+}
+{
+   mlx_x11_get_default
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   ...
+   fun:XGetDefault
+}
+{
+   mlx_writev_uninit_xcb
+   Memcheck:Param
+   writev(vector[0])
+   fun:writev
+   obj:/usr/lib/x86_64-linux-gnu/libxcb.so*
+   obj:/usr/lib/x86_64-linux-gnu/libxcb.so*
+   fun:xcb_writev
+   fun:_XSend
+}

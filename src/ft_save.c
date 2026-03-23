@@ -15,17 +15,17 @@
 int		ft_save(t_window *rt)
 {
 	int				fd;
+	int				ret;
 
+	ret = 0;
 	if ((fd = open("miniRT.bmp", O_WRONLY | O_CREAT | O_TRUNC, 0777)) == -1)
 		return (-5);
-	if (ft_file_header(fd, rt) == -1)
-		return (-2);
-	if (ft_info_header(fd, rt) == -1)
-		return (-3);
-	if (ft_pixel_data(fd, rt) == -1)
-		return (-4);
-	if (close(fd) < 0)
-		return (2);
+	if (ft_file_header(fd, rt) == -1 || ft_info_header(fd, rt) == -1
+		|| ft_pixel_data(fd, rt) == -1)
+		ret = -1;
+	close(fd);
+	if (ret == -1)
+		return (ret);
 	ft_close(rt);
 	return (0);
 }

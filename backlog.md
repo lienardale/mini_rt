@@ -6,7 +6,7 @@
 - [x] Replace VLA stack allocation in `ft_save.c` (`unsigned char tab[3 * win->x * win->y]`) with heap allocation (`malloc`) to prevent stack overflow on large resolutions
 - [x] Audit all `malloc`/`ft_calloc` calls for missing NULL return checks (all 3 calls already properly checked)
 - [x] Add proper cleanup on all error paths in parsing (some `ft_error()` paths may leak)
-- [ ] Run Valgrind/AddressSanitizer analysis and fix all reported leaks and invalid accesses
+- [x] Run Valgrind/AddressSanitizer analysis and fix all reported leaks and invalid accesses
 - [x] Remove leftover debug `printf` in `ft_mouse()` (ft_event.c) and `ft_check_resol()` (ft_check_parsing.c)
 
 ### Performance Optimization
