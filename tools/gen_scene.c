@@ -85,7 +85,7 @@ static t_vec dir_to_euler(t_vec dir)
 	dir.x /= len;
 	dir.y /= len;
 	dir.z /= len;
-	euler.x = asin(dir.y) / PI;
+	euler.x = -asin(dir.y) / PI;
 	euler.y = atan2(-dir.x, -dir.z) / PI;
 	euler.z = 0;
 	return (euler);
@@ -144,6 +144,14 @@ static void write_cone(FILE *f, t_vec pos, t_vec ori, double diam,
 		diam, height, col.r, col.g, col.b);
 }
 
+static void write_square(FILE *f, t_vec pos, t_vec ori, double side,
+						  t_color col)
+{
+	fprintf(f, "sq\t%.1f,%.1f,%.1f\t%.1f,%.1f,%.1f\t%.0f\t%d,%d,%d\n",
+		pos.x, pos.y, pos.z, ori.x, ori.y, ori.z, side,
+		col.r, col.g, col.b);
+}
+
 static void write_box(FILE *f, t_vec pos, t_vec size, t_color col)
 {
 	fprintf(f, "bx\t%.2f,%.2f,%.2f\t%.2f,%.2f,%.2f\t%d,%d,%d\n",
@@ -153,25 +161,28 @@ static void write_box(FILE *f, t_vec pos, t_vec size, t_color col)
 static void gen_cornell_box(FILE *f, t_config *cfg)
 {
 	write_header(f, cfg);
-	write_camera(f, (t_vec){0, 5, 14}, (t_vec){0, -0.1, -1}, 60);
+	fprintf(f, "c\t0.0,5.0,0.0\t0.0000,0.0000,0.0000\t70\n");
 	fprintf(f, "\n");
-	write_light(f, (t_vec){0, 9.5, 0}, 0.9, (t_color){255, 255, 255});
+	write_light(f, (t_vec){0, 9.5, 5}, 0.9, (t_color){255, 250, 240});
+	write_light(f, (t_vec){2, 8, 3}, 0.3, (t_color){255, 230, 210});
 	fprintf(f, "\n");
-	write_plane(f, (t_vec){0, 0, 0}, (t_vec){0, 1, 0},
-		(t_color){220, 220, 220});
-	write_plane(f, (t_vec){0, 10, 0}, (t_vec){0, -1, 0},
-		(t_color){220, 220, 220});
-	write_plane(f, (t_vec){0, 0, -5}, (t_vec){0, 0, 1},
-		(t_color){220, 220, 220});
-	write_plane(f, (t_vec){-5, 0, 0}, (t_vec){1, 0, 0},
-		(t_color){200, 40, 40});
-	write_plane(f, (t_vec){5, 0, 0}, (t_vec){-1, 0, 0},
-		(t_color){40, 200, 40});
+	write_square(f, (t_vec){0, 0, 5}, (t_vec){0, 1, 0}, 10,
+		(t_color){150, 150, 150});
+	write_square(f, (t_vec){0, 10, 5}, (t_vec){0, -1, 0}, 10,
+		(t_color){150, 150, 150});
+	write_square(f, (t_vec){0, 5, 10}, (t_vec){0, 0, -1}, 10,
+		(t_color){150, 150, 150});
+	write_square(f, (t_vec){-5, 5, 5}, (t_vec){1, 0, 0}, 10,
+		(t_color){180, 30, 30});
+	write_square(f, (t_vec){5, 5, 5}, (t_vec){-1, 0, 0}, 10,
+		(t_color){30, 180, 30});
 	fprintf(f, "\n");
-	write_sphere(f, (t_vec){-2, 1.5, -1}, 3.0, (t_color){255, 255, 255},
+	write_sphere(f, (t_vec){-1.5, 1.5, 6}, 3.0, (t_color){240, 240, 255},
 		"refl:0.8 spec:0.9");
-	write_sphere(f, (t_vec){2, 1.0, 1}, 2.0, (t_color){255, 255, 255},
+	write_sphere(f, (t_vec){2, 1, 3.5}, 2.0, (t_color){255, 255, 255},
 		"trans:0.9 ior:1.5 spec:0.5");
+	write_box(f, (t_vec){2, 3, 8}, (t_vec){1.8, 6, 1.8},
+		(t_color){200, 200, 200});
 }
 
 static void gen_checkerboard_spheres(FILE *f, t_config *cfg)
