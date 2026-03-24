@@ -30,6 +30,8 @@ int ft_window_init(t_window *win)
 	win->resol = RESOL;
 	win->bvh = NULL;
 	win->num_threads = 1;
+	win->keys_held = 0;
+	win->needs_render = 1;
 	return (0);
 }
 

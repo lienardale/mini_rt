@@ -33,6 +33,8 @@ void ft_cleanup(t_window *win)
 		win->bvh = NULL;
 	}
 	ft_free_lst_sh(win);
+	if (win->mlx_ptr)
+		mlx_do_key_autorepeaton(win->mlx_ptr);
 	if (win->mlx_ptr && win->img_ptr)
 		mlx_destroy_image(win->mlx_ptr, win->img_ptr);
 	if (win->mlx_ptr && win->win_ptr)

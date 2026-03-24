@@ -55,6 +55,55 @@ t_pt ft_rotation_vect(t_pt p, t_pt ori)
 | `0,0,-1` | 180° roll — flips image vertically and horizontally |
 | `-0.1,0,-1` | Tilt up 18° + full flip — floor appears on top |
 
+## FPS-Style Camera Controls
+
+### Movement Model
+
+Camera movement uses FPS-style controls where WASD moves relative to the camera's facing direction, projected onto the XZ ground plane.
+
+The forward and right vectors are derived from the camera's yaw angle (`ori.y * M_PI`):
+
+```c
+// Forward direction on XZ plane (ignoring pitch)
+forward.x = -sin(yaw);
+forward.z = -cos(yaw);
+
+// Right strafe direction (90° clockwise from forward)
+right.x = cos(yaw);
+right.z = -sin(yaw);
+```
+
+Y movement (PgUp/PgDn) remains world-relative — standard FPS convention.
+
+Implementation: `src/ft_cam_move.c` — `ft_cam_forward_xz()`, `ft_cam_right_xz()`, `ft_cam_apply_movement()`.
+
+### Continuous Input Architecture
+
+The event system uses KeyPress/KeyRelease events with a frame loop for smooth continuous motion:
+
+1. **KeyPress** (`X11 event 2`): Sets bit in `t_window.keys_held` bitfield
+2. **KeyRelease** (`X11 event 3`): Clears bit in `t_window.keys_held`
+3. **Frame loop** (`mlx_loop_hook`): Each iteration checks `keys_held`; if any movement/look bits are set, applies incremental movement and re-renders
+
+Key-to-bit mapping is defined in `includes/keybinds.h` (`KEY_BIT_FWD`, `KEY_BIT_BKW`, etc.) and converted via `ft_keycode_to_bit()` in `src/ft_cam_move.c`.
+
+One-shot keys (ESC, Space, R, FOV +/-) are handled immediately in the KeyPress handler and do not use the bitfield.
+
+### Rendering During Movement
+
+While keys are held, the scene renders at draft resolution (4x pixel stepping) for responsiveness. When all keys are released, a final full-resolution render is triggered. This matches the existing dual-render pattern.
+
+### Step Sizes
+
+| Parameter | Value | Defined in |
+|-----------|-------|------------|
+| `MOVE_STEP` | 0.5 | `keybinds.h` |
+| `LOOK_STEP` | 0.02 | `keybinds.h` |
+
+### X11 Auto-Repeat
+
+`mlx_do_key_autorepeatoff()` is called at startup to prevent X11 from generating spurious KeyPress/KeyRelease pairs when a key is held. `mlx_do_key_autorepeaton()` is called in `ft_close()` to restore normal behavior on exit.
+
 ## Pixel Writing
 
 `ft_argb.c:ft_pix()` writes to the mlx image buffer with a Y-flip:
