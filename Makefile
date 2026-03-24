@@ -94,7 +94,7 @@ CC =		gcc
 
 RM = 		rm -f
 
-CFLAGS =	-Wall -Wextra -Werror -g3 -ofast
+CFLAGS =	-Wall -Wextra -Werror -g3 -O3
 
 SANFLAGS =	-Wall -Wextra -Werror -g3 -fsanitize=address -fno-omit-frame-pointer
 
