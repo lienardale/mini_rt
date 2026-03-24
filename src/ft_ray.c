@@ -122,6 +122,8 @@ t_argb ft_trace_ray_recursive(t_window *win, t_ray *ray, int depth)
 	double min;
 	t_argb black;
 	t_argb color;
+	t_argb saved_color;
+	t_pt saved_n;
 
 	min_sh = NULL;
 	min = INFINITY;
@@ -132,6 +134,8 @@ t_argb ft_trace_ray_recursive(t_window *win, t_ray *ray, int depth)
 	ft_trace_csg_shapes(win, ray, &min, &min_sh);
 	if (min_sh == NULL)
 		return (black = (t_argb){0, 0, 0, 0});
+	saved_color = min_sh->color;
+	saved_n = min_sh->n;
 	if (min_sh->mat.texture)
 		min_sh->color = ft_get_shape_color(min_sh, ray);
 	if (min_sh->mat.bump_map)
@@ -141,6 +145,8 @@ t_argb ft_trace_ray_recursive(t_window *win, t_ray *ray, int depth)
 		ft_apply_reflection(win, ray, min_sh, min, &color, depth);
 	if (depth < MAX_REFLECT_DEPTH && min_sh->mat.transparency > 0.001)
 		ft_apply_refraction(win, ray, min_sh, min, &color, depth);
+	min_sh->color = saved_color;
+	min_sh->n = saved_n;
 	return (color);
 }
 

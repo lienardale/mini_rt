@@ -38,7 +38,7 @@ run_scene() {
     echo -n "  $scene_name: "
 
     cd "$TMP_DIR"
-    timeout 30 "$BINARY" "$scene_file" -save 2>/dev/null || true
+    timeout 30 "$BINARY" "$scene_file" -save --threads 1 2>/dev/null || true
     cd "$PROJECT_DIR"
 
     if [ ! -f "$TMP_DIR/miniRT.bmp" ]; then
