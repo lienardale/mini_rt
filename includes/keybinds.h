@@ -33,20 +33,20 @@
 #define NXT_CAM 49
 #endif
 
-#define KEY_BIT_FWD		(1 << 0)
-#define KEY_BIT_BKW		(1 << 1)
-#define KEY_BIT_LEFT	(1 << 2)
-#define KEY_BIT_RIGHT	(1 << 3)
-#define KEY_BIT_UP		(1 << 4)
-#define KEY_BIT_DOWN	(1 << 5)
-#define KEY_BIT_LK_L	(1 << 6)
-#define KEY_BIT_LK_R	(1 << 7)
-#define KEY_BIT_LK_U	(1 << 8)
-#define KEY_BIT_LK_D	(1 << 9)
-#define KEY_BIT_LK_ZL	(1 << 10)
-#define KEY_BIT_LK_ZR	(1 << 11)
-#define MOVE_STEP		0.5
-#define LOOK_STEP		0.02
+#define KEY_BIT_FWD (1 << 0)
+#define KEY_BIT_BKW (1 << 1)
+#define KEY_BIT_LEFT (1 << 2)
+#define KEY_BIT_RIGHT (1 << 3)
+#define KEY_BIT_UP (1 << 4)
+#define KEY_BIT_DOWN (1 << 5)
+#define KEY_BIT_LK_L (1 << 6)
+#define KEY_BIT_LK_R (1 << 7)
+#define KEY_BIT_LK_U (1 << 8)
+#define KEY_BIT_LK_D (1 << 9)
+#define KEY_BIT_LK_ZL (1 << 10)
+#define KEY_BIT_LK_ZR (1 << 11)
+#define MOVE_STEP 0.5
+#define LOOK_STEP 0.02
 
 #ifdef Linux
 #define ESC 65307
