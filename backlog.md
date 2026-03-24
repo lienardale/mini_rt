@@ -105,7 +105,19 @@
 
 ---
 
-## 6. Code Quality & Refactoring
+## 6. Fix Multi-Threaded Rendering Data Race
+
+Multi-threaded rendering still has a tiny race window (save/restore isn't atomic), but regression tests are fully deterministic via `--threads 1`. A complete fix would require passing color/normal as stack-local values through the lighting pipeline rather than mutating shared shapes — a larger refactor to tackle.
+
+- [ ] Refactor `ft_trace_ray_recursive()` to use stack-local `t_argb` color and `t_pt` normal instead of writing to shared `t_shape` fields
+- [ ] Thread the local color/normal through `ft_pre_light()`, `ft_albedo()`, `ft_apply_reflection()`, and `ft_apply_refraction()`
+- [ ] Remove the save/restore workaround in `src/ft_ray.c`
+- [ ] Verify multi-threaded determinism: same BMP output regardless of thread count
+- [ ] Update regression tests to run with default thread count (remove `--threads 1` constraint)
+
+---
+
+## 7. Code Quality & Refactoring
 
 - [ ] Add inline documentation / comments to all functions (especially math-heavy ones)
 - [ ] Replace hardcoded epsilon values (0.0001, 0.001) with named constants
@@ -117,7 +129,7 @@
 
 ---
 
-## 7. Cross-Platform & Build Improvements
+## 8. Cross-Platform & Build Improvements
 
 - [ ] Add CMake as an alternative build system for better IDE integration and dependency management
 - [ ] Fix compiler warnings with stricter flags (`-Wpedantic`, `-Wshadow`, `-Wconversion`)
@@ -128,7 +140,7 @@
 
 ---
 
-## 8. User Experience Improvements
+## 9. User Experience Improvements
 
 - [ ] Add a loading/progress indicator during rendering (percentage or scanline counter)
 - [ ] Implement real-time preview at low resolution, then progressive refinement
@@ -140,7 +152,7 @@
 
 ---
 
-## 9. Advanced Rendering Features
+## 10. Advanced Rendering Features
 
 - [ ] Implement a full Phong/Blinn-Phong lighting model (ambient + diffuse + specular)
 - [ ] Add recursive reflections with configurable max depth
