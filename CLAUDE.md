@@ -145,16 +145,17 @@ tr  -1,0,-3  1,0,-3  0,2,-3  0,0,255      # Triangle: 3 vertices, color
 - `t_win` — window/image context (mlx pointers, resolution)
 - `t_rt` — root struct containing all scene data
 
+## Implementation Details
+
+See `skills/` for in-depth technical documentation:
+
+- **[skills/camera-and-rendering.md](skills/camera-and-rendering.md)** — Camera orientation system (Euler angles in PI-radians, not direction vectors), pixel coordinate conventions, Y-axis mapping, BMP save workflow, headless rendering with Xvfb, scene authoring guidelines, material properties, and shape IDs.
+
 ## Known Issues & Limitations
 
-- **Single-threaded:** No parallelism, rendering can be slow at high resolution
-- **No specular/reflections:** Only ambient + diffuse lighting (Phong diffuse only)
-- **Stack overflow risk:** `ft_save.c` uses VLA `unsigned char tab[3 * win->x * win->y]` on stack
 - **Hardcoded epsilon values:** Magic numbers (0.0001, 0.001) in intersection math
 - **No inline documentation:** Code follows 42 norm (no comments)
-- **Debug output:** Leftover `printf` in `ft_mouse()` (ft_event.c)
-- **No CI/CD pipeline**
-- **No automated unit tests** (external tester exists for parsing validation only)
+- **gen_scene.c camera bug:** The scene generator treats camera orientation as a direction vector; generated scenes need `rot_z` corrected from `-1` to `0` (see `skills/camera-and-rendering.md`)
 
 ## Testing
 
