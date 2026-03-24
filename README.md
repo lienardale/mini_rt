@@ -70,16 +70,63 @@ All movement and look keys support continuous hold for smooth motion.
 | Next camera | Space | Cycle through scene cameras |
 | Exit | ESC | Close window |
 
+## Supported Shapes
+
+### Basic shapes
+
+| ID | Shape | Parameters | Example |
+|---|---|---|---|
+| `sp` | Sphere | center, diameter, color | `sp 0,0,-5 2.0 255,0,0` |
+| `pl` | Plane | point, normal, color | `pl 0,-1,0 0,1,0 200,200,200` |
+| `sq` | Square | center, normal, side, color | `sq 0,0,-5 0,0,1 4.0 255,255,0` |
+| `cy` | Cylinder | center, axis, diameter, height, color | `cy 0,0,-5 0,1,0 2.0 4.0 0,255,0` |
+| `tr` | Triangle | vertex1, vertex2, vertex3, color | `tr -1,0,-3 1,0,-3 0,2,-3 0,0,255` |
+
+### Extended shapes
+
+| ID | Shape | Parameters | Example |
+|---|---|---|---|
+| `co` | Cone | center, axis, diameter, height, color | `co 0,0,-3 0,1,0 2.0 4.0 30,255,30` |
+| `dk` | Disk | center, normal, diameter, color | `dk 0,2,-5 0,0,1 4.0 255,255,30` |
+| `to` | Torus | center, axis, major radius, minor radius, color | `to 0,5,-8 0,1,0 2.5 0.7 255,30,255` |
+| `el` | Ellipsoid | center, radii (x,y,z), color | `el 4,1.5,-3 2.0,1.2,1.2 30,80,255` |
+| `bx` | Box | center, dimensions (w,h,d), color | `bx 8,1.5,-3 3,3,3 255,140,0` |
+
+### Quadric surfaces
+
+| ID | Shape | Parameters | Example |
+|---|---|---|---|
+| `hy` | Hyperboloid | center, axis, radii (a,b,c), height, color | `hy -5,2,-4 0,1,0 1.5,2.0,0 6.0 255,80,30` |
+| `pa` | Paraboloid | center, axis, scale, height, color | `pa 0,0,-4 0,1,0 0.8 5.0 30,200,255` |
+
+### Composites
+
+| ID | Shape | Parameters | Example |
+|---|---|---|---|
+| `csg` | CSG operation | op (0=union, 1=intersect, 2=difference), shape_idx_a, shape_idx_b | `csg 2 0 1` |
+| `me` | OBJ Mesh | file path, offset, color | `me model.obj 0,0,0 200,200,200` |
+
+### Material properties
+
+Material properties can be appended to any shape line as `key:value` pairs:
+
+| Property | Range | Effect |
+|---|---|---|
+| `spec:` | 0–1 | Specular highlight intensity |
+| `refl:` | 0–1 | Reflectivity (recursive, max depth 4) |
+| `trans:` | 0–1 | Transparency |
+| `ior:` | >0 | Index of refraction (used with `trans`) |
+
+Example: `sp 0,0,-5 2.0 255,0,0 spec:0.8 refl:0.3`
+
 ## Features
 
-- 5 simple geometric objects (plane, sphere, cylinder, square, triangle)
-- Extended shapes: cone, disk, torus, ellipsoid, box, hyperboloid, paraboloid
-- Constructive Solid Geometry (CSG: union, intersect, difference)
-- OBJ mesh loading
 - Multiple light spots (intensity, shadows, ambient light)
 - Multiple cameras (cycle with Space)
 - Phong specular highlights, reflections, transparency, refraction
 - Texture mapping and bump mapping
+- Constructive Solid Geometry (CSG: union, intersect, difference)
+- OBJ mesh loading
 - BVH acceleration structure
 - Multi-threaded rendering
 - FPS-style camera controls (WASD relative to camera orientation)
