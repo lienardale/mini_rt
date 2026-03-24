@@ -126,4 +126,4 @@ cc -lm tools/gen_scene.c -o gen_scene
 ./gen_scene --list  # show all presets
 ```
 
-The `write_camera` function accepts an intuitive direction vector and internally converts it to Euler angles via `dir_to_euler()` using `asin(dy)/PI` for pitch and `atan2(-dx,-dz)/PI` for yaw.
+The `write_camera` function accepts an intuitive direction vector and internally converts it to Euler angles via `dir_to_euler()` using `-asin(dy)/PI` for pitch and `atan2(-dx,-dz)/PI` for yaw.
