@@ -155,7 +155,6 @@ See `skills/` for in-depth technical documentation:
 
 - **Hardcoded epsilon values:** Magic numbers (0.0001, 0.001) in intersection math
 - **No inline documentation:** Code follows 42 norm (no comments)
-- **gen_scene.c camera bug:** The scene generator treats camera orientation as a direction vector; generated scenes need `rot_z` corrected from `-1` to `0` (see `skills/camera-and-rendering.md`)
 
 ## Testing
 
