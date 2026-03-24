@@ -91,7 +91,9 @@ void ft_mlx_init(t_window *win, int ac, char **av)
 {
 	int ret;
 
-	mlx_key_hook(win->win_ptr, &ft_key, win);
+	mlx_do_key_autorepeatoff(win->mlx_ptr);
+	mlx_hook(win->win_ptr, 2, 1L << 0, &ft_key_press, win);
+	mlx_hook(win->win_ptr, 3, 1L << 1, &ft_key_release, win);
 	mlx_mouse_hook(win->win_ptr, &ft_mouse, win);
 	if (ft_has_save_flag(ac, av))
 	{
@@ -99,6 +101,7 @@ void ft_mlx_init(t_window *win, int ac, char **av)
 		ret == 0 ? ft_close(win) : ft_error(2, win, "save");
 	}
 	mlx_hook(win->win_ptr, 17, 0, &ft_close, win);
+	mlx_loop_hook(win->mlx_ptr, &ft_frame_update, win);
 	mlx_loop(win->mlx_ptr);
 }
 

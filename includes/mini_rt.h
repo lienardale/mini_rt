@@ -196,6 +196,8 @@ typedef struct s_window
 	t_light *beg_light;
 	t_bvh_node *bvh;
 	int num_threads;
+	unsigned int keys_held;
+	int needs_render;
 } t_window;
 
 typedef struct s_thread_data
@@ -287,11 +289,17 @@ int ft_free_lst_cam(t_window *win);
 int ft_free_lst_light(t_window *win);
 int ft_free_lst_sh(t_window *win);
 
-int ft_key(int keycode, t_window *param);
-void ft_key_moove(int keycode, t_window *param);
-void ft_key_look(int keycode, t_window *param);
+int ft_key_press(int keycode, t_window *param);
+int ft_key_release(int keycode, t_window *param);
+int ft_frame_update(t_window *win);
+unsigned int ft_keycode_to_bit(int keycode);
 void ft_key_fov(int keycode, t_window *param);
 int ft_mouse(int button, int x, int y, t_window *param);
+
+t_pt ft_cam_forward_xz(t_cam *cam);
+t_pt ft_cam_right_xz(t_cam *cam);
+void ft_cam_apply_movement(t_cam *cam, unsigned int keys_held);
+void ft_cam_apply_look(t_cam *cam, unsigned int keys_held);
 
 double ft_sqr(double d);
 double ft_dot_product(t_pt a, t_pt b);

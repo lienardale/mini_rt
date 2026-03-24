@@ -42,35 +42,48 @@ Feel free to use it, fork it, and report eventual issues.
 	<img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/c/c-original.svg" alt="c" width="40" height="40"/> 
 </a> 
 
-## Features :
+## Usage
 
-- clean window handling (no problem when resized, minimized or so on)
+```bash
+./miniRT <scene_file.rt>              # Render scene in window
+./miniRT <scene_file.rt> -save        # Render and save as BMP
+./miniRT <scene_file.rt> --threads N  # Use N render threads
+./miniRT <scene_file.rt> --threads=auto  # Auto-detect thread count
+```
 
-- 5 simple geometric objects (plan, sphere, cylinder, square, triangle)
+Multiple options can be combined: `./miniRT scene.rt -save --threads 4`
 
-- multiple light spots (intensity, shadows, ambiant light)
+## Controls
 
-- multiple cameras (pov)
+All movement and look keys support continuous hold for smooth motion.
 
-- objects intersection
+| Action | Key | Description |
+|---|---|---|
+| Move forward/back | W / S | Relative to camera facing direction (XZ plane) |
+| Strafe left/right | A / D | Perpendicular to camera facing (XZ plane) |
+| Move up/down | PgUp / PgDn | World Y axis |
+| Look left/right | Left / Right arrows | Hold for continuous yaw rotation |
+| Look up/down | Up / Down arrows | Hold for continuous pitch rotation |
+| Roll camera | , / . | Hold for continuous roll rotation |
+| FOV increase/decrease | Numpad + / - | Adjust field of view (0-180) |
+| Toggle resolution | R | Switch between draft (4x) and full resolution |
+| Next camera | Space | Cycle through scene cameras |
+| Exit | ESC | Close window |
 
-- color and size of objects are defined in parsing and can be modified in the input file
+## Features
 
-- transformations (translation and rotation)
-
-- "- save" option that saves the outpout into a .bmp file
-
-- exiting wiht the 'esc' key or the red cross button
-
-- changing the pov with the 'space' key
-
-- low resolution mode with the 'r' key (pressing it again will make the resolution go back to high)
-
-- mooving the pov forward, back, left and right with the 'w', 's', 'a' and 'd' keys
-
-- mooving the pov up and down with the 'page up' and 'page down' keys
-
-- rotating the pov up, down, left, right with the corresponding arrow keys
+- 5 simple geometric objects (plane, sphere, cylinder, square, triangle)
+- Extended shapes: cone, disk, torus, ellipsoid, box, hyperboloid, paraboloid
+- Constructive Solid Geometry (CSG: union, intersect, difference)
+- OBJ mesh loading
+- Multiple light spots (intensity, shadows, ambient light)
+- Multiple cameras (cycle with Space)
+- Phong specular highlights, reflections, transparency, refraction
+- Texture mapping and bump mapping
+- BVH acceleration structure
+- Multi-threaded rendering
+- FPS-style camera controls (WASD relative to camera orientation)
+- BMP file export with `-save` flag
 
 ## Screenshots :
 

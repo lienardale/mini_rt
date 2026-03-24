@@ -68,6 +68,7 @@ SRC_NAME =		ft_mini_rt.c \
 			ft_bump.c \
 			ft_argb.c \
 			ft_event.c \
+			ft_cam_move.c \
 			ft_vectors.c \
 			ft_vectors_2.c \
 			ft_scalar.c \
@@ -134,7 +135,7 @@ sanitize:	$(MLX)
 			$(MAKE) CFLAGS="$(SANFLAGS)" $(NAME)
 
 TEST_MATH_SRCS = ft_vectors.c ft_vectors_2.c ft_scalar.c ft_matrix.c \
-				 ft_pt.c ft_argb.c ft_cam.c
+				 ft_pt.c ft_argb.c ft_cam.c ft_cam_move.c
 
 SHAPE_SRCS = ft_sphere.c ft_plane.c ft_square.c \
 			 ft_cylinder.c ft_cylinder_2.c ft_triangle.c \
@@ -160,25 +161,31 @@ TEST_LINK = $(LIB_INC) -lm
 
 test:		$(LIB)
 			@echo "=== Running math tests ==="
-			@$(CC) -Wall -Wextra -Werror -g3 $(TEST_INC) \
+			@$(CC) -Wall -Wextra -Werror -g3 $(MLX_DEF) $(TEST_INC) \
 				$(TEST_DIR)/test_math.c \
 				$(addprefix $(SRC_DIR)/,$(TEST_MATH_SRCS)) \
 				$(TEST_LINK) -o run_test_math && ./run_test_math
 			@echo ""
+			@echo "=== Running camera tests ==="
+			@$(CC) -Wall -Wextra -Werror -g3 $(MLX_DEF) $(TEST_INC) \
+				$(TEST_DIR)/test_camera.c \
+				$(addprefix $(SRC_DIR)/,$(TEST_MATH_SRCS)) \
+				$(TEST_LINK) -o run_test_camera && ./run_test_camera
+			@echo ""
 			@echo "=== Running intersection tests ==="
-			@$(CC) -Wall -Wextra -Werror -g3 $(TEST_INC) \
+			@$(CC) -Wall -Wextra -Werror -g3 $(MLX_DEF) $(TEST_INC) \
 				$(TEST_DIR)/test_intersections.c $(TEST_DIR)/test_stubs.c \
 				$(addprefix $(SRC_DIR)/,$(TEST_INTERSECT_SRCS)) \
 				$(TEST_LINK) -o run_test_intersections && ./run_test_intersections
 			@echo ""
 			@echo "=== Running lighting tests ==="
-			@$(CC) -Wall -Wextra -Werror -g3 $(TEST_INC) \
+			@$(CC) -Wall -Wextra -Werror -g3 $(MLX_DEF) $(TEST_INC) \
 				$(TEST_DIR)/test_lighting.c $(TEST_DIR)/test_stubs.c \
 				$(addprefix $(SRC_DIR)/,$(TEST_INTERSECT_SRCS)) \
 				$(TEST_LINK) -o run_test_lighting && ./run_test_lighting
 			@echo ""
 			@echo "=== Running parsing tests ==="
-			@$(CC) -Wall -Wextra -Werror -g3 $(TEST_INC) \
+			@$(CC) -Wall -Wextra -Werror -g3 $(MLX_DEF) $(TEST_INC) \
 				$(TEST_DIR)/test_parsing.c $(TEST_DIR)/test_stubs.c \
 				$(addprefix $(SRC_DIR)/,$(TEST_PARSING_SRCS)) \
 				$(TEST_LINK) -o run_test_parsing && ./run_test_parsing
@@ -187,9 +194,10 @@ COV_FLAGS = -Wall -Wextra -g3 --coverage -fprofile-arcs -ftest-coverage
 
 coverage:	$(LIB)
 			@mkdir -p coverage
-			@$(CC) $(COV_FLAGS) -DTEST_ALL $(TEST_INC) \
+			@$(CC) $(COV_FLAGS) -DTEST_ALL $(MLX_DEF) $(TEST_INC) \
 				$(TEST_DIR)/test_all.c \
 				$(TEST_DIR)/test_math.c \
+				$(TEST_DIR)/test_camera.c \
 				$(TEST_DIR)/test_intersections.c \
 				$(TEST_DIR)/test_lighting.c \
 				$(TEST_DIR)/test_parsing.c \
@@ -222,7 +230,7 @@ TEST_BENCH_SRCS = $(TEST_MATH_SRCS) $(SHAPE_SRCS) \
 				  ft_check_parsing_2.c
 
 benchmark:	$(LIB)
-			@$(CC) -Wall -Wextra -Werror -g3 -ofast $(TEST_INC) \
+			@$(CC) -Wall -Wextra -Werror -g3 -ofast $(MLX_DEF) $(TEST_INC) \
 				$(TEST_DIR)/test_benchmark.c $(TEST_DIR)/test_stubs.c \
 				$(addprefix $(SRC_DIR)/,$(TEST_BENCH_SRCS)) \
 				$(TEST_LINK) -lpthread -o run_benchmark \
@@ -233,7 +241,7 @@ gen_scene:
 			@echo "Built gen_scene tool"
 
 testclean:
-			$(RM) run_test_math run_test_intersections run_test_lighting run_test_parsing run_benchmark
+			$(RM) run_test_math run_test_camera run_test_intersections run_test_lighting run_test_parsing run_benchmark
 			$(RM) cov_test_math cov_test_intersections cov_test_lighting cov_test_parsing cov_test_all
 			$(RM) -r coverage
 			$(RM) *.gcno *.gcda src/*.gcno src/*.gcda tests/*.gcno tests/*.gcda
