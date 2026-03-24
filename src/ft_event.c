@@ -12,7 +12,7 @@
 
 #include "mini_rt.h"
 
-void	ft_key_fov(int keycode, t_window *param)
+void ft_key_fov(int keycode, t_window *param)
 {
 	if (keycode == FOV_P)
 	{
@@ -26,9 +26,9 @@ void	ft_key_fov(int keycode, t_window *param)
 	}
 }
 
-int	ft_key_press(int keycode, t_window *param)
+int ft_key_press(int keycode, t_window *param)
 {
-	unsigned int	bit;
+	unsigned int bit;
 
 	if (keycode == ESC)
 		ft_close(param);
@@ -60,9 +60,9 @@ int	ft_key_press(int keycode, t_window *param)
 	return (0);
 }
 
-int	ft_key_release(int keycode, t_window *param)
+int ft_key_release(int keycode, t_window *param)
 {
-	unsigned int	bit;
+	unsigned int bit;
 
 	bit = ft_keycode_to_bit(keycode);
 	if (bit)
@@ -70,7 +70,7 @@ int	ft_key_release(int keycode, t_window *param)
 	return (0);
 }
 
-int	ft_frame_update(t_window *win)
+int ft_frame_update(t_window *win)
 {
 	if (win->keys_held == 0 && !win->needs_render)
 		return (0);
@@ -90,7 +90,7 @@ int	ft_frame_update(t_window *win)
 	return (0);
 }
 
-int	ft_mouse(int button, int x, int y, t_window *param)
+int ft_mouse(int button, int x, int y, t_window *param)
 {
 	(void)button;
 	(void)x;
