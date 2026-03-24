@@ -76,10 +76,34 @@ static void write_header(FILE *f, t_config *cfg)
 	fprintf(f, "A\t0.15\t255,255,255\n\n");
 }
 
+static t_vec dir_to_euler(t_vec dir)
+{
+	t_vec	euler;
+	double	len;
+
+	len = sqrt(dir.x * dir.x + dir.y * dir.y + dir.z * dir.z);
+	dir.x /= len;
+	dir.y /= len;
+	dir.z /= len;
+	euler.x = asin(dir.y) / PI;
+	euler.y = atan2(-dir.x, -dir.z) / PI;
+	euler.z = 0;
+	return (euler);
+}
+
 static void write_camera(FILE *f, t_vec pos, t_vec dir, int fov)
 {
-	fprintf(f, "c\t%.1f,%.1f,%.1f\t%.2f,%.2f,%.2f\t%d\n",
-		pos.x, pos.y, pos.z, dir.x, dir.y, dir.z, fov);
+	t_vec	ori;
+
+	ori = dir_to_euler(dir);
+	if (ori.x == 0.0)
+		ori.x = 0.0;
+	if (ori.y == 0.0)
+		ori.y = 0.0;
+	if (ori.z == 0.0)
+		ori.z = 0.0;
+	fprintf(f, "c\t%.1f,%.1f,%.1f\t%.4f,%.4f,%.4f\t%d\n",
+		pos.x, pos.y, pos.z, ori.x, ori.y, ori.z, fov);
 }
 
 static void write_light(FILE *f, t_vec pos, double intensity, t_color col)
