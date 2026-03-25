@@ -53,6 +53,7 @@ int ft_box_check(t_window *win, t_shape **cur)
 	return (check);
 }
 
+/* Return the minimum of two doubles */
 static double ft_dmin_local(double a, double b)
 {
 	if (a < b)
@@ -60,6 +61,7 @@ static double ft_dmin_local(double a, double b)
 	return (b);
 }
 
+/* Return the maximum of two doubles */
 static double ft_dmax_local(double a, double b)
 {
 	if (a > b)
@@ -67,6 +69,7 @@ static double ft_dmax_local(double a, double b)
 	return (b);
 }
 
+/* Slab test: clip ray interval [tmin,tmax] against one axis of the AABB */
 static void ft_box_slab(double *tmin, double *tmax, double orig, double dir,
 						double bmin, double bmax)
 {
@@ -98,6 +101,7 @@ static void ft_box_slab(double *tmin, double *tmax, double orig, double dir,
 	}
 }
 
+/* Compute box face normal by finding which face the hit point lies on */
 void ft_box_compute_normal(t_shape *sh, t_ray *ray)
 {
 	t_pt r;
@@ -125,6 +129,7 @@ void ft_box_compute_normal(t_shape *sh, t_ray *ray)
 		ft_inv_norm(&ray->hit_n);
 }
 
+/* Ray-AABB intersection using slab method across all three axes */
 void ft_intersect_ray_box(t_shape *sh, t_ray *ray)
 {
 	double tmin;

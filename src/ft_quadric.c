@@ -12,6 +12,7 @@
 
 #include "mini_rt.h"
 
+/* Parse hyperboloid properties (center, axis, radii, height, color) from scene line */
 static int ft_hyperboloid_parse(t_window *win, t_shape **cur, char *line)
 {
 	int check;
@@ -38,12 +39,14 @@ static int ft_hyperboloid_parse(t_window *win, t_shape **cur, char *line)
 	return (check == 0 ? 0 : ft_error(check, win, "hyperboloid"));
 }
 
+/* Initialize hyperboloid shape and delegate to parser */
 int ft_hyperboloid_init(t_window *win, t_shape **cur, char *line)
 {
 	(*cur)->id = SHAPE_HYPERBOLOID;
 	return (ft_hyperboloid_parse(win, cur, line));
 }
 
+/* Validate hyperboloid parameters (positive radii/height, valid point, color, orientation) */
 int ft_hyperboloid_check(t_window *win, t_shape **cur)
 {
 	int check;
@@ -58,6 +61,7 @@ int ft_hyperboloid_check(t_window *win, t_shape **cur)
 	return (check);
 }
 
+/* Compute hyperboloid normal via gradient of x^2/a^2 + z^2/a^2 - y^2/b^2 = 1 */
 void ft_hyperboloid_norm(t_shape *sh, t_ray *ray)
 {
 	t_pt r;
@@ -85,6 +89,7 @@ void ft_hyperboloid_norm(t_shape *sh, t_ray *ray)
 		ft_inv_norm(&ray->hit_n);
 }
 
+/* Ray-hyperboloid intersection: transform to local space and solve quadratic */
 void ft_intersect_ray_hyperboloid(t_shape *sh, t_ray *ray)
 {
 	t_pt oc;
@@ -114,6 +119,7 @@ void ft_intersect_ray_hyperboloid(t_shape *sh, t_ray *ray)
 	ft_hyperboloid_solve(sh, ray, (t_pt){ox, oy, oz}, (t_pt){dx, dy, dz});
 }
 
+/* Solve quadratic for hyperboloid intersection in local coordinates */
 void ft_hyperboloid_solve(t_shape *sh, t_ray *ray, t_pt o, t_pt d)
 {
 	double a;
@@ -143,6 +149,7 @@ void ft_hyperboloid_solve(t_shape *sh, t_ray *ray, t_pt o, t_pt d)
 	ft_hyperboloid_pick(sh, ray, t0, t1);
 }
 
+/* Select nearest valid root within hyperboloid height bounds */
 void ft_hyperboloid_pick(t_shape *sh, t_ray *ray, double t0, double t1)
 {
 	t_pt up;
