@@ -85,6 +85,27 @@ int ft_cam_init(t_window *win, t_cam **begin, char *line)
 		line++;
 	while ((ft_isspace(*line)) == 1)
 		line++;
+	cur->aperture = 0.0;
+	cur->focal_dist = 5.0;
+	while (*line != '\0')
+	{
+		if (ft_strncmp(line, "aperture:", 9) == 0)
+		{
+			line += 9;
+			cur->aperture = ft_atof(line);
+		}
+		else if (ft_strncmp(line, "focal:", 6) == 0)
+		{
+			line += 6;
+			cur->focal_dist = ft_atof(line);
+		}
+		else
+			break ;
+		while (*line && !ft_isspace(*line))
+			line++;
+		while ((ft_isspace(*line)) == 1)
+			line++;
+	}
 	return (*line == '\0' ? ft_check_cam_parsing(win, cur)
 						  : ft_error(4, win, "camera"));
 }

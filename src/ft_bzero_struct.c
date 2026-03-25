@@ -46,6 +46,9 @@ int ft_window_init(t_window *win)
 	win->last_render_ms = 0.0;
 	win->ac = 0;
 	win->av = NULL;
+	win->path_trace_spp = 0;
+	win->path_trace_bounces = PT_DEFAULT_BOUNCES;
+	win->motion_blur_samples = 0;
 	return (0);
 }
 

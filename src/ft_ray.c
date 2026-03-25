@@ -12,8 +12,8 @@
 
 #include "mini_rt.h"
 
-/* Cast a single ray through pixel (i,j) and return the resulting color */
-static t_argb ft_ray_single(double i, double j, t_window *win, t_cam *cam)
+/* Compute ray origin and direction for pixel (i,j) on camera (no trace) */
+void ft_ray_single_setup(double i, double j, t_window *win, t_cam *cam)
 {
 	double size;
 	t_mat unit;
@@ -30,6 +30,12 @@ static t_argb ft_ray_single(double i, double j, t_window *win, t_cam *cam)
 	cam->rij = ft_rotation_vect(cam->rij, cam->ori);
 	cam->rij = ft_point_matrix_transl(cam->rij, unit);
 	cam->pij = ft_point_matrix_transl(cam->pij, unit);
+}
+
+/* Cast a single ray through pixel (i,j) and return the resulting color */
+static t_argb ft_ray_single(double i, double j, t_window *win, t_cam *cam)
+{
+	ft_ray_single_setup(i, j, win, cam);
 	return (ft_trace_ray(win, cam));
 }
 
@@ -41,6 +47,21 @@ void ft_ray(double i, double j, t_window *win, t_cam *cam)
 	double offsets[4];
 	int s;
 
+	if (win->path_trace_spp > 0)
+	{
+		ft_pathtrace_pixel(i, j, win, cam);
+		return ;
+	}
+	if (cam->aperture > EPSILON_ZERO)
+	{
+		ft_ray_dof(i, j, win, cam);
+		return ;
+	}
+	if (win->motion_blur_samples > 1)
+	{
+		ft_ray_motion(i, j, win, cam);
+		return ;
+	}
 	offsets[0] = -0.25;
 	offsets[1] = 0.25;
 	offsets[2] = -0.25;
@@ -69,6 +90,7 @@ void ft_init_ray_cam(t_cam *cam, t_ray *ray)
 	ray->orig = cam->pij;
 	ray->lenght = -1;
 	ray->unit = cam->rij;
+	ray->motion_time = 0.0;
 }
 
 /* Test ray against all CSG (constructive solid geometry) shapes */
@@ -121,6 +143,7 @@ static void ft_apply_refraction(t_window *win, t_ray *ray, t_shape *sh,
 		ft_addition(ray->orig, ft_multi_scal(t + EPSILON_NORMAL, ray->dir));
 	ref_ray.dir = ft_refract_ray(ray->dir, ray->hit_n, eta);
 	ref_ray.lenght = -1;
+	ref_ray.motion_time = ray->motion_time;
 	ref_color = ft_trace_ray_recursive(win, &ref_ray, depth + 1);
 	color->r = color->r * (1.0 - tr) + ref_color.r * tr;
 	color->g = color->g * (1.0 - tr) + ref_color.g * tr;
@@ -172,6 +195,7 @@ void ft_apply_reflection(t_window *win, t_ray *ray, t_shape *sh, double t,
 		ft_addition(ray->orig, ft_multi_scal(t + EPSILON_NORMAL, ray->dir));
 	ref_ray.dir = ft_reflect_ray(ray->dir, ray->hit_n);
 	ref_ray.lenght = -1;
+	ref_ray.motion_time = ray->motion_time;
 	ref_color = ft_trace_ray_recursive(win, &ref_ray, depth + 1);
 	color->r = color->r * (1.0 - r) + ref_color.r * r;
 	color->g = color->g * (1.0 - r) + ref_color.g * r;

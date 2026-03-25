@@ -31,6 +31,11 @@
 #define MAX_THREADS 64
 #define MAX_REFLECT_DEPTH 4
 
+#define DOF_SAMPLES 16
+#define MOTION_BLUR_SAMPLES 8
+#define PT_DEFAULT_SPP 64
+#define PT_DEFAULT_BOUNCES 3
+
 #define EPSILON_HIT 0.0001
 #define EPSILON_NORMAL 0.001
 #define EPSILON_ZERO 1e-8
@@ -95,6 +100,7 @@ typedef struct s_ray
 	t_pt ray;
 	t_pt unit;
 	t_pt hit_n;
+	double motion_time;
 } t_ray;
 
 typedef struct s_mat
@@ -136,6 +142,7 @@ typedef struct s_material
 	double bump_strength;
 	t_texture *texture;
 	t_texture *bump_map;
+	t_pt vel;
 } t_material;
 
 typedef struct s_cam
@@ -145,6 +152,8 @@ typedef struct s_cam
 	int fov;
 	t_pt pij;
 	t_pt rij;
+	double aperture;
+	double focal_dist;
 	struct s_cam *next;
 } t_cam;
 
@@ -236,6 +245,9 @@ typedef struct s_window
 	double last_render_ms;
 	int ac;
 	char **av;
+	int path_trace_spp;
+	int path_trace_bounces;
+	int motion_blur_samples;
 } t_window;
 
 typedef struct s_thread_data
@@ -456,6 +468,20 @@ void ft_apply_bump_map(t_shape *sh, t_ray *ray);
 void *ft_render_band(void *arg);
 int ft_aff_threaded(t_window *win);
 int ft_get_num_cores(void);
+
+unsigned int ft_rand_next(unsigned int *seed);
+double ft_rand_float(unsigned int *seed);
+unsigned int ft_rand_seed(int x, int y, int sample);
+t_pt ft_rand_disk(unsigned int *seed);
+t_pt ft_rand_hemisphere_cosine(t_pt normal, unsigned int *seed);
+
+void ft_ray_single_setup(double i, double j, t_window *win, t_cam *cam);
+void ft_ray_dof(double i, double j, t_window *win, t_cam *cam);
+
+int ft_scene_has_motion(t_window *win);
+void ft_ray_motion(double i, double j, t_window *win, t_cam *cam);
+
+void ft_pathtrace_pixel(double i, double j, t_window *win, t_cam *cam);
 
 int ft_save(t_window *win);
 int ft_file_header(int fd, t_window *rt);

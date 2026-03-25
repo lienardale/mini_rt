@@ -154,14 +154,14 @@ The rendering pipeline was analyzed and found to be mostly thread-safe already: 
 
 ## 10. Advanced Rendering Features
 
-- [ ] Implement a full Phong/Blinn-Phong lighting model (ambient + diffuse + specular)
-- [ ] Add recursive reflections with configurable max depth
-- [ ] Implement refractive transparency (glass, water effects)
-- [ ] Add texture mapping (image textures, procedural textures like checkerboard/noise)
-- [ ] Implement normal/bump mapping
-- [ ] Add depth of field (aperture simulation)
-- [ ] Add motion blur support
-- [ ] Consider path tracing for global illumination (Monte Carlo integration)
+- [x] Implement a full Phong/Blinn-Phong lighting model (ambient + diffuse + specular)
+- [x] Add recursive reflections with configurable max depth
+- [x] Implement refractive transparency (glass, water effects)
+- [x] Add texture mapping (image textures, procedural textures like checkerboard/noise)
+- [x] Implement normal/bump mapping
+- [x] Add depth of field (aperture simulation)
+- [x] Add motion blur support
+- [x] Implement path tracing for global illumination (Monte Carlo integration)
 
 ---
 

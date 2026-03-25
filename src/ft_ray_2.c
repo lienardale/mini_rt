@@ -52,6 +52,27 @@ void ft_which_shape(t_shape *sh, t_ray *ray)
 		ray->lenght = -1;
 }
 
+/* Test a single shape, applying motion blur offset if the shape has velocity */
+static void ft_trace_one_shape(t_shape *sh, t_ray *ray, double motion_time)
+{
+	t_ray moved;
+	t_pt vel;
+
+	vel = sh->mat.vel;
+	if (motion_time > EPSILON_ZERO
+		&& (vel.x != 0.0 || vel.y != 0.0 || vel.z != 0.0))
+	{
+		moved = *ray;
+		moved.orig = ft_subtraction(ray->orig,
+									ft_multi_scal(motion_time, vel));
+		ft_which_shape(sh, &moved);
+		ray->lenght = moved.lenght;
+		ray->hit_n = moved.hit_n;
+	}
+	else
+		ft_which_shape(sh, ray);
+}
+
 /* Iterate all shapes to find the closest ray intersection */
 void ft_trace_shapes(t_shape *cur_shape, t_ray *ray, double *min,
 					 t_shape **min_sh)
@@ -61,7 +82,7 @@ void ft_trace_shapes(t_shape *cur_shape, t_ray *ray, double *min,
 	best_n = (t_pt){0, 0, 0};
 	while (cur_shape)
 	{
-		ft_which_shape(cur_shape, ray);
+		ft_trace_one_shape(cur_shape, ray, ray->motion_time);
 		if (ray->lenght > EPSILON_HIT && ray->lenght < *min)
 		{
 			*min = ray->lenght;

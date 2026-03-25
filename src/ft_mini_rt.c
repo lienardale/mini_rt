@@ -146,10 +146,21 @@ static void ft_parse_threads(t_window *win, int ac, char **av)
 	win->num_threads = ft_get_num_cores();
 }
 
-/* Parse --width, --height, --output, --verbose flags. */
+/* Parse a flag with a numeric argument, return the value or 0 */
+static int ft_parse_int_flag(char **av, int ac, int *idx, const char *flag,
+							 size_t len)
+{
+	if (ft_strncmp(flag, av[*idx], len) == 0 && *idx + 1 < ac)
+		return (ft_atoi(av[++(*idx)]));
+	return (0);
+}
+
+/* Parse --width, --height, --output, --verbose, --pathtrace, --pt-bounces,
+ * --motion-samples flags. */
 static void ft_parse_flags(t_window *win, int ac, char **av)
 {
 	int i;
+	int val;
 
 	i = 2;
 	while (i < ac)
@@ -158,17 +169,18 @@ static void ft_parse_flags(t_window *win, int ac, char **av)
 			ft_strncmp("-v", av[i], 3) == 0)
 			win->verbose = 1;
 		else if (ft_strncmp("--width", av[i], 8) == 0 && i + 1 < ac)
-		{
 			win->orig_x = (unsigned int)ft_atoi(av[++i]);
-		}
 		else if (ft_strncmp("--height", av[i], 9) == 0 && i + 1 < ac)
-		{
 			win->orig_y = (unsigned int)ft_atoi(av[++i]);
-		}
 		else if (ft_strncmp("--output", av[i], 9) == 0 && i + 1 < ac)
-		{
 			win->output_path = av[++i];
-		}
+		else if ((val = ft_parse_int_flag(av, ac, &i, "--pathtrace", 12)))
+			win->path_trace_spp = val;
+		else if ((val = ft_parse_int_flag(av, ac, &i, "--pt-bounces", 13)))
+			win->path_trace_bounces = val;
+		else if ((val = ft_parse_int_flag(av, ac, &i, "--motion-samples",
+										  17)))
+			win->motion_blur_samples = val;
 		i++;
 	}
 }
@@ -216,6 +228,12 @@ static int ft_valid_arg(char *arg)
 		return (1);
 	if (ft_strncmp("--output", arg, 9) == 0)
 		return (1);
+	if (ft_strncmp("--pathtrace", arg, 12) == 0)
+		return (1);
+	if (ft_strncmp("--pt-bounces", arg, 13) == 0)
+		return (1);
+	if (ft_strncmp("--motion-samples", arg, 17) == 0)
+		return (1);
 	return (0);
 }
 
@@ -241,7 +259,10 @@ int main(int ac, char **av)
 			if (ft_strncmp("--threads", av[arg_i], 10) == 0 ||
 				ft_strncmp("--width", av[arg_i], 8) == 0 ||
 				ft_strncmp("--height", av[arg_i], 9) == 0 ||
-				ft_strncmp("--output", av[arg_i], 9) == 0)
+				ft_strncmp("--output", av[arg_i], 9) == 0 ||
+				ft_strncmp("--pathtrace", av[arg_i], 12) == 0 ||
+				ft_strncmp("--pt-bounces", av[arg_i], 13) == 0 ||
+				ft_strncmp("--motion-samples", av[arg_i], 17) == 0)
 				arg_i++;
 			arg_i++;
 		}
@@ -267,6 +288,8 @@ int main(int ac, char **av)
 		ft_print_verbose(&win);
 	ft_precompute_shapes(&win);
 	ft_build_scene_bvh(&win);
+	if (win.motion_blur_samples == 0 && ft_scene_has_motion(&win))
+		win.motion_blur_samples = MOTION_BLUR_SAMPLES;
 	win.cur_cam = win.beg_cam;
 	win.ac = ac;
 	win.av = av;
