@@ -107,13 +107,13 @@
 
 ## 6. Fix Multi-Threaded Rendering Data Race
 
-Multi-threaded rendering still has a tiny race window (save/restore isn't atomic), but regression tests are fully deterministic via `--threads 1`. A complete fix would require passing color/normal as stack-local values through the lighting pipeline rather than mutating shared shapes — a larger refactor to tackle.
+The rendering pipeline was analyzed and found to be mostly thread-safe already: normals are stored on stack-local `t_ray.hit_n`, colors are read from shapes without mutation, and each thread operates on its own ray. The only data race was dead `sh->in = 0` writes in intersection functions (`ft_intersect_ray_sphere`, `ft_cylinder_calc_one`) that mutated shared `t_shape` fields from multiple threads. The fix removed these writes, removed the unused `in` field from `t_shape`, and updated regression tests to run with the default thread count.
 
-- [ ] Refactor `ft_trace_ray_recursive()` to use stack-local `t_argb` color and `t_pt` normal instead of writing to shared `t_shape` fields
-- [ ] Thread the local color/normal through `ft_pre_light()`, `ft_albedo()`, `ft_apply_reflection()`, and `ft_apply_refraction()`
-- [ ] Remove the save/restore workaround in `src/ft_ray.c`
-- [ ] Verify multi-threaded determinism: same BMP output regardless of thread count
-- [ ] Update regression tests to run with default thread count (remove `--threads 1` constraint)
+- [x] Refactor `ft_trace_ray_recursive()` to use stack-local `t_argb` color and `t_pt` normal instead of writing to shared `t_shape` fields
+- [x] Thread the local color/normal through `ft_pre_light()`, `ft_albedo()`, `ft_apply_reflection()`, and `ft_apply_refraction()`
+- [x] Remove the save/restore workaround in `src/ft_ray.c`
+- [x] Verify multi-threaded determinism: same BMP output regardless of thread count
+- [x] Update regression tests to run with default thread count (remove `--threads 1` constraint)
 
 ---
 

@@ -68,7 +68,6 @@ void ft_intersect_ray_sphere(t_shape *sh, t_ray *ray)
 	t_pt calc;
 	t_pt oc;
 
-	sh->in = 0;
 	oc = ft_subtraction(ray->orig, sh->pt_0);
 	if (ft_dot_product(oc, oc) < sh->radius_sq)
 		ft_multi_scal(-1, oc);

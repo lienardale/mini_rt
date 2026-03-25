@@ -155,7 +155,6 @@ typedef struct s_shape
 	t_pt pt_3;
 	t_pt ori;
 	t_pt n;
-	int in;
 	double diameter;
 	double height;
 	double radius_sq;

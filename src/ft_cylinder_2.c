@@ -14,7 +14,6 @@
 
 void ft_cylinder_calc_one(t_shape *sh, t_ray *ray, t_mat *tmp, t_argb *dot)
 {
-	sh->in = 0;
 	tmp->x = sh->pt_0;
 	tmp->y = sh->cyl_top;
 	dot->a = sh->diameter / 2;
