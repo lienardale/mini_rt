@@ -195,8 +195,8 @@ static void ft_print_verbose(t_window *win)
 		lights++;
 		lt = lt->next;
 	}
-	ft_printf("miniRT: %ux%u, %d shapes, %d lights, %d threads\n",
-			  win->x, win->y, shapes, lights, win->num_threads);
+	ft_printf("miniRT: %ux%u, %d shapes, %d lights, %d threads\n", win->x,
+			  win->y, shapes, lights, win->num_threads);
 }
 
 /* Return 1 if the argument is a recognized command-line flag. */
@@ -263,7 +263,6 @@ int main(int ac, char **av)
 		win.orig_x = win.x;
 	if (win.orig_y == 0)
 		win.orig_y = win.y;
-	win.ratio = (double)win.x / (double)win.y;
 	if (win.verbose)
 		ft_print_verbose(&win);
 	ft_precompute_shapes(&win);

@@ -130,8 +130,7 @@ static void ft_timed_render(t_window *win, int resol)
  * refinement (8x -> 4x -> 2x -> 1x). */
 int ft_frame_update(t_window *win)
 {
-	if (win->keys_held == 0 && !win->needs_render &&
-		win->progressive_stage < 0)
+	if (win->keys_held == 0 && !win->needs_render && win->progressive_stage < 0)
 		return (0);
 	if (win->keys_held)
 	{
@@ -181,9 +180,8 @@ int ft_mouse(int button, int x, int y, t_window *param)
 			param->cur_cam->coord = ft_addition(param->cur_cam->coord,
 												ft_multi_scal(MOVE_STEP, fwd));
 		else
-			param->cur_cam->coord =
-				ft_subtraction(param->cur_cam->coord,
-							   ft_multi_scal(MOVE_STEP, fwd));
+			param->cur_cam->coord = ft_subtraction(
+				param->cur_cam->coord, ft_multi_scal(MOVE_STEP, fwd));
 		param->needs_render = 1;
 		param->progressive_stage = 0;
 	}
