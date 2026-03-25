@@ -109,9 +109,9 @@ TEST(test_sphere_normal_at_hit)
 	t_ray ray = make_ray(ft_pt_create(0, 0, 0), ft_pt_create(0, 0, -1));
 	ft_intersect_ray_sphere(&sh, &ray);
 	ASSERT_TRUE(ray.lenght > 0);
-	ASSERT_DBL_EQ(0.0, sh.n.x);
-	ASSERT_DBL_EQ(0.0, sh.n.y);
-	ASSERT_TRUE(sh.n.z > 0);
+	ASSERT_DBL_EQ(0.0, ray.hit_n.x);
+	ASSERT_DBL_EQ(0.0, ray.hit_n.y);
+	ASSERT_TRUE(ray.hit_n.z > 0);
 }
 
 TEST(test_sphere_ray_along_x)
@@ -421,9 +421,9 @@ TEST(test_box_normal)
 	t_ray ray = make_ray(ft_pt_create(0, 0, 0), ft_pt_create(0, 0, -1));
 	ft_intersect_ray_box(&sh, &ray);
 	ASSERT_TRUE(ray.lenght > 0);
-	ASSERT_DBL_EQ(0.0, sh.n.x);
-	ASSERT_DBL_EQ(0.0, sh.n.y);
-	ASSERT_TRUE(sh.n.z > 0);
+	ASSERT_DBL_EQ(0.0, ray.hit_n.x);
+	ASSERT_DBL_EQ(0.0, ray.hit_n.y);
+	ASSERT_TRUE(ray.hit_n.z > 0);
 }
 
 /* ========== Torus intersection tests ========== */
@@ -520,8 +520,8 @@ TEST(test_cone_normal_direction)
 	t_ray ray = make_ray(ft_pt_create(2, 1, -5), ft_pt_create(-1, 0, 0));
 	ft_intersect_ray_cone(&sh, &ray);
 	ASSERT_TRUE(ray.lenght > 0);
-	ASSERT_TRUE(ft_lenght(sh.n) > 0.9);
-	ASSERT_TRUE(ft_lenght(sh.n) < 1.1);
+	ASSERT_TRUE(ft_lenght(ray.hit_n) > 0.9);
+	ASSERT_TRUE(ft_lenght(ray.hit_n) < 1.1);
 }
 
 TEST(test_cone_behind_ray)
@@ -550,7 +550,7 @@ TEST(test_disk_normal)
 	t_ray ray = make_ray(ft_pt_create(0, 0, 0), ft_pt_create(0, 0, -1));
 	ft_intersect_ray_disk(&sh, &ray);
 	ASSERT_TRUE(ray.lenght > 0);
-	ASSERT_TRUE(fabs(sh.n.z) > 0.9);
+	ASSERT_TRUE(fabs(ray.hit_n.z) > 0.9);
 }
 
 /* ========== Additional ellipsoid tests ========== */
@@ -562,7 +562,7 @@ TEST(test_ellipsoid_normal)
 	t_ray ray = make_ray(ft_pt_create(0, 0, 0), ft_pt_create(0, 0, -1));
 	ft_intersect_ray_ellipsoid(&sh, &ray);
 	ASSERT_TRUE(ray.lenght > 0);
-	ASSERT_TRUE(ft_lenght(sh.n) > 0.9);
+	ASSERT_TRUE(ft_lenght(ray.hit_n) > 0.9);
 }
 
 TEST(test_ellipsoid_behind_ray)
@@ -599,7 +599,7 @@ TEST(test_box_hit_side_x)
 	t_ray ray = make_ray(ft_pt_create(0, 0, 0), ft_pt_create(1, 0, 0));
 	ft_intersect_ray_box(&sh, &ray);
 	ASSERT_TRUE(ray.lenght > 0);
-	ASSERT_TRUE(fabs(sh.n.x) > 0.9);
+	ASSERT_TRUE(fabs(ray.hit_n.x) > 0.9);
 }
 
 TEST(test_box_hit_side_y)
@@ -608,7 +608,7 @@ TEST(test_box_hit_side_y)
 	t_ray ray = make_ray(ft_pt_create(0, 0, 0), ft_pt_create(0, 1, 0));
 	ft_intersect_ray_box(&sh, &ray);
 	ASSERT_TRUE(ray.lenght > 0);
-	ASSERT_TRUE(fabs(sh.n.y) > 0.9);
+	ASSERT_TRUE(fabs(ray.hit_n.y) > 0.9);
 }
 
 /* ========== Additional torus tests ========== */

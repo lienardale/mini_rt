@@ -157,7 +157,7 @@ TEST(test_pre_light)
 	win.beg_light = NULL;
 
 	memset(&sh, 0, sizeof(t_shape));
-	sh.n = ft_pt_create(0, 1, 0);
+	ray.hit_n = ft_pt_create(0, 1, 0);
 
 	ray.orig = ft_pt_create(0, 0, 0);
 	ray.dir = ft_pt_create(0, 0, -1);
@@ -275,7 +275,7 @@ TEST(test_pre_light_with_light)
 	win.beg_sh = NULL;
 
 	memset(&sh, 0, sizeof(t_shape));
-	sh.n = ft_pt_create(0, 1, 0);
+	ray.hit_n = ft_pt_create(0, 1, 0);
 
 	ray.orig = ft_pt_create(0, 0, 0);
 	ray.dir = ft_pt_create(0, 0, -1);
