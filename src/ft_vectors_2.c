@@ -15,6 +15,7 @@
 #include <emmintrin.h>
 #endif
 
+/* Compute the cross product a x b, yielding a vector perpendicular to both */
 t_pt ft_cross_product(t_pt a, t_pt b)
 {
 	t_pt c;
@@ -25,6 +26,7 @@ t_pt ft_cross_product(t_pt a, t_pt b)
 	return (c);
 }
 
+/* Component-wise addition of two vectors: c = a + b */
 t_pt ft_addition(t_pt a, t_pt b)
 {
 	t_pt c;
@@ -44,6 +46,7 @@ t_pt ft_addition(t_pt a, t_pt b)
 	return (c);
 }
 
+/* Component-wise subtraction of two vectors: c = a - b */
 t_pt ft_subtraction(t_pt a, t_pt b)
 {
 	t_pt c;
@@ -63,6 +66,7 @@ t_pt ft_subtraction(t_pt a, t_pt b)
 	return (c);
 }
 
+/* Component-wise (Hadamard) multiplication of two vectors: c = a * b */
 t_pt ft_multi_vect(t_pt a, t_pt b)
 {
 	t_pt c;
@@ -82,6 +86,7 @@ t_pt ft_multi_vect(t_pt a, t_pt b)
 	return (c);
 }
 
+/* Return the negation of a vector: (-x, -y, -z) */
 t_pt ft_neg_pt(t_pt dir)
 {
 	t_pt tmp;

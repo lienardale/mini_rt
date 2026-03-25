@@ -12,6 +12,7 @@
 
 #include "mini_rt.h"
 
+/* Compute the hit point from ray distance and evaluate scene lighting */
 t_pt ft_pre_light(t_window *win, t_shape *sh, double clos, t_ray *ray)
 {
 	t_pt p;
@@ -24,6 +25,7 @@ t_pt ft_pre_light(t_window *win, t_shape *sh, double clos, t_ray *ray)
 	return (i);
 }
 
+/* Add specular highlight contribution from a light source */
 static void ft_add_specular(t_pt *i, t_pt l_vec, t_pt n, t_pt view_dir,
 							t_shape *sh, t_argb l_col)
 {
@@ -37,6 +39,7 @@ static void ft_add_specular(t_pt *i, t_pt l_vec, t_pt n, t_pt view_dir,
 	i->z += spec.b / 255.0;
 }
 
+/* Sample 16 jittered shadow rays for soft shadow estimation */
 static double ft_soft_shadow_sample(t_window *win, t_pt l_vec, t_pt p,
 									double light_dist)
 {
@@ -59,13 +62,14 @@ static double ft_soft_shadow_sample(t_window *win, t_pt l_vec, t_pt p,
 			l_vec, ft_addition(ft_multi_scal(((s % 4) - 1.5) * 0.02, perp1),
 							   ft_multi_scal(((s / 4) - 1.5) * 0.02, perp2)));
 		offset = ft_normal_vect(offset);
-		if (ft_shadow(win, offset, p, light_dist) > 0.001)
+		if (ft_shadow(win, offset, p, light_dist) > EPSILON_NORMAL)
 			total += 1.0;
 		s++;
 	}
 	return (total / 16.0);
 }
 
+/* Accumulate ambient and per-light diffuse/specular illumination at a point */
 t_pt ft_light(t_window *win, t_pt n, t_pt p, t_shape *sh, t_pt view_dir)
 {
 	t_light *cur_light;
@@ -84,10 +88,10 @@ t_pt ft_light(t_window *win, t_pt n, t_pt p, t_shape *sh, t_pt view_dir)
 		light_dist = ft_lenght(l_vec);
 		l_vec = ft_div_scal(light_dist, l_vec);
 		n_dot_l = ft_dot_product(n, l_vec);
-		if (n_dot_l > 0.001)
+		if (n_dot_l > EPSILON_NORMAL)
 		{
 			shadow_factor = ft_soft_shadow_sample(win, l_vec, p, light_dist);
-			if (shadow_factor > 0.001)
+			if (shadow_factor > EPSILON_NORMAL)
 			{
 				n_dot_l = cur_light->light_ratio * n_dot_l / ft_lenght(n);
 				ft_db_mult_to_add_pt(&i, n_dot_l * shadow_factor,
@@ -100,6 +104,7 @@ t_pt ft_light(t_window *win, t_pt n, t_pt p, t_shape *sh, t_pt view_dir)
 	return (i);
 }
 
+/* Count the number of light sources in the scene */
 int ft_lstsize_light(t_window *win)
 {
 	t_light *cur_light;
@@ -115,6 +120,7 @@ int ft_lstsize_light(t_window *win)
 	return (len);
 }
 
+/* Cast a shadow ray toward a light; return negative if occluded */
 double ft_shadow(t_window *win, t_pt n, t_pt p, double light_dist)
 {
 	t_shape *cur_shape;
@@ -139,7 +145,7 @@ double ft_shadow(t_window *win, t_pt n, t_pt p, double light_dist)
 	while (cur_shape)
 	{
 		ft_which_shape(cur_shape, &ray);
-		if (ray.lenght > 0.0001 && ray.lenght < min)
+		if (ray.lenght > EPSILON_HIT && ray.lenght < min)
 		{
 			min = ray.lenght;
 			if (min < light_dist)

@@ -12,6 +12,7 @@
 
 #include "mini_rt.h"
 
+/* Apply gamma correction (gamma=2.2) to a color channel, clamped to [0, 255] */
 static double ft_gamma_correct(double c)
 {
 	if (c <= 0.0)
@@ -21,6 +22,7 @@ static double ft_gamma_correct(double c)
 	return (255.0 * pow(c / 255.0, 1.0 / 2.2));
 }
 
+/* Write a gamma-corrected pixel (scaled by resolution factor) into the image buffer */
 void ft_pix(int x, int y, t_window *w, t_argb color)
 {
 	int i;
@@ -47,6 +49,7 @@ void ft_pix(int x, int y, t_window *w, t_argb color)
 	}
 }
 
+/* Component-wise multiplication of two ARGB colors */
 t_argb ft_multi_argb(t_argb a, t_argb col)
 {
 	t_argb c;
@@ -57,6 +60,7 @@ t_argb ft_multi_argb(t_argb a, t_argb col)
 	return (c);
 }
 
+/* Scale a color by an albedo vector (per-channel intensity), normalized to [0,255] */
 t_argb ft_albedo(t_pt a, t_argb col)
 {
 	t_argb c;
@@ -67,6 +71,7 @@ t_argb ft_albedo(t_pt a, t_argb col)
 	return (c);
 }
 
+/* Accumulate scaled color into a point: a += b * c (for light contribution) */
 void ft_db_mult_to_add_pt(t_pt *a, double b, t_argb c)
 {
 	a->x += b * (c.r);

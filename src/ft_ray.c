@@ -12,6 +12,7 @@
 
 #include "mini_rt.h"
 
+/* Cast a single ray through pixel (i,j) and return the resulting color */
 static t_argb ft_ray_single(double i, double j, t_window *win, t_cam *cam)
 {
 	double size;
@@ -32,6 +33,7 @@ static t_argb ft_ray_single(double i, double j, t_window *win, t_cam *cam)
 	return (ft_trace_ray(win, cam));
 }
 
+/* Cast 4 sub-pixel rays for anti-aliasing and write the averaged color */
 void ft_ray(double i, double j, t_window *win, t_cam *cam)
 {
 	t_argb color;
@@ -60,6 +62,7 @@ void ft_ray(double i, double j, t_window *win, t_cam *cam)
 	ft_pix(i, j, win, color);
 }
 
+/* Initialize a ray from the camera's current position and direction */
 void ft_init_ray_cam(t_cam *cam, t_ray *ray)
 {
 	ray->dir = cam->rij;
@@ -68,6 +71,7 @@ void ft_init_ray_cam(t_cam *cam, t_ray *ray)
 	ray->unit = cam->rij;
 }
 
+/* Test ray against all CSG (constructive solid geometry) shapes */
 static void ft_trace_csg_shapes(t_window *win, t_ray *ray, double *min,
 								t_shape **min_sh)
 {
@@ -78,10 +82,10 @@ static void ft_trace_csg_shapes(t_window *win, t_ray *ray, double *min,
 	cur = win->beg_sh;
 	while (cur)
 	{
-		if (cur->id == 'g')
+		if (cur->id == SHAPE_CSG)
 		{
 			ft_intersect_ray_csg(cur, ray, win);
-			if (ray->lenght > 0.0001 && ray->lenght < *min)
+			if (ray->lenght > EPSILON_HIT && ray->lenght < *min)
 			{
 				*min = ray->lenght;
 				*min_sh = cur;
@@ -93,6 +97,7 @@ static void ft_trace_csg_shapes(t_window *win, t_ray *ray, double *min,
 	ray->hit_n = best_n;
 }
 
+/* Trace a primary ray from camera and return the shaded pixel color */
 t_argb ft_trace_ray(t_window *win, t_cam *cam)
 {
 	t_ray ray;
@@ -101,6 +106,7 @@ t_argb ft_trace_ray(t_window *win, t_cam *cam)
 	return (ft_trace_ray_recursive(win, &ray, 0));
 }
 
+/* Compute refracted ray through transparent surface and blend its color */
 static void ft_apply_refraction(t_window *win, t_ray *ray, t_shape *sh,
 								double t, t_argb *color, int depth)
 {
@@ -111,7 +117,7 @@ static void ft_apply_refraction(t_window *win, t_ray *ray, t_shape *sh,
 
 	tr = sh->mat.transparency;
 	eta = 1.0 / sh->mat.refr_index;
-	ref_ray.orig = ft_addition(ray->orig, ft_multi_scal(t + 0.001, ray->dir));
+	ref_ray.orig = ft_addition(ray->orig, ft_multi_scal(t + EPSILON_NORMAL, ray->dir));
 	ref_ray.dir = ft_refract_ray(ray->dir, ray->hit_n, eta);
 	ref_ray.lenght = -1;
 	ref_color = ft_trace_ray_recursive(win, &ref_ray, depth + 1);
@@ -120,6 +126,7 @@ static void ft_apply_refraction(t_window *win, t_ray *ray, t_shape *sh,
 	color->b = color->b * (1.0 - tr) + ref_color.b * tr;
 }
 
+/* Recursively trace a ray, handling intersections, lighting, reflection, and refraction */
 t_argb ft_trace_ray_recursive(t_window *win, t_ray *ray, int depth)
 {
 	t_shape *min_sh;
@@ -143,13 +150,14 @@ t_argb ft_trace_ray_recursive(t_window *win, t_ray *ray, int depth)
 	if (min_sh->mat.bump_map)
 		ft_apply_bump_map(min_sh, ray);
 	color = ft_albedo(ft_pre_light(win, min_sh, min, ray), hit_color);
-	if (depth < MAX_REFLECT_DEPTH && min_sh->mat.reflectivity > 0.001)
+	if (depth < MAX_REFLECT_DEPTH && min_sh->mat.reflectivity > EPSILON_NORMAL)
 		ft_apply_reflection(win, ray, min_sh, min, &color, depth);
-	if (depth < MAX_REFLECT_DEPTH && min_sh->mat.transparency > 0.001)
+	if (depth < MAX_REFLECT_DEPTH && min_sh->mat.transparency > EPSILON_NORMAL)
 		ft_apply_refraction(win, ray, min_sh, min, &color, depth);
 	return (color);
 }
 
+/* Compute reflected ray off a surface and blend its color by reflectivity */
 void ft_apply_reflection(t_window *win, t_ray *ray, t_shape *sh, double t,
 						 t_argb *color, int depth)
 {
@@ -158,7 +166,7 @@ void ft_apply_reflection(t_window *win, t_ray *ray, t_shape *sh, double t,
 	double r;
 
 	r = sh->mat.reflectivity;
-	ref_ray.orig = ft_addition(ray->orig, ft_multi_scal(t + 0.001, ray->dir));
+	ref_ray.orig = ft_addition(ray->orig, ft_multi_scal(t + EPSILON_NORMAL, ray->dir));
 	ref_ray.dir = ft_reflect_ray(ray->dir, ray->hit_n);
 	ref_ray.lenght = -1;
 	ref_color = ft_trace_ray_recursive(win, &ref_ray, depth + 1);
@@ -167,6 +175,7 @@ void ft_apply_reflection(t_window *win, t_ray *ray, t_shape *sh, double t,
 	color->b = color->b * (1.0 - r) + ref_color.b * r;
 }
 
+/* Construct a ray with origin, direction, and precomputed hit point */
 t_ray ft_shoot_ray(t_pt orig, t_pt dir, double t)
 {
 	t_ray ray;

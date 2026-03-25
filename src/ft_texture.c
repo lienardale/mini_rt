@@ -12,6 +12,7 @@
 
 #include "mini_rt.h"
 
+/* Load an XPM image file as a texture and return its pixel data */
 t_texture *ft_texture_load(char *path, void *mlx_ptr)
 {
 	t_texture *tex;
@@ -30,6 +31,7 @@ t_texture *ft_texture_load(char *path, void *mlx_ptr)
 	return (tex);
 }
 
+/* Destroy the texture image and free its memory */
 void ft_texture_free(t_texture *tex, void *mlx_ptr)
 {
 	if (!tex)
@@ -39,6 +41,7 @@ void ft_texture_free(t_texture *tex, void *mlx_ptr)
 	free(tex);
 }
 
+/* Sample a color from the texture at UV coordinates (wrapping) */
 t_argb ft_texture_sample(t_texture *tex, double u, double v)
 {
 	int x;
@@ -68,6 +71,7 @@ t_argb ft_texture_sample(t_texture *tex, double u, double v)
 	return (color);
 }
 
+/* Compute spherical UV mapping from the hit point */
 void ft_uv_sphere(t_shape *sh, t_ray *ray, double *u, double *v)
 {
 	t_pt r;
@@ -81,6 +85,7 @@ void ft_uv_sphere(t_shape *sh, t_ray *ray, double *u, double *v)
 	*v *= sh->mat.tex_scale_v;
 }
 
+/* Compute planar UV mapping by projecting hit point onto local axes */
 void ft_uv_plane(t_shape *sh, t_ray *ray, double *u, double *v)
 {
 	t_pt r;
@@ -98,6 +103,7 @@ void ft_uv_plane(t_shape *sh, t_ray *ray, double *u, double *v)
 	*v = ft_dot_product(r, fwd) * sh->mat.tex_scale_v;
 }
 
+/* Compute cylindrical UV mapping using angle around axis and height */
 void ft_uv_cylinder(t_shape *sh, t_ray *ray, double *u, double *v)
 {
 	t_pt r;
@@ -118,6 +124,7 @@ void ft_uv_cylinder(t_shape *sh, t_ray *ray, double *u, double *v)
 	*v *= sh->mat.tex_scale_v;
 }
 
+/* Compute fallback spherical UV mapping for unsupported shape types */
 void ft_uv_generic(t_shape *sh, t_ray *ray, double *u, double *v)
 {
 	t_pt r;
@@ -130,6 +137,7 @@ void ft_uv_generic(t_shape *sh, t_ray *ray, double *u, double *v)
 	*v *= sh->mat.tex_scale_v;
 }
 
+/* Return the texture-mapped color at the ray hit point, or the base color */
 t_argb ft_get_shape_color(t_shape *sh, t_ray *ray)
 {
 	double u;
@@ -137,11 +145,11 @@ t_argb ft_get_shape_color(t_shape *sh, t_ray *ray)
 
 	if (!sh->mat.texture)
 		return (sh->color);
-	if (sh->id == 's')
+	if (sh->id == SHAPE_SPHERE)
 		ft_uv_sphere(sh, ray, &u, &v);
-	else if (sh->id == 'p' || sh->id == 'q')
+	else if (sh->id == SHAPE_PLANE || sh->id == SHAPE_SQUARE)
 		ft_uv_plane(sh, ray, &u, &v);
-	else if (sh->id == 'y')
+	else if (sh->id == SHAPE_CYLINDER)
 		ft_uv_cylinder(sh, ray, &u, &v);
 	else
 		ft_uv_generic(sh, ray, &u, &v);

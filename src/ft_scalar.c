@@ -15,6 +15,7 @@
 #include <emmintrin.h>
 #endif
 
+/* Multiply each component of vector b by scalar a: c = a * b */
 t_pt ft_multi_scal(double a, t_pt b)
 {
 	t_pt c;
@@ -34,6 +35,7 @@ t_pt ft_multi_scal(double a, t_pt b)
 	return (c);
 }
 
+/* Divide each component of vector b by scalar a: c = b / a */
 t_pt ft_div_scal(double a, t_pt b)
 {
 	t_pt c;
@@ -53,6 +55,7 @@ t_pt ft_div_scal(double a, t_pt b)
 	return (c);
 }
 
+/* Add scalar a to each component of vector b: c = b + a */
 t_pt ft_add_scal(double a, t_pt b)
 {
 	t_pt c;
@@ -72,6 +75,7 @@ t_pt ft_add_scal(double a, t_pt b)
 	return (c);
 }
 
+/* Subtract scalar a from each component of vector b: c = b - a */
 t_pt ft_sub_scal(double a, t_pt b)
 {
 	t_pt c;

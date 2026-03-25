@@ -12,6 +12,7 @@
 
 #include "mini_rt.h"
 
+/* Render a horizontal band of the image (called per thread) */
 void *ft_render_band(void *arg)
 {
 	t_thread_data *td;
@@ -35,6 +36,7 @@ void *ft_render_band(void *arg)
 	return (NULL);
 }
 
+/* Spawn worker threads to render the scene and display the result */
 int ft_aff_threaded(t_window *win)
 {
 	pthread_t threads[MAX_THREADS];
@@ -70,6 +72,7 @@ int ft_aff_threaded(t_window *win)
 	return (0);
 }
 
+/* Return the number of available CPU cores, capped at MAX_THREADS */
 int ft_get_num_cores(void)
 {
 	long n;

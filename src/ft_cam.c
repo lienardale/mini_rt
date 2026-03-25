@@ -12,6 +12,7 @@
 
 #include "mini_rt.h"
 
+/* Apply combined X, Y, Z rotations to a vector using orientation angles in PI-radians. */
 t_pt ft_rotation_vect(t_pt p, t_pt ori)
 {
 	t_pt tmp;
@@ -22,6 +23,7 @@ t_pt ft_rotation_vect(t_pt p, t_pt ori)
 	return (tmp);
 }
 
+/* Apply the same rotation angle around all three axes. */
 t_pt ft_rot_angle(t_pt p, double a)
 {
 	t_pt tmp;
@@ -32,6 +34,7 @@ t_pt ft_rot_angle(t_pt p, double a)
 	return (tmp);
 }
 
+/* Rotate a point around the X axis by angle a (radians). */
 t_pt ft_rotate_arr_x(t_pt p, double a)
 {
 	t_pt tmp;
@@ -42,6 +45,7 @@ t_pt ft_rotate_arr_x(t_pt p, double a)
 	return (tmp);
 }
 
+/* Rotate a point around the Y axis by angle a (radians). */
 t_pt ft_rotate_arr_y(t_pt p, double a)
 {
 	t_pt tmp;
@@ -52,6 +56,7 @@ t_pt ft_rotate_arr_y(t_pt p, double a)
 	return (tmp);
 }
 
+/* Rotate a point around the Z axis by angle a (radians). */
 t_pt ft_rotate_arr_z(t_pt p, double a)
 {
 	t_pt tmp;

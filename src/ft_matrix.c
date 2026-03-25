@@ -12,6 +12,7 @@
 
 #include "mini_rt.h"
 
+/* Multiply point p by 3x3 matrix m: applies rotation/transform */
 t_pt ft_point_matrix_transl(t_pt p, t_mat m)
 {
 	t_pt n;
@@ -22,6 +23,7 @@ t_pt ft_point_matrix_transl(t_pt p, t_mat m)
 	return (n);
 }
 
+/* Translate point m1 by offset coord (adds non-zero components) */
 t_pt ft_translation(t_pt coord, t_pt m1)
 {
 	t_pt m2;

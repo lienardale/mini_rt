@@ -30,6 +30,30 @@
 #define MAX_THREADS 64
 #define MAX_REFLECT_DEPTH 4
 
+#define EPSILON_HIT 0.0001
+#define EPSILON_NORMAL 0.001
+#define EPSILON_ZERO 1e-8
+#define EPSILON_AABB 0.001
+#define BUMP_STEP 0.001
+
+enum e_shape_id
+{
+	SHAPE_SPHERE = 's',
+	SHAPE_PLANE = 'p',
+	SHAPE_SQUARE = 'q',
+	SHAPE_CYLINDER = 'y',
+	SHAPE_TRIANGLE = 't',
+	SHAPE_CONE = 'o',
+	SHAPE_DISK = 'k',
+	SHAPE_TORUS = 'u',
+	SHAPE_ELLIPSOID = 'e',
+	SHAPE_BOX = 'b',
+	SHAPE_HYPERBOLOID = 'h',
+	SHAPE_PARABOLOID = 'a',
+	SHAPE_CSG = 'g',
+	SHAPE_MESH = 'm'
+};
+
 enum e_csg_op
 {
 	CSG_UNION = 0,
@@ -396,13 +420,6 @@ void ft_inv_norm(t_pt *dir);
 
 double ft_is_in_triangle(t_pt r, t_shape *sh, t_ray *ray);
 double ft_is_in_square(t_ray *ray, t_shape *sh, t_pt n);
-void ft_cylinder_calc_one(t_shape *sh, t_ray *ray, t_mat *tmp, t_argb *dot);
-void ft_cylinder_calc_two(t_pt *calc, t_ray *ray, t_mat *tmp, t_argb *dot);
-double ft_cylinder_calc_three(t_pt *calc, t_argb *dist, t_argb *dot,
-							  t_ray *ray);
-void ft_cylinder_calc_four(t_pt *calc, t_argb *dist, t_argb *dot);
-double ft_cylinder_calc_five(t_shape *sh, t_argb *dist, t_argb *dot,
-							 t_ray *ray);
 void ft_cylinder_cap_check(t_shape *sh, t_ray *ray, double *best_t);
 
 void ft_material_default(t_material *mat);

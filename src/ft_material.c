@@ -12,6 +12,7 @@
 
 #include "mini_rt.h"
 
+/* Initialize material with default values: opaque, non-reflective, no texture */
 void ft_material_default(t_material *mat)
 {
 	mat->reflectivity = 0.0;
@@ -26,6 +27,7 @@ void ft_material_default(t_material *mat)
 	mat->bump_strength = 1.0;
 }
 
+/* Parse a single material property keyword (refl, trans, ior, spec) from line */
 static int ft_parse_mat_prop(t_material *mat, char **line)
 {
 	if (ft_strncmp(*line, "refl:", 5) == 0)
@@ -54,6 +56,7 @@ static int ft_parse_mat_prop(t_material *mat, char **line)
 	return (1);
 }
 
+/* Parse all material properties from a scene file line */
 int ft_parse_material(t_window *win, t_material *mat, char **line)
 {
 	(void)win;
@@ -64,6 +67,7 @@ int ft_parse_material(t_window *win, t_material *mat, char **line)
 	return (0);
 }
 
+/* Compute Phong specular highlight: spec * (R . V)^shininess * light_color */
 t_argb ft_apply_specular(t_pt view, t_pt light_dir, t_pt normal,
 						 t_material *mat, t_argb light_col)
 {
@@ -88,6 +92,7 @@ t_argb ft_apply_specular(t_pt view, t_pt light_dir, t_pt normal,
 	return (spec);
 }
 
+/* Reflect direction vector about normal: R = dir - 2*(dir . n)*n */
 t_pt ft_reflect_ray(t_pt dir, t_pt normal)
 {
 	double dot;
@@ -96,6 +101,7 @@ t_pt ft_reflect_ray(t_pt dir, t_pt normal)
 	return (ft_subtraction(dir, ft_multi_scal(2.0 * dot, normal)));
 }
 
+/* Compute refracted ray using Snell's law; falls back to reflection on total internal reflection */
 t_pt ft_refract_ray(t_pt dir, t_pt normal, double eta)
 {
 	double cos_i;

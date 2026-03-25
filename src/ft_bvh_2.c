@@ -12,6 +12,7 @@
 
 #include "mini_rt.h"
 
+/* Compare two shapes by their X coordinate for BVH sorting */
 static int ft_cmp_x(const void *a, const void *b)
 {
 	t_shape *sa;
@@ -26,6 +27,7 @@ static int ft_cmp_x(const void *a, const void *b)
 	return (0);
 }
 
+/* Recursively build a BVH tree by splitting shapes along the X axis */
 t_bvh_node *ft_bvh_build(t_shape **shapes, int count)
 {
 	t_bvh_node *node;
@@ -61,6 +63,7 @@ t_bvh_node *ft_bvh_build(t_shape **shapes, int count)
 	return (node);
 }
 
+/* Traverse the BVH tree to find the closest ray-shape intersection */
 void ft_bvh_trace(t_bvh_node *node, t_ray *ray, double *min, t_shape **min_sh)
 {
 	t_pt best_n;
@@ -73,7 +76,7 @@ void ft_bvh_trace(t_bvh_node *node, t_ray *ray, double *min, t_shape **min_sh)
 	if (node->shape)
 	{
 		ft_which_shape(node->shape, ray);
-		if (ray->lenght > 0.0001 && ray->lenght < *min)
+		if (ray->lenght > EPSILON_HIT && ray->lenght < *min)
 		{
 			*min = ray->lenght;
 			*min_sh = node->shape;
@@ -94,6 +97,7 @@ void ft_bvh_trace(t_bvh_node *node, t_ray *ray, double *min, t_shape **min_sh)
 	ray->hit_n = best_n;
 }
 
+/* Recursively free all nodes of the BVH tree */
 void ft_bvh_free(t_bvh_node *node)
 {
 	if (!node)
@@ -103,6 +107,7 @@ void ft_bvh_free(t_bvh_node *node)
 	free(node);
 }
 
+/* Collect all scene shapes into an array and build the BVH */
 void ft_build_scene_bvh(t_window *win)
 {
 	t_shape **arr;

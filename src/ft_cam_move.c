@@ -12,6 +12,7 @@
 
 #include "mini_rt.h"
 
+/* Map a keycode to its corresponding bitmask for held-key tracking. */
 unsigned int ft_keycode_to_bit(int keycode)
 {
 	if (keycode == MV_FWD)
@@ -41,6 +42,7 @@ unsigned int ft_keycode_to_bit(int keycode)
 	return (0);
 }
 
+/* Compute the camera's forward direction projected onto the XZ plane. */
 t_pt ft_cam_forward_xz(t_cam *cam)
 {
 	double yaw;
@@ -53,6 +55,7 @@ t_pt ft_cam_forward_xz(t_cam *cam)
 	return (fwd);
 }
 
+/* Compute the camera's right direction projected onto the XZ plane. */
 t_pt ft_cam_right_xz(t_cam *cam)
 {
 	double yaw;
@@ -65,6 +68,7 @@ t_pt ft_cam_right_xz(t_cam *cam)
 	return (right);
 }
 
+/* Translate the camera position based on currently held movement keys. */
 void ft_cam_apply_movement(t_cam *cam, unsigned int keys_held)
 {
 	t_pt fwd;
@@ -87,6 +91,7 @@ void ft_cam_apply_movement(t_cam *cam, unsigned int keys_held)
 		cam->coord.y -= MOVE_STEP;
 }
 
+/* Adjust the camera orientation angles based on currently held look keys. */
 void ft_cam_apply_look(t_cam *cam, unsigned int keys_held)
 {
 	if (keys_held & KEY_BIT_LK_L)

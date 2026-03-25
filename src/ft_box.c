@@ -12,11 +12,11 @@
 
 #include "mini_rt.h"
 
-int ft_box_init(t_window *win, t_shape **cur, char *line)
+/* Parse box properties (center, dimensions, color) from scene line */
+static int ft_box_parse(t_window *win, t_shape **cur, char *line)
 {
 	int check;
 
-	(*cur)->id = 'b';
 	while ((ft_isspace(*line)) == 1 || (ft_isalpha(*line)) == 1)
 		line++;
 	check = (ft_isnum(line) == 1) ? ft_point_init(win, &(*cur)->pt_0, &line)
@@ -32,6 +32,14 @@ int ft_box_init(t_window *win, t_shape **cur, char *line)
 	return (check == 0 ? 0 : ft_error(check, win, "box"));
 }
 
+/* Initialize box shape and delegate to parser */
+int ft_box_init(t_window *win, t_shape **cur, char *line)
+{
+	(*cur)->id = SHAPE_BOX;
+	return (ft_box_parse(win, cur, line));
+}
+
+/* Validate box parameters (positive dimensions, valid center and color) */
 int ft_box_check(t_window *win, t_shape **cur)
 {
 	int check;
@@ -66,7 +74,7 @@ static void ft_box_slab(double *tmin, double *tmax, double orig, double dir,
 	double t0;
 	double t1;
 
-	if (fabs(dir) < 1e-8)
+	if (fabs(dir) < EPSILON_ZERO)
 	{
 		if (orig < bmin || orig > bmax)
 		{
@@ -113,7 +121,7 @@ void ft_box_compute_normal(t_shape *sh, t_ray *ray)
 		ray->hit_n.y = (d.y > 0) ? 1.0 : -1.0;
 	else
 		ray->hit_n.z = (d.z > 0) ? 1.0 : -1.0;
-	if (ft_dot_product(ray->dir, ray->hit_n) > 0.001)
+	if (ft_dot_product(ray->dir, ray->hit_n) > EPSILON_NORMAL)
 		ft_inv_norm(&ray->hit_n);
 }
 
@@ -130,7 +138,7 @@ void ft_intersect_ray_box(t_shape *sh, t_ray *ray)
 	bmax.x = sh->pt_0.x + sh->pt_1.x / 2.0;
 	bmax.y = sh->pt_0.y + sh->pt_1.y / 2.0;
 	bmax.z = sh->pt_0.z + sh->pt_1.z / 2.0;
-	tmin = 0.0001;
+	tmin = EPSILON_HIT;
 	tmax = INFINITY;
 	ft_box_slab(&tmin, &tmax, ray->orig.x, ray->dir.x, bmin.x, bmax.x);
 	ft_box_slab(&tmin, &tmax, ray->orig.y, ray->dir.y, bmin.y, bmax.y);

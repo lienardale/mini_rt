@@ -193,7 +193,7 @@ void ft_mesh_create_triangles(t_window *win, t_shape **begin, t_pt *verts,
 			ft_error(6, win, "mesh triangle");
 			return;
 		}
-		cur->id = 't';
+		cur->id = SHAPE_TRIANGLE;
 		cur->pt_0 = ft_addition(verts[faces[i * 3]], offset);
 		cur->pt_1 = ft_addition(verts[faces[i * 3 + 1]], offset);
 		cur->pt_2 = ft_addition(verts[faces[i * 3 + 2]], offset);
