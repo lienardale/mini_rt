@@ -67,6 +67,7 @@ SRC_NAME =		ft_mini_rt.c \
 			ft_bump.c \
 			ft_argb.c \
 			ft_event.c \
+			ft_hud.c \
 			ft_cam_move.c \
 			ft_vectors.c \
 			ft_vectors_2.c \

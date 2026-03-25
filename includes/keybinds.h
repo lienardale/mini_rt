@@ -31,6 +31,12 @@
 #define FOV_N 78
 #define CHG_RES 15
 #define NXT_CAM 49
+#define KEY_HELP 4
+#define KEY_INFO 34
+#define KEY_RES_1 18
+#define KEY_RES_2 19
+#define KEY_RES_3 20
+#define KEY_RES_4 21
 #endif
 
 #define KEY_BIT_FWD (1 << 0)
@@ -47,6 +53,7 @@
 #define KEY_BIT_LK_ZR (1 << 11)
 #define MOVE_STEP 0.5
 #define LOOK_STEP 0.02
+#define MOUSE_SENSITIVITY 0.003
 
 #ifdef Linux
 #define ESC 65307
@@ -66,6 +73,12 @@
 #define FOV_N 65453
 #define CHG_RES 114
 #define NXT_CAM 32
+#define KEY_HELP 104
+#define KEY_INFO 105
+#define KEY_RES_1 49
+#define KEY_RES_2 50
+#define KEY_RES_3 51
+#define KEY_RES_4 52
 #endif
 
 #endif

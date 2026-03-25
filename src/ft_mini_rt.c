@@ -39,6 +39,7 @@ int ft_aff(t_window *win)
 		j += win->resol;
 	}
 	mlx_put_image_to_window(win->mlx_ptr, win->win_ptr, win->img_ptr, 0, 0);
+	ft_draw_hud(win);
 	return (0);
 }
 
@@ -91,22 +92,30 @@ static int ft_has_save_flag(int ac, char **av)
 	return (0);
 }
 
+/* Register all event hooks on the current window. */
+void ft_register_hooks(t_window *win)
+{
+	mlx_do_key_autorepeatoff(win->mlx_ptr);
+	mlx_hook(win->win_ptr, 2, 1L << 0, &ft_key_press, win);
+	mlx_hook(win->win_ptr, 3, 1L << 1, &ft_key_release, win);
+	mlx_mouse_hook(win->win_ptr, &ft_mouse, win);
+	mlx_hook(win->win_ptr, 5, 1L << 3, &ft_mouse_release, win);
+	mlx_hook(win->win_ptr, 6, 1L << 6, &ft_mouse_move, win);
+	mlx_hook(win->win_ptr, 17, 0, &ft_close, win);
+	mlx_loop_hook(win->mlx_ptr, &ft_frame_update, win);
+}
+
 /* Initialize mlx hooks, handle -save flag, and start the event loop. */
 void ft_mlx_init(t_window *win, int ac, char **av)
 {
 	int ret;
 
-	mlx_do_key_autorepeatoff(win->mlx_ptr);
-	mlx_hook(win->win_ptr, 2, 1L << 0, &ft_key_press, win);
-	mlx_hook(win->win_ptr, 3, 1L << 1, &ft_key_release, win);
-	mlx_mouse_hook(win->win_ptr, &ft_mouse, win);
+	ft_register_hooks(win);
 	if (ft_has_save_flag(ac, av))
 	{
 		ret = ft_save(win);
 		ret == 0 ? ft_close(win) : ft_error(2, win, "save");
 	}
-	mlx_hook(win->win_ptr, 17, 0, &ft_close, win);
-	mlx_loop_hook(win->mlx_ptr, &ft_frame_update, win);
 	mlx_loop(win->mlx_ptr);
 }
 
@@ -137,12 +146,75 @@ static void ft_parse_threads(t_window *win, int ac, char **av)
 	win->num_threads = ft_get_num_cores();
 }
 
+/* Parse --width, --height, --output, --verbose flags. */
+static void ft_parse_flags(t_window *win, int ac, char **av)
+{
+	int i;
+
+	i = 2;
+	while (i < ac)
+	{
+		if (ft_strncmp("--verbose", av[i], 10) == 0 ||
+			ft_strncmp("-v", av[i], 3) == 0)
+			win->verbose = 1;
+		else if (ft_strncmp("--width", av[i], 8) == 0 && i + 1 < ac)
+		{
+			win->orig_x = (unsigned int)ft_atoi(av[++i]);
+		}
+		else if (ft_strncmp("--height", av[i], 9) == 0 && i + 1 < ac)
+		{
+			win->orig_y = (unsigned int)ft_atoi(av[++i]);
+		}
+		else if (ft_strncmp("--output", av[i], 9) == 0 && i + 1 < ac)
+		{
+			win->output_path = av[++i];
+		}
+		i++;
+	}
+}
+
+/* Print scene information when --verbose is set. */
+static void ft_print_verbose(t_window *win)
+{
+	int shapes;
+	int lights;
+	t_shape *sh;
+	t_light *lt;
+
+	shapes = 0;
+	lights = 0;
+	sh = win->beg_sh;
+	while (sh)
+	{
+		shapes++;
+		sh = sh->next;
+	}
+	lt = win->beg_light;
+	while (lt)
+	{
+		lights++;
+		lt = lt->next;
+	}
+	ft_printf("miniRT: %ux%u, %d shapes, %d lights, %d threads\n",
+			  win->x, win->y, shapes, lights, win->num_threads);
+}
+
 /* Return 1 if the argument is a recognized command-line flag. */
 static int ft_valid_arg(char *arg)
 {
 	if (ft_strncmp("-save", arg, 6) == 0)
 		return (1);
 	if (ft_strncmp("--threads", arg, 9) == 0)
+		return (1);
+	if (ft_strncmp("--verbose", arg, 10) == 0)
+		return (1);
+	if (ft_strncmp("-v", arg, 3) == 0)
+		return (1);
+	if (ft_strncmp("--width", arg, 8) == 0)
+		return (1);
+	if (ft_strncmp("--height", arg, 9) == 0)
+		return (1);
+	if (ft_strncmp("--output", arg, 9) == 0)
 		return (1);
 	return (0);
 }
@@ -166,12 +238,16 @@ int main(int ac, char **av)
 		{
 			if (!ft_valid_arg(av[arg_i]))
 				ft_error(0, &win, "arguments");
-			if (ft_strncmp("--threads", av[arg_i], 10) == 0)
+			if (ft_strncmp("--threads", av[arg_i], 10) == 0 ||
+				ft_strncmp("--width", av[arg_i], 8) == 0 ||
+				ft_strncmp("--height", av[arg_i], 9) == 0 ||
+				ft_strncmp("--output", av[arg_i], 9) == 0)
 				arg_i++;
 			arg_i++;
 		}
 	}
 	ft_parse_threads(&win, ac, av);
+	ft_parse_flags(&win, ac, av);
 	if ((win.fd = open(av[1], O_RDONLY)) < 0)
 		return (ft_error(2, &win, "open"));
 	ft_parse(&check, &win, win.fd);
@@ -179,9 +255,22 @@ int main(int ac, char **av)
 	if (close(win.fd) < 0)
 		return (ft_error(2, &win, "close"));
 	ft_check_parsing(&win);
+	if (win.orig_x > 0)
+		win.x = win.orig_x;
+	if (win.orig_y > 0)
+		win.y = win.orig_y;
+	if (win.orig_x == 0)
+		win.orig_x = win.x;
+	if (win.orig_y == 0)
+		win.orig_y = win.y;
+	win.ratio = (double)win.x / (double)win.y;
+	if (win.verbose)
+		ft_print_verbose(&win);
 	ft_precompute_shapes(&win);
 	ft_build_scene_bvh(&win);
 	win.cur_cam = win.beg_cam;
+	win.ac = ac;
+	win.av = av;
 	if (!(win.mlx_ptr = mlx_init()))
 		return (check = ft_error(2, &win, "initialize mlx"));
 	win.win_ptr = mlx_new_window(win.mlx_ptr, (int)win.x, (int)win.y, "miniRT");

@@ -142,13 +142,13 @@ The rendering pipeline was analyzed and found to be mostly thread-safe already: 
 
 ## 9. User Experience Improvements
 
-- [ ] Add a loading/progress indicator during rendering (percentage or scanline counter)
-- [ ] Implement real-time preview at low resolution, then progressive refinement
-- [ ] Add mouse-based camera controls (click-drag to rotate, scroll to zoom)
-- [ ] Display scene statistics on screen (object count, render time, FPS)
-- [ ] Add command-line flags for resolution override, output format, verbose mode
-- [ ] Support window resizing with automatic re-render
-- [ ] Add a help overlay (press 'h' to show controls)
+- [x] Add a loading/progress indicator during rendering (render timing measured per frame, displayed in stats overlay)
+- [x] Implement real-time preview at low resolution, then progressive refinement (8x → 4x → 2x → 1x multi-stage pipeline in `ft_frame_update`)
+- [x] Add mouse-based camera controls (left-click-drag to rotate view, scroll wheel to zoom in/out)
+- [x] Display scene statistics on screen (press 'I': resolution, object/light count, render time, threads, camera position)
+- [x] Add command-line flags for resolution override (`--width W --height H`), output path (`--output FILE`), verbose mode (`--verbose` / `-v`)
+- [x] Support window resizing with automatic re-render (press 1/2/3/4 for preset resolutions: 320×240, 640×480, 1280×720, scene default — recreates window and re-renders)
+- [x] Add a help overlay (press 'H' to show all controls including new mouse, stats, and resolution features)
 
 ---
 

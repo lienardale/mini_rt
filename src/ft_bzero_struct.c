@@ -33,6 +33,19 @@ int ft_window_init(t_window *win)
 	win->num_threads = 1;
 	win->keys_held = 0;
 	win->needs_render = 1;
+	win->verbose = 0;
+	win->output_path = NULL;
+	win->orig_x = 0;
+	win->orig_y = 0;
+	win->progressive_stage = -1;
+	win->mouse_pressed = 0;
+	win->mouse_last_x = 0;
+	win->mouse_last_y = 0;
+	win->show_stats = 0;
+	win->show_help = 0;
+	win->last_render_ms = 0.0;
+	win->ac = 0;
+	win->av = NULL;
 	return (0);
 }
 

@@ -17,9 +17,11 @@ int ft_save(t_window *rt)
 {
 	int fd;
 	int ret;
+	const char *path;
 
 	ret = 0;
-	if ((fd = open("miniRT.bmp", O_WRONLY | O_CREAT | O_TRUNC, 0777)) == -1)
+	path = rt->output_path ? rt->output_path : "miniRT.bmp";
+	if ((fd = open(path, O_WRONLY | O_CREAT | O_TRUNC, 0777)) == -1)
 		return (-5);
 	if (ft_file_header(fd, rt) == -1 || ft_info_header(fd, rt) == -1 ||
 		ft_pixel_data(fd, rt) == -1)

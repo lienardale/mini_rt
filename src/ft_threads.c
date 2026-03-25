@@ -70,6 +70,7 @@ int ft_aff_threaded(t_window *win)
 	while (--n >= 0)
 		pthread_join(threads[n], NULL);
 	mlx_put_image_to_window(win->mlx_ptr, win->win_ptr, win->img_ptr, 0, 0);
+	ft_draw_hud(win);
 	return (0);
 }
 
