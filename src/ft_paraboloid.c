@@ -12,6 +12,7 @@
 
 #include "mini_rt.h"
 
+/* Parse paraboloid properties (center, axis, focal length, height, color) from scene line */
 static int ft_paraboloid_parse(t_window *win, t_shape **cur, char *line)
 {
 	int check;
@@ -40,12 +41,14 @@ static int ft_paraboloid_parse(t_window *win, t_shape **cur, char *line)
 	return (check == 0 ? 0 : ft_error(check, win, "paraboloid"));
 }
 
+/* Initialize paraboloid shape and delegate to parser */
 int ft_paraboloid_init(t_window *win, t_shape **cur, char *line)
 {
 	(*cur)->id = SHAPE_PARABOLOID;
 	return (ft_paraboloid_parse(win, cur, line));
 }
 
+/* Validate paraboloid parameters (positive focal length/height, valid point, color, axis) */
 int ft_paraboloid_check(t_window *win, t_shape **cur)
 {
 	int check;
@@ -60,6 +63,7 @@ int ft_paraboloid_check(t_window *win, t_shape **cur)
 	return (check);
 }
 
+/* Compute paraboloid normal via gradient of x^2 + z^2 = 4fy in local space */
 void ft_paraboloid_norm(t_shape *sh, t_ray *ray)
 {
 	t_pt r;
@@ -94,6 +98,7 @@ void ft_paraboloid_norm(t_shape *sh, t_ray *ray)
 		ft_inv_norm(&ray->hit_n);
 }
 
+/* Ray-paraboloid intersection: transform to local space and solve quadratic */
 void ft_intersect_ray_paraboloid(t_shape *sh, t_ray *ray)
 {
 	t_pt oc;
@@ -123,6 +128,7 @@ void ft_intersect_ray_paraboloid(t_shape *sh, t_ray *ray)
 	ft_paraboloid_solve(sh, ray, (t_pt){ox, oy, oz}, (t_pt){dx, dy, dz});
 }
 
+/* Solve quadratic for paraboloid intersection in local coordinates */
 void ft_paraboloid_solve(t_shape *sh, t_ray *ray, t_pt o, t_pt d)
 {
 	double f;
@@ -148,6 +154,7 @@ void ft_paraboloid_solve(t_shape *sh, t_ray *ray, t_pt o, t_pt d)
 	ft_paraboloid_pick(sh, ray, t0, t1);
 }
 
+/* Select nearest valid root within paraboloid height bounds */
 void ft_paraboloid_pick(t_shape *sh, t_ray *ray, double t0, double t1)
 {
 	t_pt up;
