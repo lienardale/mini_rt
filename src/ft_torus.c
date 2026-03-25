@@ -190,8 +190,9 @@ static int ft_solve_quartic(double *c, double *roots)
 	coef[2] = c[3] / c[0];
 	coef[3] = c[4] / c[0];
 	nc = ft_solve_cubic(-coef[1], coef[0] * coef[2] - 4.0 * coef[3],
-		-coef[0] * coef[0] * coef[3] + 4.0 * coef[1] * coef[3]
-		- coef[2] * coef[2], cubic_roots);
+						-coef[0] * coef[0] * coef[3] + 4.0 * coef[1] * coef[3] -
+							coef[2] * coef[2],
+						cubic_roots);
 	i = -1;
 	while (++i < nc)
 	{
