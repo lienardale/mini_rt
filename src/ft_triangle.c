@@ -77,6 +77,7 @@ void ft_intersect_ray_triangle(t_shape *sh, t_ray *ray)
 		ray->lenght = -1;
 }
 
+/* Compute triangle normal via cross product of two edges */
 void ft_triangle_norm(t_shape *sh, t_ray *ray)
 {
 	t_pt u;
@@ -88,6 +89,7 @@ void ft_triangle_norm(t_shape *sh, t_ray *ray)
 	ray->hit_n = ft_normal_vect(ray->hit_n);
 }
 
+/* Edge-based containment test: point is inside if all cross products agree with normal */
 double ft_is_in_triangle(t_pt r, t_shape *sh, t_ray *ray)
 {
 	t_mat c;
