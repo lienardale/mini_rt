@@ -126,23 +126,20 @@ void ft_draw_stats(t_window *win)
 	mlx_string_put(win->mlx_ptr, win->win_ptr, 10, y, 0xFFFFFF, buf);
 	y += 18;
 	if (win->cur_cam->aperture > EPSILON_ZERO)
-		mlx_string_put(win->mlx_ptr, win->win_ptr, 10, y, 0x00FFFF,
-					   "DOF: ON");
+		mlx_string_put(win->mlx_ptr, win->win_ptr, 10, y, 0x00FFFF, "DOF: ON");
 	if (win->path_trace_spp > 0)
 	{
 		ft_strlcpy(buf, "PathTrace SPP: ", 128);
 		len = (int)ft_strlen(buf);
 		ft_hud_itoa(buf + len, win->path_trace_spp);
-		mlx_string_put(win->mlx_ptr, win->win_ptr, 10, y + 18, 0x00FFFF,
-					   buf);
+		mlx_string_put(win->mlx_ptr, win->win_ptr, 10, y + 18, 0x00FFFF, buf);
 	}
 	if (win->motion_blur_samples > 1)
 	{
 		ft_strlcpy(buf, "MotionBlur: ", 128);
 		len = (int)ft_strlen(buf);
 		ft_hud_itoa(buf + len, win->motion_blur_samples);
-		mlx_string_put(win->mlx_ptr, win->win_ptr, 10, y + 36, 0x00FFFF,
-					   buf);
+		mlx_string_put(win->mlx_ptr, win->win_ptr, 10, y + 36, 0x00FFFF, buf);
 	}
 }
 

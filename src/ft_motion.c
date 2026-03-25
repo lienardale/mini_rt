@@ -20,8 +20,8 @@ int ft_scene_has_motion(t_window *win)
 	sh = win->beg_sh;
 	while (sh)
 	{
-		if (sh->mat.vel.x != 0.0 || sh->mat.vel.y != 0.0
-			|| sh->mat.vel.z != 0.0)
+		if (sh->mat.vel.x != 0.0 || sh->mat.vel.y != 0.0 ||
+			sh->mat.vel.z != 0.0)
 			return (1);
 		sh = sh->next;
 	}

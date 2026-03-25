@@ -178,8 +178,7 @@ static void ft_parse_flags(t_window *win, int ac, char **av)
 			win->path_trace_spp = val;
 		else if ((val = ft_parse_int_flag(av, ac, &i, "--pt-bounces", 13)))
 			win->path_trace_bounces = val;
-		else if ((val = ft_parse_int_flag(av, ac, &i, "--motion-samples",
-										  17)))
+		else if ((val = ft_parse_int_flag(av, ac, &i, "--motion-samples", 17)))
 			win->motion_blur_samples = val;
 		i++;
 	}
