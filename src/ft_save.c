@@ -80,9 +80,14 @@ int ft_pixel_data(int fd, t_window *win)
 		x = 0;
 		while (x < win->x)
 		{
-			tab[i * 3] = win->data[((win->y - y - 1) * win->x + x) * 4 + 0];
-			tab[i * 3 + 1] = win->data[((win->y - y - 1) * win->x + x) * 4 + 1];
-			tab[i * 3 + 2] = win->data[((win->y - y - 1) * win->x + x) * 4 + 2];
+			tab[i * 3] = (unsigned char)
+							 win->data[((win->y - y - 1) * win->x + x) * 4 + 0];
+			tab[i * 3 + 1] =
+				(unsigned char)
+					win->data[((win->y - y - 1) * win->x + x) * 4 + 1];
+			tab[i * 3 + 2] =
+				(unsigned char)
+					win->data[((win->y - y - 1) * win->x + x) * 4 + 2];
 			i++;
 			x++;
 		}

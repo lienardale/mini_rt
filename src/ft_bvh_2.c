@@ -43,7 +43,7 @@ t_bvh_node *ft_bvh_build(t_shape **shapes, int count)
 		node->box = ft_shape_aabb(shapes[0]);
 		return (node);
 	}
-	qsort(shapes, count, sizeof(t_shape *), ft_cmp_x);
+	qsort(shapes, (size_t)count, sizeof(t_shape *), ft_cmp_x);
 	mid = count / 2;
 	node->left = ft_bvh_build(shapes, mid);
 	node->right = ft_bvh_build(shapes + mid, count - mid);
@@ -124,7 +124,7 @@ void ft_build_scene_bvh(t_window *win)
 	}
 	if (count == 0)
 		return;
-	arr = malloc(sizeof(t_shape *) * count);
+	arr = malloc(sizeof(t_shape *) * (size_t)count);
 	if (!arr)
 		return;
 	cur = win->beg_sh;

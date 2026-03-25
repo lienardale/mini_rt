@@ -8,15 +8,34 @@ on:
 
 jobs:
   build-and-test:
-    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - distro: ubuntu-22.04
+            runs-on: ubuntu-22.04
+            deps: sudo apt-get update && sudo apt-get install -y libx11-dev libxext-dev zlib1g-dev
+          - distro: ubuntu-24.04
+            runs-on: ubuntu-24.04
+            deps: sudo apt-get update && sudo apt-get install -y libx11-dev libxext-dev zlib1g-dev
+          - distro: debian-12
+            runs-on: ubuntu-latest
+            container: debian:12
+            deps: apt-get update && apt-get install -y gcc make libx11-dev libxext-dev zlib1g-dev
+          - distro: fedora-39
+            runs-on: ubuntu-latest
+            container: fedora:39
+            deps: dnf install -y gcc make libX11-devel libXext-devel zlib-devel
+
+    runs-on: ${{ matrix.runs-on }}
+    container: ${{ matrix.container || '' }}
+    name: build (${{ matrix.distro }})
 
     steps:
       - uses: actions/checkout@v4
 
       - name: Install dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y libx11-dev libxext-dev zlib1g-dev
+        run: ${{ matrix.deps }}
 
       - name: Build project
         run: make all

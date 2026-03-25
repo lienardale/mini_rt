@@ -127,14 +127,16 @@ int ft_resol_init(t_window *res, char *line)
 {
 	while (*line && ((ft_isspace(*line)) == 1 || (ft_isalpha(*line)) == 1))
 		line++;
-	res->x = ((ft_isdigit(*line) == 1) ? ft_atoi(line)
-									   : ft_error(3, res, "resolution"));
+	res->x = (unsigned int)((ft_isdigit(*line) == 1)
+								? ft_atoi(line)
+								: ft_error(3, res, "resolution"));
 	while ((ft_isdigit(*line)) == 1 && *line)
 		line++;
 	while (*line && (ft_isspace(*line)) == 1)
 		line++;
-	res->y = ((ft_isdigit(*line) == 1) ? ft_atoi(line)
-									   : ft_error(3, res, "resolution"));
+	res->y = (unsigned int)((ft_isdigit(*line) == 1)
+								? ft_atoi(line)
+								: ft_error(3, res, "resolution"));
 	while (((ft_isdigit(*line)) == 1) && *line)
 		line++;
 	while ((ft_isspace(*line)) == 1)

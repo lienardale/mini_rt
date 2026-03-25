@@ -23,7 +23,7 @@ int ft_aff(t_window *win)
 		return (ft_aff_threaded(win));
 	if (win->img_ptr)
 		mlx_destroy_image(win->mlx_ptr, win->img_ptr);
-	win->img_ptr = mlx_new_image(win->mlx_ptr, win->x, win->y);
+	win->img_ptr = mlx_new_image(win->mlx_ptr, (int)win->x, (int)win->y);
 	win->data = mlx_get_data_addr(win->img_ptr, &(win->depth),
 								  &(win->size_line), &(win->endian));
 	cam = win->cur_cam;
@@ -184,8 +184,11 @@ int main(int ac, char **av)
 	win.cur_cam = win.beg_cam;
 	if (!(win.mlx_ptr = mlx_init()))
 		return (check = ft_error(2, &win, "initialize mlx"));
-	win.win_ptr = mlx_new_window(win.mlx_ptr, win.x, win.y, "miniRT");
+	win.win_ptr = mlx_new_window(win.mlx_ptr, (int)win.x, (int)win.y, "miniRT");
 	check = ft_aff(&win);
-	(check == -1) ? ft_close(&win) : ft_mlx_init(&win, ac, av);
+	if (check == -1)
+		ft_close(&win);
+	else
+		ft_mlx_init(&win, ac, av);
 	return (0);
 }

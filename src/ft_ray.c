@@ -59,7 +59,7 @@ void ft_ray(double i, double j, t_window *win, t_cam *cam)
 	color.r /= 4.0;
 	color.g /= 4.0;
 	color.b /= 4.0;
-	ft_pix(i, j, win, color);
+	ft_pix((int)i, (int)j, win, color);
 }
 
 /* Initialize a ray from the camera's current position and direction */

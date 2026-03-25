@@ -131,12 +131,12 @@ The rendering pipeline was analyzed and found to be mostly thread-safe already: 
 
 ## 8. Cross-Platform & Build Improvements
 
-- [ ] Add CMake as an alternative build system for better IDE integration and dependency management
-- [ ] Fix compiler warnings with stricter flags (`-Wpedantic`, `-Wshadow`, `-Wconversion`)
-- [ ] Add a `make debug` target with sanitizers enabled (`-fsanitize=address,undefined`)
-- [ ] Add a `make release` target with full optimizations (`-O3 -DNDEBUG`)
-- [ ] Test and validate on multiple Linux distributions
-- [ ] Consider replacing minilibX with SDL2 or similar for broader platform support
+- [x] Add CMake as an alternative build system for better IDE integration and dependency management
+- [x] Fix compiler warnings with stricter flags (`-Wpedantic`, `-Wshadow`, `-Wconversion`)
+- [x] Add a `make debug` target with sanitizers enabled (`-fsanitize=address,undefined`)
+- [x] Add a `make release` target with full optimizations (`-O3 -DNDEBUG`)
+- [x] Test and validate on multiple Linux distributions
+- [x] Consider replacing minilibX with SDL2 or similar for broader platform support
 
 ---
 
