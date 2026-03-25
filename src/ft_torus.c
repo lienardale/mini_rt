@@ -12,7 +12,8 @@
 
 #include "mini_rt.h"
 
-/* Parse torus properties (center, orientation, major/minor radii, color) from scene line */
+/* Parse torus properties (center, orientation, major/minor radii, color) from
+ * scene line */
 static int ft_torus_parse(t_window *win, t_shape **cur, char *line)
 {
 	int check;
@@ -48,7 +49,8 @@ int ft_torus_init(t_window *win, t_shape **cur, char *line)
 	return (ft_torus_parse(win, cur, line));
 }
 
-/* Validate torus parameters (positive radii, valid point, color, orientation) */
+/* Validate torus parameters (positive radii, valid point, color, orientation)
+ */
 int ft_torus_check(t_window *win, t_shape **cur)
 {
 	int check;
@@ -254,7 +256,8 @@ void ft_torus_norm(t_shape *sh, t_ray *ray)
 	ft_torus_world_normal(sh, ray);
 }
 
-/* Transform local-space normal back to world coordinates using orientation basis */
+/* Transform local-space normal back to world coordinates using orientation
+ * basis */
 void ft_torus_world_normal(t_shape *sh, t_ray *ray)
 {
 	t_pt up;

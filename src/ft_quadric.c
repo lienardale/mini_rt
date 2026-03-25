@@ -12,7 +12,8 @@
 
 #include "mini_rt.h"
 
-/* Parse hyperboloid properties (center, axis, radii, height, color) from scene line */
+/* Parse hyperboloid properties (center, axis, radii, height, color) from scene
+ * line */
 static int ft_hyperboloid_parse(t_window *win, t_shape **cur, char *line)
 {
 	int check;
@@ -46,7 +47,8 @@ int ft_hyperboloid_init(t_window *win, t_shape **cur, char *line)
 	return (ft_hyperboloid_parse(win, cur, line));
 }
 
-/* Validate hyperboloid parameters (positive radii/height, valid point, color, orientation) */
+/* Validate hyperboloid parameters (positive radii/height, valid point, color,
+ * orientation) */
 int ft_hyperboloid_check(t_window *win, t_shape **cur)
 {
 	int check;

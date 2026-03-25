@@ -50,7 +50,8 @@ int ft_which_id(char *line)
 	return (-1);
 }
 
-/* Advance the line pointer past digits, dots, commas, and trailing whitespace. */
+/* Advance the line pointer past digits, dots, commas, and trailing whitespace.
+ */
 void ft_iterate_in_line(char **line)
 {
 	while ((ft_isdigit(**line)) == 1 || **line == '.' || **line == ',')

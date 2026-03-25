@@ -12,7 +12,8 @@
 
 #include "mini_rt.h"
 
-/* Parse cone properties (center, axis, diameter, height, color) from scene line */
+/* Parse cone properties (center, axis, diameter, height, color) from scene line
+ */
 static int ft_cone_parse(t_window *win, t_shape **cur, char *line)
 {
 	int check;
@@ -48,7 +49,8 @@ int ft_cone_init(t_window *win, t_shape **cur, char *line)
 	return (ft_cone_parse(win, cur, line));
 }
 
-/* Validate cone parameters (non-negative height/diameter, valid point, color, orientation) */
+/* Validate cone parameters (non-negative height/diameter, valid point, color,
+ * orientation) */
 int ft_cone_check(t_window *win, t_shape **cur)
 {
 	int check;
@@ -81,7 +83,8 @@ void ft_cone_norm(t_shape *sh, t_ray *ray)
 		ft_inv_norm(&ray->hit_n);
 }
 
-/* Ray-cone intersection using quadratic formula with tapered radius along axis */
+/* Ray-cone intersection using quadratic formula with tapered radius along axis
+ */
 void ft_intersect_ray_cone(t_shape *sh, t_ray *ray)
 {
 	t_pt oc;

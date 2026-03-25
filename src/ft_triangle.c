@@ -89,7 +89,8 @@ void ft_triangle_norm(t_shape *sh, t_ray *ray)
 	ray->hit_n = ft_normal_vect(ray->hit_n);
 }
 
-/* Edge-based containment test: point is inside if all cross products agree with normal */
+/* Edge-based containment test: point is inside if all cross products agree with
+ * normal */
 double ft_is_in_triangle(t_pt r, t_shape *sh, t_ray *ray)
 {
 	t_mat c;
@@ -102,7 +103,8 @@ double ft_is_in_triangle(t_pt r, t_shape *sh, t_ray *ray)
 		ft_dot_product(ray->hit_n, ft_cross_product(sh->tri_edge2, c.z)) < 0)
 		return (-1);
 	ray->hit_n = sh->tri_norm;
-	if (ft_dot_product(ft_subtraction(sh->pt_0, ray->orig), ray->hit_n) > EPSILON_NORMAL)
+	if (ft_dot_product(ft_subtraction(sh->pt_0, ray->orig), ray->hit_n) >
+		EPSILON_NORMAL)
 		ft_inv_norm(&ray->hit_n);
 	return (0);
 }

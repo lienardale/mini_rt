@@ -12,7 +12,8 @@
 
 #include "mini_rt.h"
 
-/* Parse disk properties (center, orientation, diameter, color) from scene line */
+/* Parse disk properties (center, orientation, diameter, color) from scene line
+ */
 static int ft_disk_parse(t_window *win, t_shape **cur, char *line)
 {
 	int check;
@@ -47,7 +48,8 @@ int ft_disk_init(t_window *win, t_shape **cur, char *line)
 	return (ft_disk_parse(win, cur, line));
 }
 
-/* Validate disk parameters (non-negative diameter, valid point, color, orientation) */
+/* Validate disk parameters (non-negative diameter, valid point, color,
+ * orientation) */
 int ft_disk_check(t_window *win, t_shape **cur)
 {
 	int check;

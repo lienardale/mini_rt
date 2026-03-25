@@ -42,7 +42,8 @@ int ft_aff(t_window *win)
 	return (0);
 }
 
-/* Parse the scene file line by line, dispatching each element to its initializer. */
+/* Parse the scene file line by line, dispatching each element to its
+ * initializer. */
 void ft_parse(int *check, t_window *win, int fd)
 {
 	int res;

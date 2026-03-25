@@ -117,7 +117,8 @@ static void ft_apply_refraction(t_window *win, t_ray *ray, t_shape *sh,
 
 	tr = sh->mat.transparency;
 	eta = 1.0 / sh->mat.refr_index;
-	ref_ray.orig = ft_addition(ray->orig, ft_multi_scal(t + EPSILON_NORMAL, ray->dir));
+	ref_ray.orig =
+		ft_addition(ray->orig, ft_multi_scal(t + EPSILON_NORMAL, ray->dir));
 	ref_ray.dir = ft_refract_ray(ray->dir, ray->hit_n, eta);
 	ref_ray.lenght = -1;
 	ref_color = ft_trace_ray_recursive(win, &ref_ray, depth + 1);
@@ -126,7 +127,8 @@ static void ft_apply_refraction(t_window *win, t_ray *ray, t_shape *sh,
 	color->b = color->b * (1.0 - tr) + ref_color.b * tr;
 }
 
-/* Recursively trace a ray, handling intersections, lighting, reflection, and refraction */
+/* Recursively trace a ray, handling intersections, lighting, reflection, and
+ * refraction */
 t_argb ft_trace_ray_recursive(t_window *win, t_ray *ray, int depth)
 {
 	t_shape *min_sh;
@@ -166,7 +168,8 @@ void ft_apply_reflection(t_window *win, t_ray *ray, t_shape *sh, double t,
 	double r;
 
 	r = sh->mat.reflectivity;
-	ref_ray.orig = ft_addition(ray->orig, ft_multi_scal(t + EPSILON_NORMAL, ray->dir));
+	ref_ray.orig =
+		ft_addition(ray->orig, ft_multi_scal(t + EPSILON_NORMAL, ray->dir));
 	ref_ray.dir = ft_reflect_ray(ray->dir, ray->hit_n);
 	ref_ray.lenght = -1;
 	ref_color = ft_trace_ray_recursive(win, &ref_ray, depth + 1);

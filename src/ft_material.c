@@ -12,7 +12,8 @@
 
 #include "mini_rt.h"
 
-/* Initialize material with default values: opaque, non-reflective, no texture */
+/* Initialize material with default values: opaque, non-reflective, no texture
+ */
 void ft_material_default(t_material *mat)
 {
 	mat->reflectivity = 0.0;
@@ -27,7 +28,8 @@ void ft_material_default(t_material *mat)
 	mat->bump_strength = 1.0;
 }
 
-/* Parse a single material property keyword (refl, trans, ior, spec) from line */
+/* Parse a single material property keyword (refl, trans, ior, spec) from line
+ */
 static int ft_parse_mat_prop(t_material *mat, char **line)
 {
 	if (ft_strncmp(*line, "refl:", 5) == 0)
@@ -101,7 +103,8 @@ t_pt ft_reflect_ray(t_pt dir, t_pt normal)
 	return (ft_subtraction(dir, ft_multi_scal(2.0 * dot, normal)));
 }
 
-/* Compute refracted ray using Snell's law; falls back to reflection on total internal reflection */
+/* Compute refracted ray using Snell's law; falls back to reflection on total
+ * internal reflection */
 t_pt ft_refract_ray(t_pt dir, t_pt normal, double eta)
 {
 	double cos_i;
