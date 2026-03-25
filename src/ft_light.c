@@ -95,8 +95,8 @@ t_pt ft_light(t_window *win, t_pt n, t_pt p, t_shape *sh, t_pt view_dir)
 
 	i = ft_add_scal(win->ratio, (t_pt){0, 0, 0});
 	ft_db_mult_to_add_pt(&i, win->ratio, win->col);
-	use_pbr = (sh->mat.roughness > EPSILON_ZERO
-		|| sh->mat.metallic > EPSILON_ZERO);
+	use_pbr =
+		(sh->mat.roughness > EPSILON_ZERO || sh->mat.metallic > EPSILON_ZERO);
 	cur_light = win->beg_light;
 	while (cur_light)
 	{
@@ -110,16 +110,14 @@ t_pt ft_light(t_window *win, t_pt n, t_pt p, t_shape *sh, t_pt view_dir)
 			if (shadow_factor > EPSILON_NORMAL)
 			{
 				if (use_pbr)
-					ft_add_pbr_light(&i, l_vec, n, view_dir, sh,
-									 cur_light->col, shadow_factor,
-									 cur_light->light_ratio);
+					ft_add_pbr_light(&i, l_vec, n, view_dir, sh, cur_light->col,
+									 shadow_factor, cur_light->light_ratio);
 				else
 				{
 					n_dot_l = cur_light->light_ratio * n_dot_l / ft_lenght(n);
 					ft_db_mult_to_add_pt(&i, n_dot_l * shadow_factor,
 										 cur_light->col);
-					ft_add_specular(&i, l_vec, n, view_dir, sh,
-									cur_light->col);
+					ft_add_specular(&i, l_vec, n, view_dir, sh, cur_light->col);
 				}
 			}
 		}

@@ -51,8 +51,8 @@ static double ft_geom_schlick_ggx(double n_dot_v, double roughness)
 /* Smith's geometry function combining view and light masking */
 static double ft_geom_smith(double n_dot_v, double n_dot_l, double roughness)
 {
-	return (ft_geom_schlick_ggx(n_dot_v, roughness)
-		* ft_geom_schlick_ggx(n_dot_l, roughness));
+	return (ft_geom_schlick_ggx(n_dot_v, roughness) *
+			ft_geom_schlick_ggx(n_dot_l, roughness));
 }
 
 /* Cook-Torrance PBR BRDF: combines GGX NDF, geometry, and Fresnel */

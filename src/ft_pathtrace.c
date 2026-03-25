@@ -36,8 +36,8 @@ static t_argb ft_pt_direct(t_window *win, t_ray *ray, t_shape *sh, t_pt p,
 			shadow = ft_shadow(win, l_vec, p, l_dist);
 			if (shadow > EPSILON_NORMAL)
 			{
-				if (sh->mat.roughness > EPSILON_ZERO
-					|| sh->mat.metallic > EPSILON_ZERO)
+				if (sh->mat.roughness > EPSILON_ZERO ||
+					sh->mat.metallic > EPSILON_ZERO)
 				{
 					t_argb pbr;
 
@@ -51,8 +51,8 @@ static t_argb ft_pt_direct(t_window *win, t_ray *ray, t_shape *sh, t_pt p,
 				{
 					double n_dot_l;
 
-					n_dot_l = cur->light_ratio
-						* ft_dot_product(ray->hit_n, l_vec);
+					n_dot_l =
+						cur->light_ratio * ft_dot_product(ray->hit_n, l_vec);
 					color.r += n_dot_l * cur->col.r * albedo.r / 255.0;
 					color.g += n_dot_l * cur->col.g * albedo.g / 255.0;
 					color.b += n_dot_l * cur->col.b * albedo.b / 255.0;
@@ -115,10 +115,9 @@ static t_argb ft_pathtrace_ray(t_window *win, t_ray *ray, int bounces,
 		double cosine_pdf;
 		double n_dot_d;
 
-		bounce.orig =
-			ft_addition(p, ft_multi_scal(EPSILON_NORMAL, ray->hit_n));
-		if (min_sh->mat.reflectivity > EPSILON_ZERO
-			&& ft_rand_float(seed) < min_sh->mat.reflectivity)
+		bounce.orig = ft_addition(p, ft_multi_scal(EPSILON_NORMAL, ray->hit_n));
+		if (min_sh->mat.reflectivity > EPSILON_ZERO &&
+			ft_rand_float(seed) < min_sh->mat.reflectivity)
 			bounce.dir = ft_reflect_ray(ray->dir, ray->hit_n);
 		else
 			bounce.dir = ft_rand_hemisphere_cosine(ray->hit_n, seed);
@@ -129,12 +128,12 @@ static t_argb ft_pathtrace_ray(t_window *win, t_ray *ray, int bounces,
 		cosine_pdf = n_dot_d / M_PI;
 		if (cosine_pdf > EPSILON_ZERO)
 		{
-			color.r += indirect.r * (albedo.r / 255.0) * n_dot_d
-				/ (cosine_pdf * rr_prob);
-			color.g += indirect.g * (albedo.g / 255.0) * n_dot_d
-				/ (cosine_pdf * rr_prob);
-			color.b += indirect.b * (albedo.b / 255.0) * n_dot_d
-				/ (cosine_pdf * rr_prob);
+			color.r += indirect.r * (albedo.r / 255.0) * n_dot_d /
+					   (cosine_pdf * rr_prob);
+			color.g += indirect.g * (albedo.g / 255.0) * n_dot_d /
+					   (cosine_pdf * rr_prob);
+			color.b += indirect.b * (albedo.b / 255.0) * n_dot_d /
+					   (cosine_pdf * rr_prob);
 		}
 	}
 	else
@@ -142,8 +141,7 @@ static t_argb ft_pathtrace_ray(t_window *win, t_ray *ray, int bounces,
 		t_ray bounce;
 		t_argb indirect;
 
-		bounce.orig =
-			ft_addition(p, ft_multi_scal(EPSILON_NORMAL, ray->hit_n));
+		bounce.orig = ft_addition(p, ft_multi_scal(EPSILON_NORMAL, ray->hit_n));
 		bounce.dir = ft_rand_hemisphere_cosine(ray->hit_n, seed);
 		bounce.lenght = -1;
 		bounce.motion_time = ray->motion_time;
