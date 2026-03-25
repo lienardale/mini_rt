@@ -24,6 +24,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/time.h>
 #include <unistd.h>
 
 #define RESOL 1
@@ -222,6 +223,19 @@ typedef struct s_window
 	int num_threads;
 	unsigned int keys_held;
 	int needs_render;
+	int verbose;
+	char *output_path;
+	unsigned int orig_x;
+	unsigned int orig_y;
+	int progressive_stage;
+	int mouse_pressed;
+	int mouse_last_x;
+	int mouse_last_y;
+	int show_stats;
+	int show_help;
+	double last_render_ms;
+	int ac;
+	char **av;
 } t_window;
 
 typedef struct s_thread_data
@@ -447,5 +461,16 @@ int ft_save(t_window *win);
 int ft_file_header(int fd, t_window *rt);
 int ft_info_header(int fd, t_window *rt);
 int ft_pixel_data(int fd, t_window *win);
+
+int ft_mouse_release(int button, int x, int y, t_window *win);
+int ft_mouse_move(int x, int y, t_window *win);
+void ft_register_hooks(t_window *win);
+void ft_change_resolution(t_window *win, unsigned int w, unsigned int h);
+
+int ft_count_shapes(t_window *win);
+int ft_count_lights(t_window *win);
+void ft_draw_stats(t_window *win);
+void ft_draw_help(t_window *win);
+void ft_draw_hud(t_window *win);
 
 #endif
