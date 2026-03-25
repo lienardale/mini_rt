@@ -22,15 +22,11 @@ Feel free to use it, fork it, and report eventual issues.
 
 ## Code stats :
 
-### Project : 
+### Project :
 - 1 contributor (solo project)
-- Total 2253 lines
-  - C : 1933 lines, 57.7%
-  - headers : 982 lines, 14.9%
-- Git
-  - 1 branche
-  - 0 pull requests
-  - 53 commits   
+- 47 C source files, ~6,700 lines total (6,126 C + 586 headers)
+- 14 supported shape types, multi-threaded rendering, BVH acceleration
+- 19 test scenes, unit test suite, regression tests, CI/CD pipeline
 
 ### Tester :
 - 198 invalid configurations
@@ -41,6 +37,17 @@ Feel free to use it, fork it, and report eventual issues.
 <a href="https://www.cprogramming.com/" target="_blank" rel="noreferrer"> 
 	<img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/c/c-original.svg" alt="c" width="40" height="40"/> 
 </a> 
+
+## Build
+
+```bash
+make            # Full build (libft + mlx + miniRT executable)
+make test       # Run unit tests
+make regression # Run regression tests (compare against reference BMPs)
+make lint       # Check code style with clang-format
+make coverage   # Run tests with coverage reporting
+make benchmark  # Performance benchmarking
+```
 
 ## Usage
 
@@ -67,6 +74,9 @@ All movement and look keys support continuous hold for smooth motion.
 | Roll camera | , / . | Hold for continuous roll rotation |
 | FOV increase/decrease | Numpad + / - | Adjust field of view (0-180) |
 | Toggle resolution | R | Switch between draft (4x) and full resolution |
+| Window resize | 1 / 2 / 3 / 4 | Set window scale |
+| Help overlay | H | Toggle on-screen help text |
+| Info/stats overlay | I | Toggle render stats (FPS, resolution) |
 | Next camera | Space | Cycle through scene cameras |
 | Exit | ESC | Close window |
 
@@ -123,13 +133,19 @@ Example: `sp 0,0,-5 2.0 255,0,0 spec:0.8 refl:0.3`
 
 - Multiple light spots (intensity, shadows, ambient light)
 - Multiple cameras (cycle with Space)
-- Phong specular highlights, reflections, transparency, refraction
-- Texture mapping and bump mapping
+- Phong/Blinn-Phong specular highlights, reflections, transparency, refraction
+- Texture mapping and bump/normal mapping
+- Depth of field (aperture simulation)
+- Motion blur (temporal sampling)
+- Path tracing / global illumination
+- Anti-aliasing and gamma correction
+- Progressive rendering (8x → 4x → 2x → 1x for interactive preview)
 - Constructive Solid Geometry (CSG: union, intersect, difference)
 - OBJ mesh loading
 - BVH acceleration structure
-- Multi-threaded rendering
+- Multi-threaded rendering (`--threads N` or `--threads=auto`)
 - FPS-style camera controls (WASD relative to camera orientation)
+- On-screen HUD: help overlay (H) and render stats (I)
 - BMP file export with `-save` flag
 
 ## Screenshots :
