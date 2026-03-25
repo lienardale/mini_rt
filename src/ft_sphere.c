@@ -58,7 +58,7 @@ void ft_sphere_norm(t_shape *sh, t_ray *ray)
 	r = ft_addition(ray->orig, ft_multi_scal(ray->lenght, ray->dir));
 	r = ft_subtraction(r, sh->pt_0);
 	r = ft_normal_vect(r);
-	sh->n = r;
+	ray->hit_n = r;
 }
 
 void ft_intersect_ray_sphere(t_shape *sh, t_ray *ray)
@@ -85,6 +85,6 @@ void ft_intersect_ray_sphere(t_shape *sh, t_ray *ray)
 		calc.y = calc.z;
 	ray->lenght = calc.y;
 	ft_sphere_norm(sh, ray);
-	if (ft_dot_product(ray->dir, sh->n) > 0.001)
-		ft_inv_norm(&sh->n);
+	if (ft_dot_product(ray->dir, ray->hit_n) > 0.001)
+		ft_inv_norm(&ray->hit_n);
 }

@@ -211,11 +211,11 @@ void ft_torus_norm(t_shape *sh, t_ray *ray)
 	proj.x = sh->diameter * p.x / param;
 	proj.y = 0;
 	proj.z = sh->diameter * p.z / param;
-	sh->n = ft_normal_vect(ft_subtraction(p, proj));
-	ft_torus_world_normal(sh);
+	ray->hit_n = ft_normal_vect(ft_subtraction(p, proj));
+	ft_torus_world_normal(sh, ray);
 }
 
-void ft_torus_world_normal(t_shape *sh)
+void ft_torus_world_normal(t_shape *sh, t_ray *ray)
 {
 	t_pt up;
 	t_pt right;
@@ -228,10 +228,10 @@ void ft_torus_world_normal(t_shape *sh)
 	else
 		right = ft_normal_vect(ft_cross_product(up, (t_pt){0, 1, 0}));
 	fwd = ft_cross_product(right, up);
-	n.x = sh->n.x * right.x + sh->n.y * up.x + sh->n.z * fwd.x;
-	n.y = sh->n.x * right.y + sh->n.y * up.y + sh->n.z * fwd.y;
-	n.z = sh->n.x * right.z + sh->n.y * up.z + sh->n.z * fwd.z;
-	sh->n = ft_normal_vect(n);
+	n.x = ray->hit_n.x * right.x + ray->hit_n.y * up.x + ray->hit_n.z * fwd.x;
+	n.y = ray->hit_n.x * right.y + ray->hit_n.y * up.y + ray->hit_n.z * fwd.y;
+	n.z = ray->hit_n.x * right.z + ray->hit_n.y * up.z + ray->hit_n.z * fwd.z;
+	ray->hit_n = ft_normal_vect(n);
 }
 
 void ft_intersect_ray_torus(t_shape *sh, t_ray *ray)
@@ -266,6 +266,6 @@ void ft_intersect_ray_torus(t_shape *sh, t_ray *ray)
 	}
 	ray->lenght = best;
 	ft_torus_norm(sh, ray);
-	if (ft_dot_product(ray->dir, sh->n) > 0.001)
-		ft_inv_norm(&sh->n);
+	if (ft_dot_product(ray->dir, ray->hit_n) > 0.001)
+		ft_inv_norm(&ray->hit_n);
 }

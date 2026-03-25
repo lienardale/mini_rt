@@ -55,9 +55,9 @@ int ft_square_check(t_window *win, t_shape **current)
 	return (check);
 }
 
-void ft_square_norm(t_shape *sh)
+void ft_square_norm(t_shape *sh, t_ray *ray)
 {
-	sh->n = sh->ori;
+	ray->hit_n = sh->ori;
 }
 
 void ft_intersect_ray_square(t_shape *sh, t_ray *ray)
@@ -66,9 +66,9 @@ void ft_intersect_ray_square(t_shape *sh, t_ray *ray)
 	double t;
 	t_pt r;
 
-	sh->n = sh->ori;
-	t = -(ft_dot_product(sh->n, ray->orig) + sh->plane_d) /
-		ft_dot_product(sh->n, ray->dir);
+	ray->hit_n = sh->ori;
+	t = -(ft_dot_product(ray->hit_n, ray->orig) + sh->plane_d) /
+		ft_dot_product(ray->hit_n, ray->dir);
 	if (t < 0.0001)
 	{
 		ray->lenght = -1;
@@ -78,9 +78,10 @@ void ft_intersect_ray_square(t_shape *sh, t_ray *ray)
 	if ((d = ft_is_in_square(ray, sh, r)) == 0)
 	{
 		ray->lenght = t;
-		ft_square_norm(sh);
-		if (ft_dot_product(ft_subtraction(sh->pt_0, ray->orig), sh->n) > 0.001)
-			ft_inv_norm(&sh->n);
+		ft_square_norm(sh, ray);
+		if (ft_dot_product(ft_subtraction(sh->pt_0, ray->orig), ray->hit_n) >
+			0.001)
+			ft_inv_norm(&ray->hit_n);
 	}
 	else
 		ray->lenght = -1;

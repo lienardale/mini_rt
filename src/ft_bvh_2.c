@@ -63,6 +63,9 @@ t_bvh_node *ft_bvh_build(t_shape **shapes, int count)
 
 void ft_bvh_trace(t_bvh_node *node, t_ray *ray, double *min, t_shape **min_sh)
 {
+	t_pt best_n;
+	double prev_min;
+
 	if (!node)
 		return;
 	if (!ft_aabb_hit(&node->box, ray, *min))
@@ -77,8 +80,18 @@ void ft_bvh_trace(t_bvh_node *node, t_ray *ray, double *min, t_shape **min_sh)
 		}
 		return;
 	}
+	best_n = ray->hit_n;
+	prev_min = *min;
 	ft_bvh_trace(node->left, ray, min, min_sh);
+	if (*min < prev_min)
+	{
+		best_n = ray->hit_n;
+		prev_min = *min;
+	}
 	ft_bvh_trace(node->right, ray, min, min_sh);
+	if (*min < prev_min)
+		best_n = ray->hit_n;
+	ray->hit_n = best_n;
 }
 
 void ft_bvh_free(t_bvh_node *node)

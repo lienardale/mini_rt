@@ -106,15 +106,15 @@ void ft_box_compute_normal(t_shape *sh, t_ray *ray)
 	d.x = r.x / half.x * bias;
 	d.y = r.y / half.y * bias;
 	d.z = r.z / half.z * bias;
-	sh->n = (t_pt){0, 0, 0};
+	ray->hit_n = (t_pt){0, 0, 0};
 	if (fabs(d.x) > fabs(d.y) && fabs(d.x) > fabs(d.z))
-		sh->n.x = (d.x > 0) ? 1.0 : -1.0;
+		ray->hit_n.x = (d.x > 0) ? 1.0 : -1.0;
 	else if (fabs(d.y) > fabs(d.z))
-		sh->n.y = (d.y > 0) ? 1.0 : -1.0;
+		ray->hit_n.y = (d.y > 0) ? 1.0 : -1.0;
 	else
-		sh->n.z = (d.z > 0) ? 1.0 : -1.0;
-	if (ft_dot_product(ray->dir, sh->n) > 0.001)
-		ft_inv_norm(&sh->n);
+		ray->hit_n.z = (d.z > 0) ? 1.0 : -1.0;
+	if (ft_dot_product(ray->dir, ray->hit_n) > 0.001)
+		ft_inv_norm(&ray->hit_n);
 }
 
 void ft_intersect_ray_box(t_shape *sh, t_ray *ray)

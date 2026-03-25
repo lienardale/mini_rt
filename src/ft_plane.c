@@ -44,10 +44,10 @@ int ft_plane_check(t_window *win, t_shape **current)
 	return (check);
 }
 
-void ft_plane_norm(t_shape *sh)
+void ft_plane_norm(t_shape *sh, t_ray *ray)
 {
-	sh->n = sh->ori;
-	sh->n = ft_rot_angle(sh->n, M_PI_2);
+	ray->hit_n = sh->ori;
+	ray->hit_n = ft_rot_angle(ray->hit_n, M_PI_2);
 }
 
 void ft_intersect_ray_plan(t_shape *sh, t_ray *ray)
@@ -59,9 +59,10 @@ void ft_intersect_ray_plan(t_shape *sh, t_ray *ray)
 	if (t > 0.0001)
 	{
 		ray->lenght = t;
-		ft_plane_norm(sh);
-		if (ft_dot_product(ft_subtraction(sh->pt_0, ray->orig), sh->n) > 0.001)
-			ft_inv_norm(&sh->n);
+		ft_plane_norm(sh, ray);
+		if (ft_dot_product(ft_subtraction(sh->pt_0, ray->orig), ray->hit_n) >
+			0.001)
+			ft_inv_norm(&ray->hit_n);
 	}
 	else
 		ray->lenght = -1;

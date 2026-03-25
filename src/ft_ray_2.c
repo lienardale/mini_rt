@@ -53,6 +53,9 @@ void ft_which_shape(t_shape *sh, t_ray *ray)
 void ft_trace_shapes(t_shape *cur_shape, t_ray *ray, double *min,
 					 t_shape **min_sh)
 {
+	t_pt best_n;
+
+	best_n = (t_pt){0, 0, 0};
 	while (cur_shape)
 	{
 		ft_which_shape(cur_shape, ray);
@@ -60,7 +63,9 @@ void ft_trace_shapes(t_shape *cur_shape, t_ray *ray, double *min,
 		{
 			*min = ray->lenght;
 			*min_sh = cur_shape;
+			best_n = ray->hit_n;
 		}
 		cur_shape = cur_shape->next;
 	}
+	ray->hit_n = best_n;
 }
