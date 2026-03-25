@@ -90,7 +90,7 @@ mini_rt/
 │   ├── ft_paraboloid.c      # Paraboloid intersection
 │   ├── ft_csg.c             # CSG operations (union, intersect, difference)
 │   ├── ft_mesh.c            # OBJ mesh loading
-│   ├── ft_material.c        # Material properties (refl, trans, spec, ior)
+│   ├── ft_material.c        # Material properties (refl, trans, spec, ior, PBR)
 │   ├── ft_texture.c         # Texture mapping
 │   ├── ft_bump.c            # Bump/normal mapping
 │   ├── ft_bvh.c / ft_bvh_2.c    # BVH acceleration structure
@@ -98,6 +98,8 @@ mini_rt/
 │   ├── ft_dof.c             # Depth of field
 │   ├── ft_motion.c          # Motion blur
 │   ├── ft_pathtrace.c       # Path tracing / global illumination
+│   ├── ft_pbr.c             # PBR shading (GGX/Cook-Torrance BRDF, Fresnel)
+│   ├── ft_env.c             # Environment sky lighting
 │   ├── ft_precompute.c      # Shape precomputation / caching
 │   ├── ft_parsing.c / ft_parsing_2.c      # Scene file (.rt) parser
 │   ├── ft_check_parsing.c / ft_check_parsing_2.c  # Input validation
@@ -134,7 +136,7 @@ mini_rt/
 ├── libft/                   # Custom 42 utility library
 ├── mlx/                     # minilibX (macOS)
 ├── mlx_linux/               # minilibX (Linux)
-├── scenes/                  # 19 example .rt scene files
+├── scenes/                  # 20 example .rt scene files
 ├── saves/                   # Rendered BMP output directory
 ├── skills/                  # Technical documentation
 ├── .github/workflows/       # CI/CD (GitHub Actions)
@@ -166,12 +168,16 @@ ft_aff() main render loop
                   └── Specular highlights
           ├── Recursive reflection rays (up to MAX_REFLECT_DEPTH=4)
           ├── Refraction rays (Snell's law with IOR)
+          ├── PBR shading (GGX/Cook-Torrance BRDF, Fresnel, metallic-roughness)
+          ├── ACES filmic tone mapping + sRGB gamma
           ├── Texture / bump map sampling
           ├── Depth of field (aperture jitter, DOF_SAMPLES=16)
           └── Motion blur (temporal sampling, MOTION_BLUR_SAMPLES=8)
 ```
 
 Progressive rendering is available: renders at 8x → 4x → 2x → 1x resolution for interactive preview.
+
+Path tracing mode (`--pathtrace N`) features Russian Roulette termination, environment sky lighting, emissive materials, and PBR-aware importance sampling.
 
 ### Supported Shapes (14 types)
 
@@ -244,6 +250,9 @@ sp  2,0,-5  1.5  255,255,255  trans:0.9 ior:1.5        # Glass sphere
 | `refl:`  | 0–1   | Reflectivity (recursive, max depth 4) |
 | `trans:` | 0–1   | Transparency |
 | `ior:`   | >0    | Index of refraction (used with `trans`) |
+| `metal:` | 0–1   | Metallic factor (PBR metallic-roughness workflow) |
+| `rough:` | 0–1   | Surface roughness (0 = mirror, 1 = matte) |
+| `emit:`  | R,G,B | Emissive light (HDR values allowed, e.g. `emit:500,400,300`) |
 
 ### Memory Management
 

@@ -69,6 +69,19 @@ static double ft_soft_shadow_sample(t_window *win, t_pt l_vec, t_pt p,
 	return (total / 16.0);
 }
 
+/* Add PBR contribution from a light source */
+static void ft_add_pbr_light(t_pt *i, t_pt l_vec, t_pt n, t_pt view_dir,
+							 t_shape *sh, t_argb l_col, double shadow_factor,
+							 double light_ratio)
+{
+	t_argb pbr;
+
+	pbr = ft_pbr_shade(view_dir, l_vec, n, &sh->mat, l_col, sh->color);
+	i->x += pbr.r * shadow_factor * light_ratio / 255.0;
+	i->y += pbr.g * shadow_factor * light_ratio / 255.0;
+	i->z += pbr.b * shadow_factor * light_ratio / 255.0;
+}
+
 /* Accumulate ambient and per-light diffuse/specular illumination at a point */
 t_pt ft_light(t_window *win, t_pt n, t_pt p, t_shape *sh, t_pt view_dir)
 {
@@ -78,9 +91,12 @@ t_pt ft_light(t_window *win, t_pt n, t_pt p, t_shape *sh, t_pt view_dir)
 	double n_dot_l;
 	double light_dist;
 	double shadow_factor;
+	int use_pbr;
 
 	i = ft_add_scal(win->ratio, (t_pt){0, 0, 0});
 	ft_db_mult_to_add_pt(&i, win->ratio, win->col);
+	use_pbr = (sh->mat.roughness > EPSILON_ZERO
+		|| sh->mat.metallic > EPSILON_ZERO);
 	cur_light = win->beg_light;
 	while (cur_light)
 	{
@@ -93,10 +109,18 @@ t_pt ft_light(t_window *win, t_pt n, t_pt p, t_shape *sh, t_pt view_dir)
 			shadow_factor = ft_soft_shadow_sample(win, l_vec, p, light_dist);
 			if (shadow_factor > EPSILON_NORMAL)
 			{
-				n_dot_l = cur_light->light_ratio * n_dot_l / ft_lenght(n);
-				ft_db_mult_to_add_pt(&i, n_dot_l * shadow_factor,
-									 cur_light->col);
-				ft_add_specular(&i, l_vec, n, view_dir, sh, cur_light->col);
+				if (use_pbr)
+					ft_add_pbr_light(&i, l_vec, n, view_dir, sh,
+									 cur_light->col, shadow_factor,
+									 cur_light->light_ratio);
+				else
+				{
+					n_dot_l = cur_light->light_ratio * n_dot_l / ft_lenght(n);
+					ft_db_mult_to_add_pt(&i, n_dot_l * shadow_factor,
+										 cur_light->col);
+					ft_add_specular(&i, l_vec, n, view_dir, sh,
+									cur_light->col);
+				}
 			}
 		}
 		cur_light = cur_light->next;

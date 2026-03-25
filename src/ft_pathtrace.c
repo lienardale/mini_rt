@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_pathtrace.c                                     :+:      :+:    :+:   */
+/*   ft_pathtrace.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: alienard <alienard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -12,28 +12,78 @@
 
 #include "mini_rt.h"
 
-/* Compute indirect illumination color contribution from shape albedo */
-static t_argb ft_indirect_color(t_argb indirect, t_argb shape_col)
+/* Compute direct lighting at a hit point using PBR or Phong shading */
+static t_argb ft_pt_direct(t_window *win, t_ray *ray, t_shape *sh, t_pt p,
+						   t_argb albedo)
 {
-	t_argb result;
+	t_light *cur;
+	t_argb color;
+	t_pt l_vec;
+	double l_dist;
+	double shadow;
+	t_pt view;
 
-	result.a = 0;
-	result.r = indirect.r * (shape_col.r / 255.0);
-	result.g = indirect.g * (shape_col.g / 255.0);
-	result.b = indirect.b * (shape_col.b / 255.0);
-	return (result);
+	color = (t_argb){0, 0, 0, 0};
+	view = ft_normal_vect(ft_neg_pt(ray->dir));
+	cur = win->beg_light;
+	while (cur)
+	{
+		l_vec = ft_subtraction(cur->coord, p);
+		l_dist = ft_lenght(l_vec);
+		l_vec = ft_div_scal(l_dist, l_vec);
+		if (ft_dot_product(ray->hit_n, l_vec) > EPSILON_NORMAL)
+		{
+			shadow = ft_shadow(win, l_vec, p, l_dist);
+			if (shadow > EPSILON_NORMAL)
+			{
+				if (sh->mat.roughness > EPSILON_ZERO
+					|| sh->mat.metallic > EPSILON_ZERO)
+				{
+					t_argb pbr;
+
+					pbr = ft_pbr_shade(view, l_vec, ray->hit_n, &sh->mat,
+									   cur->col, albedo);
+					color.r += pbr.r * cur->light_ratio;
+					color.g += pbr.g * cur->light_ratio;
+					color.b += pbr.b * cur->light_ratio;
+				}
+				else
+				{
+					double n_dot_l;
+
+					n_dot_l = cur->light_ratio
+						* ft_dot_product(ray->hit_n, l_vec);
+					color.r += n_dot_l * cur->col.r * albedo.r / 255.0;
+					color.g += n_dot_l * cur->col.g * albedo.g / 255.0;
+					color.b += n_dot_l * cur->col.b * albedo.b / 255.0;
+				}
+			}
+		}
+		cur = cur->next;
+	}
+	color.r += win->ratio * win->col.r * albedo.r / 255.0;
+	color.g += win->ratio * win->col.g * albedo.g / 255.0;
+	color.b += win->ratio * win->col.b * albedo.b / 255.0;
+	return (color);
 }
 
-/* Trace a single path through the scene with Monte Carlo bounces */
+/* Compute luminance of an ARGB color for Russian Roulette */
+static double ft_luminance(t_argb c)
+{
+	return (0.2126 * c.r + 0.7152 * c.g + 0.0722 * c.b);
+}
+
+/* Trace a single path through the scene with Monte Carlo bounces,
+ * Russian Roulette termination, emissive materials, and environment sky */
 static t_argb ft_pathtrace_ray(t_window *win, t_ray *ray, int bounces,
 							   unsigned int *seed)
 {
 	t_shape *min_sh;
 	double min;
+	t_argb albedo;
 	t_argb color;
-	t_argb hit_color;
 	t_pt p;
-	t_pt view_dir;
+	double rr_prob;
 
 	min_sh = NULL;
 	min = INFINITY;
@@ -42,30 +92,65 @@ static t_argb ft_pathtrace_ray(t_window *win, t_ray *ray, int bounces,
 	else
 		ft_trace_shapes(win->beg_sh, ray, &min, &min_sh);
 	if (min_sh == NULL)
-		return ((t_argb){0, 0, 0, 0});
-	hit_color = min_sh->color;
+		return (ft_env_sky(ray->dir));
+	albedo = min_sh->color;
 	if (min_sh->mat.texture)
-		hit_color = ft_get_shape_color(min_sh, ray);
+		albedo = ft_get_shape_color(min_sh, ray);
 	if (min_sh->mat.bump_map)
 		ft_apply_bump_map(min_sh, ray);
 	p = ft_addition(ray->orig, ft_multi_scal(min, ray->dir));
-	view_dir = ft_normal_vect(ft_neg_pt(ray->dir));
-	color =
-		ft_albedo(ft_light(win, ray->hit_n, p, min_sh, view_dir), hit_color);
-	if (bounces > 0)
+	color = ft_pt_direct(win, ray, min_sh, p, albedo);
+	color.r += min_sh->mat.emission.r;
+	color.g += min_sh->mat.emission.g;
+	color.b += min_sh->mat.emission.b;
+	if (bounces <= 0)
+		return (color);
+	rr_prob = fmin(ft_luminance(albedo) / 255.0, 0.95);
+	if (bounces < win->path_trace_bounces && ft_rand_float(seed) > rr_prob)
+		return (color);
+	if (bounces < win->path_trace_bounces)
+	{
+		t_ray bounce;
+		t_argb indirect;
+		double cosine_pdf;
+		double n_dot_d;
+
+		bounce.orig =
+			ft_addition(p, ft_multi_scal(EPSILON_NORMAL, ray->hit_n));
+		if (min_sh->mat.reflectivity > EPSILON_ZERO
+			&& ft_rand_float(seed) < min_sh->mat.reflectivity)
+			bounce.dir = ft_reflect_ray(ray->dir, ray->hit_n);
+		else
+			bounce.dir = ft_rand_hemisphere_cosine(ray->hit_n, seed);
+		bounce.lenght = -1;
+		bounce.motion_time = ray->motion_time;
+		indirect = ft_pathtrace_ray(win, &bounce, bounces - 1, seed);
+		n_dot_d = fmax(ft_dot_product(ray->hit_n, bounce.dir), 0.0);
+		cosine_pdf = n_dot_d / M_PI;
+		if (cosine_pdf > EPSILON_ZERO)
+		{
+			color.r += indirect.r * (albedo.r / 255.0) * n_dot_d
+				/ (cosine_pdf * rr_prob);
+			color.g += indirect.g * (albedo.g / 255.0) * n_dot_d
+				/ (cosine_pdf * rr_prob);
+			color.b += indirect.b * (albedo.b / 255.0) * n_dot_d
+				/ (cosine_pdf * rr_prob);
+		}
+	}
+	else
 	{
 		t_ray bounce;
 		t_argb indirect;
 
-		bounce.orig = ft_addition(p, ft_multi_scal(EPSILON_NORMAL, ray->hit_n));
+		bounce.orig =
+			ft_addition(p, ft_multi_scal(EPSILON_NORMAL, ray->hit_n));
 		bounce.dir = ft_rand_hemisphere_cosine(ray->hit_n, seed);
 		bounce.lenght = -1;
 		bounce.motion_time = ray->motion_time;
 		indirect = ft_pathtrace_ray(win, &bounce, bounces - 1, seed);
-		indirect = ft_indirect_color(indirect, hit_color);
-		color.r += indirect.r;
-		color.g += indirect.g;
-		color.b += indirect.b;
+		color.r += indirect.r * (albedo.r / 255.0);
+		color.g += indirect.g * (albedo.g / 255.0);
+		color.b += indirect.b * (albedo.b / 255.0);
 	}
 	return (color);
 }

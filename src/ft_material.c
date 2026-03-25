@@ -26,6 +26,9 @@ void ft_material_default(t_material *mat)
 	mat->tex_scale_u = 1.0;
 	mat->tex_scale_v = 1.0;
 	mat->bump_strength = 1.0;
+	mat->metallic = 0.0;
+	mat->roughness = 0.5;
+	mat->emission = (t_argb){0, 0, 0, 0};
 	mat->vel = (t_pt){0, 0, 0};
 }
 
@@ -52,6 +55,31 @@ static int ft_parse_mat_prop(t_material *mat, char **line)
 	{
 		*line += 5;
 		mat->specular = ft_atof(*line);
+	}
+	else if (ft_strncmp(*line, "metal:", 6) == 0)
+	{
+		*line += 6;
+		mat->metallic = ft_atof(*line);
+	}
+	else if (ft_strncmp(*line, "rough:", 6) == 0)
+	{
+		*line += 6;
+		mat->roughness = ft_atof(*line);
+	}
+	else if (ft_strncmp(*line, "emit:", 5) == 0)
+	{
+		*line += 5;
+		mat->emission.r = ft_atof(*line);
+		while (**line && **line != ',')
+			(*line)++;
+		if (**line == ',')
+			(*line)++;
+		mat->emission.g = ft_atof(*line);
+		while (**line && **line != ',')
+			(*line)++;
+		if (**line == ',')
+			(*line)++;
+		mat->emission.b = ft_atof(*line);
 	}
 	else if (ft_strncmp(*line, "vel:", 4) == 0)
 	{

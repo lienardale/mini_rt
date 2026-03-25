@@ -12,14 +12,34 @@
 
 #include "mini_rt.h"
 
-/* Apply gamma correction (gamma=2.2) to a color channel, clamped to [0, 255] */
+/* ACES filmic tone mapping: maps HDR [0,inf) to [0,1] with filmic curve */
+static double ft_aces_tonemap(double x)
+{
+	double a;
+	double b;
+
+	a = x * (2.51 * x + 0.03);
+	b = x * (2.43 * x + 0.59) + 0.14;
+	if (b < EPSILON_ZERO)
+		return (0.0);
+	x = a / b;
+	if (x < 0.0)
+		return (0.0);
+	if (x > 1.0)
+		return (1.0);
+	return (x);
+}
+
+/* Apply ACES tone mapping and sRGB gamma to a color channel */
 static double ft_gamma_correct(double c)
 {
+	double linear;
+
 	if (c <= 0.0)
 		return (0.0);
-	if (c >= 255.0)
-		return (255.0);
-	return (255.0 * pow(c / 255.0, 1.0 / 2.2));
+	linear = c / 255.0;
+	linear = ft_aces_tonemap(linear);
+	return (255.0 * pow(linear, 1.0 / 2.2));
 }
 
 /* Write a gamma-corrected pixel (scaled by resolution factor) into the image
