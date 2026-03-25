@@ -12,6 +12,7 @@
 
 #include "mini_rt.h"
 
+/* Count vertex and face lines in an OBJ file for memory allocation */
 static int ft_count_obj_elements(int fd, int *vcount, int *fcount)
 {
 	char *line;
@@ -40,6 +41,7 @@ static int ft_count_obj_elements(int fd, int *vcount, int *fcount)
 	return (0);
 }
 
+/* Parse a vertex line ("v x y z") into a 3D point */
 static t_pt ft_parse_vertex(char *line)
 {
 	t_pt v;
@@ -61,6 +63,7 @@ static t_pt ft_parse_vertex(char *line)
 	return (v);
 }
 
+/* Parse a face line ("f v1 v2 v3") into three vertex indices (1-based to 0-based) */
 static void ft_parse_face(char *line, int *indices)
 {
 	int i;
@@ -83,6 +86,7 @@ static void ft_parse_face(char *line, int *indices)
 	}
 }
 
+/* Second pass: read OBJ file and populate vertex and face arrays */
 static int ft_load_obj_data(int fd, t_pt *verts, int *faces)
 {
 	char *line;
@@ -119,6 +123,7 @@ static int ft_load_obj_data(int fd, t_pt *verts, int *faces)
 	return (0);
 }
 
+/* Parse mesh scene line (OBJ path, optional offset, optional color) and load mesh */
 int ft_mesh_init(t_window *win, t_shape **begin, char *line)
 {
 	char path[256];

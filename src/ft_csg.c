@@ -119,6 +119,7 @@ void ft_intersect_ray_csg(t_shape *sh, t_ray *ray, t_window *win)
 	ft_csg_combine(sh, ray, &ray_a, &ray_b, shape_a, shape_b);
 }
 
+/* Dispatch CSG combination: union selects nearest, else delegate to intersect/difference */
 void ft_csg_combine(t_shape *sh, t_ray *ray, t_ray *ray_a, t_ray *ray_b,
 					t_shape *sa, t_shape *sb)
 {
@@ -148,6 +149,7 @@ void ft_csg_combine(t_shape *sh, t_ray *ray, t_ray *ray_a, t_ray *ray_b,
 		ft_csg_difference(sh, ray, ray_a, ray_b, sa, sb);
 }
 
+/* CSG intersection: keep hit only if it lies inside the other shape */
 void ft_csg_intersect(t_shape *sh, t_ray *ray, t_ray *ray_a, t_ray *ray_b,
 					  t_shape *sa, t_shape *sb)
 {
@@ -176,6 +178,7 @@ void ft_csg_intersect(t_shape *sh, t_ray *ray, t_ray *ray_a, t_ray *ray_b,
 		ray->lenght = -1;
 }
 
+/* CSG difference: keep shape A hit if outside B, else use B hit with inverted normal */
 void ft_csg_difference(t_shape *sh, t_ray *ray, t_ray *ray_a, t_ray *ray_b,
 					   t_shape *sa, t_shape *sb)
 {
@@ -204,6 +207,7 @@ void ft_csg_difference(t_shape *sh, t_ray *ray, t_ray *ray_a, t_ray *ray_b,
 		ray->lenght = -1;
 }
 
+/* Retrieve a shape from the linked list by its zero-based index */
 t_shape *ft_get_shape_by_index(t_window *win, int idx)
 {
 	t_shape *cur;
@@ -221,6 +225,7 @@ t_shape *ft_get_shape_by_index(t_window *win, int idx)
 	return (NULL);
 }
 
+/* Dispatch ray intersection to the appropriate shape handler based on shape ID */
 void ft_which_shape_base(t_shape *sh, t_ray *ray)
 {
 	if (sh->id == SHAPE_SPHERE)
