@@ -140,6 +140,9 @@ typedef struct s_material
 	double tex_scale_u;
 	double tex_scale_v;
 	double bump_strength;
+	double metallic;
+	double roughness;
+	t_argb emission;
 	t_texture *texture;
 	t_texture *bump_map;
 	t_pt vel;
@@ -482,6 +485,11 @@ int ft_scene_has_motion(t_window *win);
 void ft_ray_motion(double i, double j, t_window *win, t_cam *cam);
 
 void ft_pathtrace_pixel(double i, double j, t_window *win, t_cam *cam);
+
+t_argb ft_pbr_shade(t_pt view, t_pt light_dir, t_pt normal, t_material *mat,
+					t_argb light_col, t_argb albedo);
+double ft_fresnel_schlick(double cos_theta, double f0);
+t_argb ft_env_sky(t_pt dir);
 
 int ft_save(t_window *win);
 int ft_file_header(int fd, t_window *rt);

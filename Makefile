@@ -84,6 +84,8 @@ SRC_NAME =		ft_mini_rt.c \
 			ft_dof.c \
 			ft_motion.c \
 			ft_pathtrace.c \
+			ft_pbr.c \
+			ft_env.c \
 			ft_close.c \
 			ft_save.c \
 			ft_error.c
@@ -166,7 +168,7 @@ SHAPE_SRCS = ft_sphere.c ft_plane.c ft_square.c \
 TEST_INTERSECT_SRCS = $(TEST_MATH_SRCS) $(SHAPE_SRCS) \
 					  ft_ray_2.c ft_ray.c ft_light.c ft_precompute.c \
 					  ft_bvh.c ft_bvh_2.c \
-					  ft_random.c ft_dof.c ft_motion.c ft_pathtrace.c \
+					  ft_random.c ft_dof.c ft_motion.c ft_pathtrace.c ft_pbr.c ft_env.c \
 					  ft_parsing.c ft_parsing_2.c ft_check_parsing.c \
 					  ft_check_parsing_2.c ft_bzero_struct.c
 
@@ -174,7 +176,7 @@ TEST_PARSING_SRCS = $(TEST_MATH_SRCS) ft_parsing.c ft_parsing_2.c \
 					ft_check_parsing.c ft_check_parsing_2.c ft_bzero_struct.c \
 					$(SHAPE_SRCS) ft_precompute.c \
 					ft_bvh.c ft_bvh_2.c ft_ray.c ft_ray_2.c ft_light.c \
-					ft_random.c ft_dof.c ft_motion.c ft_pathtrace.c
+					ft_random.c ft_dof.c ft_motion.c ft_pathtrace.c ft_pbr.c ft_env.c
 
 TEST_DIR = tests
 
@@ -248,7 +250,7 @@ lint:
 TEST_BENCH_SRCS = $(TEST_MATH_SRCS) $(SHAPE_SRCS) \
 				  ft_ray_2.c ft_ray.c ft_light.c ft_precompute.c \
 				  ft_bvh.c ft_bvh_2.c ft_bzero_struct.c \
-				  ft_random.c ft_dof.c ft_motion.c ft_pathtrace.c \
+				  ft_random.c ft_dof.c ft_motion.c ft_pathtrace.c ft_pbr.c ft_env.c \
 				  ft_parsing.c ft_parsing_2.c ft_check_parsing.c \
 				  ft_check_parsing_2.c
 
