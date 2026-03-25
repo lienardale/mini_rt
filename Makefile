@@ -93,9 +93,16 @@ CC =		gcc
 
 RM = 		rm -f
 
-CFLAGS =	-Wall -Wextra -Werror -g3 -O3
+CFLAGS =	-Wall -Wextra -Werror -Wpedantic -Wshadow -Wconversion -g3 -O3
 
-SANFLAGS =	-Wall -Wextra -Werror -g3 -fsanitize=address -fno-omit-frame-pointer
+DBGFLAGS =	-Wall -Wextra -Werror -Wpedantic -Wshadow -Wconversion -g3 -O0 \
+			-fsanitize=address,undefined -fno-omit-frame-pointer
+
+RELFLAGS =	-Wall -Wextra -Werror -Wpedantic -Wshadow -Wconversion -O3 -DNDEBUG
+
+SANFLAGS =	$(DBGFLAGS)
+
+LDFLAGS =
 
 all:		$(LIB) $(MLX) $(NAME)
 
@@ -107,7 +114,7 @@ $(OBJ_DIR):
 
 
 $(NAME):	$(OBJ)
-			$(CC) $(CFLAGS) -o $(NAME) $(OBJ) $(INC) $(LIB_INC) $(MLX_INC) $(MLX_LIBS) -lpthread
+			$(CC) $(CFLAGS) $(LDFLAGS) -o $(NAME) $(OBJ) $(INC) $(LIB_INC) $(MLX_INC) $(MLX_LIBS) -lpthread
 
 $(MLX):
 		@make -C $(MLX_DIR) $(MLX_LIBS)
@@ -126,12 +133,21 @@ fclean:		clean
 
 re:			fclean all
 
-sanitize:	$(MLX)
+debug:		$(MLX)
 			@make -C $(LIBPATH) fclean
 			@make -C $(LIBPATH)
 			$(RM) -r $(OBJ_DIR)
 			$(RM) $(NAME)
-			$(MAKE) CFLAGS="$(SANFLAGS)" $(NAME)
+			$(MAKE) CFLAGS="$(DBGFLAGS)" LDFLAGS="-fsanitize=address,undefined" $(NAME)
+
+release:	$(MLX)
+			@make -C $(LIBPATH) fclean
+			@make -C $(LIBPATH)
+			$(RM) -r $(OBJ_DIR)
+			$(RM) $(NAME)
+			$(MAKE) CFLAGS="$(RELFLAGS)" $(NAME)
+
+sanitize:	debug
 
 TEST_MATH_SRCS = ft_vectors.c ft_vectors_2.c ft_scalar.c ft_matrix.c \
 				 ft_pt.c ft_argb.c ft_cam.c ft_cam_move.c
@@ -245,4 +261,4 @@ testclean:
 			$(RM) -r coverage
 			$(RM) *.gcno *.gcda src/*.gcno src/*.gcda tests/*.gcno tests/*.gcda
 
-.PHONY:		re all clean fclean sanitize test testclean coverage regression regression-generate lint benchmark gen_scene
+.PHONY:		re all clean fclean sanitize debug release test testclean coverage regression regression-generate lint benchmark gen_scene

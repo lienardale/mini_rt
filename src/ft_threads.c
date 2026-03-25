@@ -47,10 +47,11 @@ int ft_aff_threaded(t_window *win)
 
 	if (win->img_ptr)
 		mlx_destroy_image(win->mlx_ptr, win->img_ptr);
-	win->img_ptr = mlx_new_image(win->mlx_ptr, win->x, win->y);
+	win->img_ptr = mlx_new_image(win->mlx_ptr, (int)win->x, (int)win->y);
 	win->data = mlx_get_data_addr(win->img_ptr, &(win->depth),
 								  &(win->size_line), &(win->endian));
-	band_height = (win->y + win->num_threads - 1) / win->num_threads;
+	band_height =
+		(int)(win->y + (unsigned int)win->num_threads - 1) / win->num_threads;
 	band_height = ((band_height + win->resol - 1) / win->resol) * win->resol;
 	y_pos = 0;
 	n = 0;

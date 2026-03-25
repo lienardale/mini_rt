@@ -170,8 +170,8 @@ int ft_load_obj_mesh(t_window *win, t_shape **begin, char *path, t_pt offset,
 	close(fd);
 	if (vcount < 3 || fcount < 1)
 		return (ft_error(7, win, "mesh too few vertices/faces"));
-	verts = malloc(sizeof(t_pt) * vcount);
-	faces = malloc(sizeof(int) * fcount * 3);
+	verts = malloc(sizeof(t_pt) * (size_t)vcount);
+	faces = malloc(sizeof(int) * (size_t)fcount * 3);
 	if (!verts || !faces)
 	{
 		free(verts);

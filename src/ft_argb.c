@@ -41,9 +41,21 @@ void ft_pix(int x, int y, t_window *w, t_argb color)
 		j = 0;
 		while (j < w->resol)
 		{
-			w->data[((w->y - y - j - 1) * w->x + x + i) * 4 + 0] = b;
-			w->data[((w->y - y - j - 1) * w->x + x + i) * 4 + 1] = g;
-			w->data[((w->y - y - j - 1) * w->x + x + i) * 4 + 2] = r;
+			w->data[((int)(w->y - (unsigned int)y - (unsigned int)j - 1) *
+						 (int)w->x +
+					 x + i) *
+						4 +
+					0] = (char)b;
+			w->data[((int)(w->y - (unsigned int)y - (unsigned int)j - 1) *
+						 (int)w->x +
+					 x + i) *
+						4 +
+					1] = (char)g;
+			w->data[((int)(w->y - (unsigned int)y - (unsigned int)j - 1) *
+						 (int)w->x +
+					 x + i) *
+						4 +
+					2] = (char)r;
 			j++;
 		}
 		i++;

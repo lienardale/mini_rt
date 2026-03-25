@@ -193,14 +193,14 @@ void ft_intersect_ray_cylinder(t_shape *sh, t_ray *ray)
 
 	ft_cylinder_calc_one(sh, ray, &tmp, &dot);
 	ft_cylinder_calc_two(&calc, ray, &tmp, &dot);
-	if ((ret = ft_cylinder_calc_three(&calc, &dist, &dot, ray)) != 0)
+	if ((ret = (int)ft_cylinder_calc_three(&calc, &dist, &dot, ray)) != 0)
 	{
 		ray->lenght = -1;
 		best_t = INFINITY;
 		ft_cylinder_cap_check(sh, ray, &best_t);
 		return;
 	}
-	if ((ret = ft_cylinder_calc_five(sh, &dist, &dot, ray)) != 0)
+	if ((ret = (int)ft_cylinder_calc_five(sh, &dist, &dot, ray)) != 0)
 	{
 		best_t = ray->lenght;
 		ft_cylinder_cap_check(sh, ray, &best_t);
