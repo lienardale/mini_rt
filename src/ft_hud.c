@@ -181,7 +181,7 @@ void ft_draw_help(t_window *win)
 void ft_change_resolution(t_window *win, unsigned int w, unsigned int h)
 {
 	if (w == win->x && h == win->y)
-		return ;
+		return;
 	if (win->img_ptr)
 	{
 		mlx_destroy_image(win->mlx_ptr, win->img_ptr);
@@ -194,7 +194,6 @@ void ft_change_resolution(t_window *win, unsigned int w, unsigned int h)
 	}
 	win->x = w;
 	win->y = h;
-	win->ratio = (double)w / (double)h;
 	win->win_ptr = mlx_new_window(win->mlx_ptr, (int)w, (int)h, "miniRT");
 	ft_register_hooks(win);
 	win->needs_render = 1;
@@ -205,7 +204,7 @@ void ft_change_resolution(t_window *win, unsigned int w, unsigned int h)
 void ft_draw_hud(t_window *win)
 {
 	if (!win->win_ptr)
-		return ;
+		return;
 	if (win->show_stats)
 		ft_draw_stats(win);
 	if (win->show_help)
