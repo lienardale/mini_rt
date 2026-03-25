@@ -91,8 +91,7 @@ double ft_is_in_triangle(t_pt r, t_shape *sh, t_ray *ray)
 		ft_dot_product(ray->hit_n, ft_cross_product(sh->tri_edge2, c.z)) < 0)
 		return (-1);
 	ray->hit_n = sh->tri_norm;
-	if (ft_dot_product(ft_subtraction(sh->pt_0, ray->orig), ray->hit_n) >
-		0.001)
+	if (ft_dot_product(ft_subtraction(sh->pt_0, ray->orig), ray->hit_n) > 0.001)
 		ft_inv_norm(&ray->hit_n);
 	return (0);
 }
