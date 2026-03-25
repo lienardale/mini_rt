@@ -146,25 +146,8 @@ static int ft_solve_cubic(double a, double b, double c, double *r)
 	return (3);
 }
 
-static int ft_solve_quartic(double *c, double *roots)
+static int ft_try_cubic_root(double *coef, double y, double *roots)
 {
-	double a;
-	double b;
-	double cc;
-	double d;
-	double cubic_roots[3];
-
-	a = c[1] / c[0];
-	b = c[2] / c[0];
-	cc = c[3] / c[0];
-	d = c[4] / c[0];
-	return (ft_quartic_inner(a, b, cc, d, cubic_roots, roots));
-}
-
-int ft_quartic_inner(double a, double b, double cc, double d,
-					 double *cubic_roots, double *roots)
-{
-	double y;
 	double p;
 	double q;
 	double r1[2];
@@ -172,27 +155,65 @@ int ft_quartic_inner(double a, double b, double cc, double d,
 	int n;
 	int count;
 
-	ft_solve_cubic(-b, a * cc - 4.0 * d, -a * a * d + 4.0 * b * d - cc * cc,
-				   cubic_roots);
-	y = cubic_roots[0];
-	p = a * a / 4.0 - b + y;
-	q = y * y / 4.0 - d;
+	p = coef[0] * coef[0] / 4.0 - coef[1] + y;
+	q = y * y / 4.0 - coef[3];
 	if (p < -1e-10 || q < -1e-10)
 		return (0);
 	p = (p < 0) ? 0 : sqrt(p);
 	q = (q < 0) ? 0 : sqrt(q);
+	if (coef[0] * y / 2.0 - coef[2] < 0)
+		q = -q;
 	count = 0;
-	n = ft_solve_quadratic_local(1.0, a / 2.0 + p, y / 2.0 + q, r1);
+	n = ft_solve_quadratic_local(1.0, coef[0] / 2.0 + p, y / 2.0 + q, r1);
 	if (n > 0 && r1[0] > 0.0001)
 		roots[count++] = r1[0];
 	if (n > 1 && r1[1] > 0.0001)
 		roots[count++] = r1[1];
-	n = ft_solve_quadratic_local(1.0, a / 2.0 - p, y / 2.0 - q, r2);
+	n = ft_solve_quadratic_local(1.0, coef[0] / 2.0 - p, y / 2.0 - q, r2);
 	if (n > 0 && r2[0] > 0.0001)
 		roots[count++] = r2[0];
 	if (n > 1 && r2[1] > 0.0001)
 		roots[count++] = r2[1];
 	return (count);
+}
+
+static int ft_solve_quartic(double *c, double *roots)
+{
+	double coef[4];
+	double cubic_roots[3];
+	int nc;
+	int i;
+	int count;
+
+	coef[0] = c[1] / c[0];
+	coef[1] = c[2] / c[0];
+	coef[2] = c[3] / c[0];
+	coef[3] = c[4] / c[0];
+	nc = ft_solve_cubic(-coef[1], coef[0] * coef[2] - 4.0 * coef[3],
+		-coef[0] * coef[0] * coef[3] + 4.0 * coef[1] * coef[3]
+		- coef[2] * coef[2], cubic_roots);
+	i = -1;
+	while (++i < nc)
+	{
+		count = ft_try_cubic_root(coef, cubic_roots[i], roots);
+		if (count > 0)
+			return (count);
+	}
+	return (0);
+}
+
+int ft_quartic_inner(double a, double b, double cc, double d,
+					 double *cubic_roots, double *roots)
+{
+	double c[5];
+
+	(void)cubic_roots;
+	c[0] = 1;
+	c[1] = a;
+	c[2] = b;
+	c[3] = cc;
+	c[4] = d;
+	return (ft_solve_quartic(c, roots));
 }
 
 void ft_torus_norm(t_shape *sh, t_ray *ray)

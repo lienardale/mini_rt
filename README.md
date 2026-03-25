@@ -134,21 +134,36 @@ Example: `sp 0,0,-5 2.0 255,0,0 spec:0.8 refl:0.3`
 
 ## Screenshots :
 
+![Taurus](./saves/taurus.bmp?raw=true)
+
 ![Screenshot 2](./saves/example.bmp?raw=true)
+
 ![Screenshot 3](./saves/lights.bmp?raw=true)
+
 ![Screenshot 4](./saves/objects.bmp?raw=true)
+
 ![Screenshot 5](./saves/triangle.bmp?raw=true)
 
 ## Gallery :
 
 Scenes showcasing enhanced rendering features (specular highlights, soft shadows, reflections, refraction, anti-aliasing, gamma correction).
 
-| Cornell Box | Reflections | Glass Spheres |
-|:-----------:|:-----------:|:-------------:|
-| ![Cornell Box](./saves/cornell_box.bmp?raw=true) | ![Reflections](./saves/reflections.bmp?raw=true) | ![Glass Spheres](./saves/glass_spheres.bmp?raw=true) |
+### Cornell Box
+![Cornell Box](./saves/cornell_box.bmp?raw=true)
 
-| Solar System | Spiral | Mixed Shapes |
-|:------------:|:------:|:------------:|
-| ![Solar System](./saves/solar_system.bmp?raw=true) | ![Spiral](./saves/spiral.bmp?raw=true) | ![Mixed Shapes](./saves/mixed_shapes.bmp?raw=true) |
+### Reflections
+![Reflections](./saves/reflections.bmp?raw=true)
+
+### Glass Spheres
+![Glass Spheres](./saves/glass_spheres.bmp?raw=true)
+
+### Solar System
+![Solar System](./saves/solar_system.bmp?raw=true)
+
+### Spiral
+![Spiral](./saves/spiral.bmp?raw=true)
+
+### Mixed Shapes
+![Mixed Shapes](./saves/mixed_shapes.bmp?raw=true)
 
 Scene files are in `gallery/`. Use `make gen_scene` to build the procedural scene generator.
