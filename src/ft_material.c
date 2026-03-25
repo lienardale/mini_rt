@@ -26,6 +26,7 @@ void ft_material_default(t_material *mat)
 	mat->tex_scale_u = 1.0;
 	mat->tex_scale_v = 1.0;
 	mat->bump_strength = 1.0;
+	mat->vel = (t_pt){0, 0, 0};
 }
 
 /* Parse a single material property keyword (refl, trans, ior, spec) from line
@@ -52,13 +53,29 @@ static int ft_parse_mat_prop(t_material *mat, char **line)
 		*line += 5;
 		mat->specular = ft_atof(*line);
 	}
+	else if (ft_strncmp(*line, "vel:", 4) == 0)
+	{
+		*line += 4;
+		mat->vel.x = ft_atof(*line);
+		while (**line && **line != ',')
+			(*line)++;
+		if (**line == ',')
+			(*line)++;
+		mat->vel.y = ft_atof(*line);
+		while (**line && **line != ',')
+			(*line)++;
+		if (**line == ',')
+			(*line)++;
+		mat->vel.z = ft_atof(*line);
+	}
 	else
 		return (0);
 	ft_iterate_in_line(line);
 	return (1);
 }
 
-/* Parse all material properties from a scene file line */
+/* Parse all material properties from a scene file line (vel: handled outside)
+ */
 int ft_parse_material(t_window *win, t_material *mat, char **line)
 {
 	(void)win;
