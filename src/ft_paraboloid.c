@@ -12,11 +12,10 @@
 
 #include "mini_rt.h"
 
-int ft_paraboloid_init(t_window *win, t_shape **cur, char *line)
+static int ft_paraboloid_parse(t_window *win, t_shape **cur, char *line)
 {
 	int check;
 
-	(*cur)->id = 'a';
 	while ((ft_isspace(*line)) == 1 || (ft_isalpha(*line)) == 1)
 		line++;
 	check = (ft_isnum(line) == 1) ? ft_point_init(win, &(*cur)->pt_0, &line)
@@ -39,6 +38,12 @@ int ft_paraboloid_init(t_window *win, t_shape **cur, char *line)
 		check = (*line == '\0') ? ft_paraboloid_check(win, cur)
 								: ft_error(4, win, "paraboloid");
 	return (check == 0 ? 0 : ft_error(check, win, "paraboloid"));
+}
+
+int ft_paraboloid_init(t_window *win, t_shape **cur, char *line)
+{
+	(*cur)->id = SHAPE_PARABOLOID;
+	return (ft_paraboloid_parse(win, cur, line));
 }
 
 int ft_paraboloid_check(t_window *win, t_shape **cur)
@@ -85,7 +90,7 @@ void ft_paraboloid_norm(t_shape *sh, t_ray *ray)
 	ray->hit_n.z =
 		2.0 * lx * right.z + 2.0 * lz * fwd.z - 4.0 * sh->diameter * up.z;
 	ray->hit_n = ft_normal_vect(ray->hit_n);
-	if (ft_dot_product(ray->dir, ray->hit_n) > 0.001)
+	if (ft_dot_product(ray->dir, ray->hit_n) > EPSILON_NORMAL)
 		ft_inv_norm(&ray->hit_n);
 }
 
@@ -149,7 +154,7 @@ void ft_paraboloid_pick(t_shape *sh, t_ray *ray, double t0, double t1)
 	double m;
 
 	up = ft_normal_vect(sh->ori);
-	if (t0 > 0.0001)
+	if (t0 > EPSILON_HIT)
 	{
 		m = ft_dot_product(ft_addition(ft_subtraction(ray->orig, sh->pt_0),
 									   ft_multi_scal(t0, ray->dir)),
@@ -161,7 +166,7 @@ void ft_paraboloid_pick(t_shape *sh, t_ray *ray, double t0, double t1)
 			return;
 		}
 	}
-	if (t1 > 0.0001)
+	if (t1 > EPSILON_HIT)
 	{
 		m = ft_dot_product(ft_addition(ft_subtraction(ray->orig, sh->pt_0),
 									   ft_multi_scal(t1, ray->dir)),

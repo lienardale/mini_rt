@@ -12,6 +12,7 @@
 
 #include "mini_rt.h"
 
+/* Render the scene by casting a ray for each pixel and displaying the image. */
 int ft_aff(t_window *win)
 {
 	double i;
@@ -41,6 +42,7 @@ int ft_aff(t_window *win)
 	return (0);
 }
 
+/* Parse the scene file line by line, dispatching each element to its initializer. */
 void ft_parse(int *check, t_window *win, int fd)
 {
 	int res;
@@ -73,6 +75,7 @@ void ft_parse(int *check, t_window *win, int fd)
 	ft_error_param(amb, res, win);
 }
 
+/* Check if the -save flag is present among command-line arguments. */
 static int ft_has_save_flag(int ac, char **av)
 {
 	int i;
@@ -87,6 +90,7 @@ static int ft_has_save_flag(int ac, char **av)
 	return (0);
 }
 
+/* Initialize mlx hooks, handle -save flag, and start the event loop. */
 void ft_mlx_init(t_window *win, int ac, char **av)
 {
 	int ret;
@@ -105,6 +109,7 @@ void ft_mlx_init(t_window *win, int ac, char **av)
 	mlx_loop(win->mlx_ptr);
 }
 
+/* Parse the --threads argument or default to auto-detected core count. */
 static void ft_parse_threads(t_window *win, int ac, char **av)
 {
 	int i;
@@ -131,6 +136,7 @@ static void ft_parse_threads(t_window *win, int ac, char **av)
 	win->num_threads = ft_get_num_cores();
 }
 
+/* Return 1 if the argument is a recognized command-line flag. */
 static int ft_valid_arg(char *arg)
 {
 	if (ft_strncmp("-save", arg, 6) == 0)
@@ -140,6 +146,7 @@ static int ft_valid_arg(char *arg)
 	return (0);
 }
 
+/* Entry point: validate args, parse scene file, init mlx, and render. */
 int main(int ac, char **av)
 {
 	t_window win;

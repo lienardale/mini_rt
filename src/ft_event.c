@@ -12,6 +12,7 @@
 
 #include "mini_rt.h"
 
+/* Increase or decrease the current camera's field of view. */
 void ft_key_fov(int keycode, t_window *param)
 {
 	if (keycode == FOV_P)
@@ -26,6 +27,7 @@ void ft_key_fov(int keycode, t_window *param)
 	}
 }
 
+/* Handle key press events: update held keys, FOV, resolution, and camera switching. */
 int ft_key_press(int keycode, t_window *param)
 {
 	unsigned int bit;
@@ -60,6 +62,7 @@ int ft_key_press(int keycode, t_window *param)
 	return (0);
 }
 
+/* Handle key release events by clearing the corresponding held-key bit. */
 int ft_key_release(int keycode, t_window *param)
 {
 	unsigned int bit;
@@ -70,6 +73,7 @@ int ft_key_release(int keycode, t_window *param)
 	return (0);
 }
 
+/* Per-frame callback: apply movement/look, render at low then full resolution. */
 int ft_frame_update(t_window *win)
 {
 	if (win->keys_held == 0 && !win->needs_render)
@@ -90,6 +94,7 @@ int ft_frame_update(t_window *win)
 	return (0);
 }
 
+/* Handle mouse button events (currently unused). */
 int ft_mouse(int button, int x, int y, t_window *param)
 {
 	(void)button;

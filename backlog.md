@@ -119,13 +119,13 @@ The rendering pipeline was analyzed and found to be mostly thread-safe already: 
 
 ## 7. Code Quality & Refactoring
 
-- [ ] Add inline documentation / comments to all functions (especially math-heavy ones)
-- [ ] Replace hardcoded epsilon values (0.0001, 0.001) with named constants
-- [ ] Replace magic shape IDs ('s', 'p', 'q', 'y', 't') with an enum
-- [ ] Refactor nested ternary chains in `ft_parsing.c` into readable if/else blocks
-- [ ] Consolidate duplicated cylinder code (`ft_cylinder.c` + `ft_cylinder_2.c`)
-- [ ] Add proper error messages with context (file, line, what went wrong)
-- [ ] Separate parsing logic from shape initialization (single responsibility)
+- [x] Add inline documentation / comments to all functions (especially math-heavy ones)
+- [x] Replace hardcoded epsilon values (0.0001, 0.001) with named constants
+- [x] Replace magic shape IDs ('s', 'p', 'q', 'y', 't') with an enum
+- [x] Refactor nested ternary chains in `ft_parsing.c` into readable if/else blocks
+- [x] Consolidate duplicated cylinder code (`ft_cylinder.c` + `ft_cylinder_2.c`)
+- [x] Add proper error messages with context (file, line, what went wrong)
+- [x] Separate parsing logic from shape initialization (single responsibility)
 
 ---
 

@@ -12,11 +12,11 @@
 
 #include "mini_rt.h"
 
-int ft_square_init(t_window *win, t_shape **cur, char *line)
+/* Parse square properties (center, orientation, side length, color) from scene line */
+static int ft_square_parse(t_window *win, t_shape **cur, char *line)
 {
 	int check;
 
-	(*cur)->id = 'q';
 	while ((ft_isspace(*line)) == 1 || (ft_isalpha(*line)) == 1)
 		line++;
 	check = (ft_isnum(line) == 1) ? ft_point_init(win, &(*cur)->pt_0, &line)
@@ -40,6 +40,14 @@ int ft_square_init(t_window *win, t_shape **cur, char *line)
 	return (check == 0 ? 0 : ft_error(check, win, "square"));
 }
 
+/* Initialize square shape and delegate to parser */
+int ft_square_init(t_window *win, t_shape **cur, char *line)
+{
+	(*cur)->id = SHAPE_SQUARE;
+	return (ft_square_parse(win, cur, line));
+}
+
+/* Validate square parameters (non-negative height, valid point, orientation, color) */
 int ft_square_check(t_window *win, t_shape **current)
 {
 	int check;
@@ -55,11 +63,13 @@ int ft_square_check(t_window *win, t_shape **current)
 	return (check);
 }
 
+/* Set square surface normal directly from shape orientation */
 void ft_square_norm(t_shape *sh, t_ray *ray)
 {
 	ray->hit_n = sh->ori;
 }
 
+/* Ray-square intersection: plane intersection then bounds check */
 void ft_intersect_ray_square(t_shape *sh, t_ray *ray)
 {
 	double d;
@@ -69,7 +79,7 @@ void ft_intersect_ray_square(t_shape *sh, t_ray *ray)
 	ray->hit_n = sh->ori;
 	t = -(ft_dot_product(ray->hit_n, ray->orig) + sh->plane_d) /
 		ft_dot_product(ray->hit_n, ray->dir);
-	if (t < 0.0001)
+	if (t < EPSILON_HIT)
 	{
 		ray->lenght = -1;
 		return;
@@ -80,13 +90,14 @@ void ft_intersect_ray_square(t_shape *sh, t_ray *ray)
 		ray->lenght = t;
 		ft_square_norm(sh, ray);
 		if (ft_dot_product(ft_subtraction(sh->pt_0, ray->orig), ray->hit_n) >
-			0.001)
+			EPSILON_NORMAL)
 			ft_inv_norm(&ray->hit_n);
 	}
 	else
 		ray->lenght = -1;
 }
 
+/* Check if point r lies within the square's axis-aligned half-extents */
 double ft_is_in_square(t_ray *ray, t_shape *sh, t_pt r)
 {
 	t_pt tmp;

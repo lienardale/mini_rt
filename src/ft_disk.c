@@ -12,11 +12,11 @@
 
 #include "mini_rt.h"
 
-int ft_disk_init(t_window *win, t_shape **cur, char *line)
+/* Parse disk properties (center, orientation, diameter, color) from scene line */
+static int ft_disk_parse(t_window *win, t_shape **cur, char *line)
 {
 	int check;
 
-	(*cur)->id = 'k';
 	while ((ft_isspace(*line)) == 1 || (ft_isalpha(*line)) == 1)
 		line++;
 	check = (ft_isnum(line) == 1) ? ft_point_init(win, &(*cur)->pt_0, &line)
@@ -40,6 +40,14 @@ int ft_disk_init(t_window *win, t_shape **cur, char *line)
 	return (check == 0 ? 0 : ft_error(check, win, "disk"));
 }
 
+/* Initialize disk shape and delegate to parser */
+int ft_disk_init(t_window *win, t_shape **cur, char *line)
+{
+	(*cur)->id = SHAPE_DISK;
+	return (ft_disk_parse(win, cur, line));
+}
+
+/* Validate disk parameters (non-negative diameter, valid point, color, orientation) */
 int ft_disk_check(t_window *win, t_shape **cur)
 {
 	int check;
@@ -54,6 +62,7 @@ int ft_disk_check(t_window *win, t_shape **cur)
 	return (check);
 }
 
+/* Ray-disk intersection: plane intersection then radius distance check */
 void ft_intersect_ray_disk(t_shape *sh, t_ray *ray)
 {
 	double denom;
@@ -62,13 +71,13 @@ void ft_intersect_ray_disk(t_shape *sh, t_ray *ray)
 	t_pt v;
 
 	denom = ft_dot_product(sh->ori, ray->dir);
-	if (fabs(denom) < 1e-8)
+	if (fabs(denom) < EPSILON_ZERO)
 	{
 		ray->lenght = -1;
 		return;
 	}
 	t = ft_dot_product(ft_subtraction(sh->pt_0, ray->orig), sh->ori) / denom;
-	if (t < 0.0001)
+	if (t < EPSILON_HIT)
 	{
 		ray->lenght = -1;
 		return;
@@ -82,6 +91,6 @@ void ft_intersect_ray_disk(t_shape *sh, t_ray *ray)
 	}
 	ray->lenght = t;
 	ray->hit_n = sh->ori;
-	if (ft_dot_product(ray->dir, ray->hit_n) > 0.001)
+	if (ft_dot_product(ray->dir, ray->hit_n) > EPSILON_NORMAL)
 		ft_inv_norm(&ray->hit_n);
 }

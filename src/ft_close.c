@@ -12,6 +12,7 @@
 
 #include "mini_rt.h"
 
+/* Free all allocated resources: line buffer, linked lists, BVH, and mlx objects. */
 void ft_cleanup(t_window *win)
 {
 	if (win->line)
@@ -50,6 +51,7 @@ void ft_cleanup(t_window *win)
 		close(win->fd);
 }
 
+/* Clean up all resources and exit the program. */
 int ft_close(t_window *win)
 {
 	ft_cleanup(win);
@@ -57,6 +59,7 @@ int ft_close(t_window *win)
 	return (0);
 }
 
+/* Free the linked list of cameras. */
 int ft_free_lst_cam(t_window *win)
 {
 	t_cam *tmp_c;
@@ -71,6 +74,7 @@ int ft_free_lst_cam(t_window *win)
 	return (0);
 }
 
+/* Free the linked list of lights. */
 int ft_free_lst_light(t_window *win)
 {
 	t_light *tmp_l;
@@ -85,6 +89,7 @@ int ft_free_lst_light(t_window *win)
 	return (0);
 }
 
+/* Free the linked list of shapes, including their textures and bump maps. */
 int ft_free_lst_sh(t_window *win)
 {
 	t_shape *tmp_s;

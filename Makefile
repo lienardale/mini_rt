@@ -52,7 +52,6 @@ SRC_NAME =		ft_mini_rt.c \
 			ft_plane.c \
 			ft_square.c \
 			ft_cylinder.c \
-			ft_cylinder_2.c \
 			ft_triangle.c \
 			ft_cone.c \
 			ft_disk.c \
@@ -138,7 +137,7 @@ TEST_MATH_SRCS = ft_vectors.c ft_vectors_2.c ft_scalar.c ft_matrix.c \
 				 ft_pt.c ft_argb.c ft_cam.c ft_cam_move.c
 
 SHAPE_SRCS = ft_sphere.c ft_plane.c ft_square.c \
-			 ft_cylinder.c ft_cylinder_2.c ft_triangle.c \
+			 ft_cylinder.c ft_triangle.c \
 			 ft_cone.c ft_disk.c ft_torus.c ft_ellipsoid.c \
 			 ft_box.c ft_quadric.c ft_paraboloid.c ft_csg.c \
 			 ft_mesh.c ft_material.c ft_texture.c ft_bump.c

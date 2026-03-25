@@ -12,6 +12,7 @@
 
 #include "mini_rt.h"
 
+/* Render the scene to a BMP file and exit. */
 int ft_save(t_window *rt)
 {
 	int fd;
@@ -30,6 +31,7 @@ int ft_save(t_window *rt)
 	return (0);
 }
 
+/* Write the 14-byte BMP file header to the output file. */
 int ft_file_header(int fd, t_window *rt)
 {
 	t_fileheader fh;
@@ -42,6 +44,7 @@ int ft_file_header(int fd, t_window *rt)
 	return (0);
 }
 
+/* Write the BMP DIB info header (dimensions, bit depth) to the output file. */
 int ft_info_header(int fd, t_window *rt)
 {
 	t_infoheader dib;
@@ -59,6 +62,7 @@ int ft_info_header(int fd, t_window *rt)
 	return (0);
 }
 
+/* Write pixel data to the BMP file, flipping rows to bottom-up order. */
 int ft_pixel_data(int fd, t_window *win)
 {
 	unsigned int i;

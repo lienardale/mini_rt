@@ -12,6 +12,7 @@
 
 #include "mini_rt.h"
 
+/* Zero-initialize all fields of the main window/scene struct. */
 int ft_window_init(t_window *win)
 {
 	win->fd = -1;
@@ -35,6 +36,7 @@ int ft_window_init(t_window *win)
 	return (0);
 }
 
+/* Zero-initialize an ARGB color struct. */
 void ft_argb_init(t_argb *a)
 {
 	a->a = 0;

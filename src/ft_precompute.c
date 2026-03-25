@@ -12,6 +12,7 @@
 
 #include "mini_rt.h"
 
+/* Cache the squared radius for sphere intersection tests */
 static void ft_precompute_sphere(t_shape *sh)
 {
 	double radius;
@@ -20,11 +21,13 @@ static void ft_precompute_sphere(t_shape *sh)
 	sh->radius_sq = radius * radius;
 }
 
+/* Precompute the plane equation constant d = -(normal . point) */
 static void ft_precompute_plane(t_shape *sh)
 {
 	sh->plane_d = -ft_dot_product(sh->ori, sh->pt_0);
 }
 
+/* Precompute triangle normal, edge vectors, and plane constant */
 static void ft_precompute_triangle(t_shape *sh)
 {
 	t_pt u;
@@ -39,6 +42,7 @@ static void ft_precompute_triangle(t_shape *sh)
 	sh->plane_d = -ft_dot_product(sh->tri_norm, sh->pt_0);
 }
 
+/* Precompute cylinder axis vector, top cap position, and squared radius */
 static void ft_precompute_cylinder(t_shape *sh)
 {
 	sh->radius_sq = ft_sqr(sh->diameter / 2.0);
@@ -48,6 +52,7 @@ static void ft_precompute_cylinder(t_shape *sh)
 	sh->cyl_axis_len_sq = ft_dot_product(sh->cyl_axis, sh->cyl_axis);
 }
 
+/* Precompute the squared tangent of the cone half-angle */
 static void ft_precompute_cone(t_shape *sh)
 {
 	double half_angle;
@@ -56,29 +61,32 @@ static void ft_precompute_cone(t_shape *sh)
 	sh->cone_half_angle_sq = tan(half_angle) * tan(half_angle);
 }
 
+/* Precompute the squared radius for disk intersection tests */
 static void ft_precompute_disk(t_shape *sh)
 {
 	sh->radius_sq = ft_sqr(sh->diameter / 2.0);
 }
 
+/* Dispatch precomputation to the handler matching the shape type */
 void ft_precompute_shape(t_shape *sh)
 {
-	if (sh->id == 's')
+	if (sh->id == SHAPE_SPHERE)
 		ft_precompute_sphere(sh);
-	else if (sh->id == 'p')
+	else if (sh->id == SHAPE_PLANE)
 		ft_precompute_plane(sh);
-	else if (sh->id == 't')
+	else if (sh->id == SHAPE_TRIANGLE)
 		ft_precompute_triangle(sh);
-	else if (sh->id == 'y')
+	else if (sh->id == SHAPE_CYLINDER)
 		ft_precompute_cylinder(sh);
-	else if (sh->id == 'q')
+	else if (sh->id == SHAPE_SQUARE)
 		ft_precompute_plane(sh);
-	else if (sh->id == 'o')
+	else if (sh->id == SHAPE_CONE)
 		ft_precompute_cone(sh);
-	else if (sh->id == 'k')
+	else if (sh->id == SHAPE_DISK)
 		ft_precompute_disk(sh);
 }
 
+/* Precompute derived values for every shape in the scene */
 void ft_precompute_shapes(t_window *win)
 {
 	t_shape *cur;

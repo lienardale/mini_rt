@@ -12,6 +12,7 @@
 
 #include "mini_rt.h"
 
+/* Return the smaller of two doubles */
 static double ft_dmin(double a, double b)
 {
 	if (a < b)
@@ -19,6 +20,7 @@ static double ft_dmin(double a, double b)
 	return (b);
 }
 
+/* Return the larger of two doubles */
 static double ft_dmax(double a, double b)
 {
 	if (a > b)
@@ -26,12 +28,13 @@ static double ft_dmax(double a, double b)
 	return (b);
 }
 
+/* Compute axis-aligned bounding box for sphere, cone, or disk shapes */
 static t_aabb ft_aabb_sphere_cone_disk(t_shape *sh)
 {
 	t_aabb box;
 	double r;
 
-	if (sh->id == 's' || sh->id == 'k')
+	if (sh->id == SHAPE_SPHERE || sh->id == SHAPE_DISK)
 	{
 		r = sh->diameter / 2.0;
 		box.min = ft_sub_scal(r, sh->pt_0);
@@ -50,24 +53,26 @@ static t_aabb ft_aabb_sphere_cone_disk(t_shape *sh)
 	return (box);
 }
 
+/* Compute axis-aligned bounding box for a triangle with epsilon padding */
 static t_aabb ft_aabb_triangle(t_shape *sh)
 {
 	t_aabb box;
 
-	box.min.x = ft_dmin(sh->pt_0.x, ft_dmin(sh->pt_1.x, sh->pt_2.x)) - 0.001;
-	box.min.y = ft_dmin(sh->pt_0.y, ft_dmin(sh->pt_1.y, sh->pt_2.y)) - 0.001;
-	box.min.z = ft_dmin(sh->pt_0.z, ft_dmin(sh->pt_1.z, sh->pt_2.z)) - 0.001;
-	box.max.x = ft_dmax(sh->pt_0.x, ft_dmax(sh->pt_1.x, sh->pt_2.x)) + 0.001;
-	box.max.y = ft_dmax(sh->pt_0.y, ft_dmax(sh->pt_1.y, sh->pt_2.y)) + 0.001;
-	box.max.z = ft_dmax(sh->pt_0.z, ft_dmax(sh->pt_1.z, sh->pt_2.z)) + 0.001;
+	box.min.x = ft_dmin(sh->pt_0.x, ft_dmin(sh->pt_1.x, sh->pt_2.x)) - EPSILON_AABB;
+	box.min.y = ft_dmin(sh->pt_0.y, ft_dmin(sh->pt_1.y, sh->pt_2.y)) - EPSILON_AABB;
+	box.min.z = ft_dmin(sh->pt_0.z, ft_dmin(sh->pt_1.z, sh->pt_2.z)) - EPSILON_AABB;
+	box.max.x = ft_dmax(sh->pt_0.x, ft_dmax(sh->pt_1.x, sh->pt_2.x)) + EPSILON_AABB;
+	box.max.y = ft_dmax(sh->pt_0.y, ft_dmax(sh->pt_1.y, sh->pt_2.y)) + EPSILON_AABB;
+	box.max.z = ft_dmax(sh->pt_0.z, ft_dmax(sh->pt_1.z, sh->pt_2.z)) + EPSILON_AABB;
 	return (box);
 }
 
+/* Compute axis-aligned bounding box for ellipsoid or box shapes */
 static t_aabb ft_aabb_ellipsoid_box(t_shape *sh)
 {
 	t_aabb box;
 
-	if (sh->id == 'e')
+	if (sh->id == SHAPE_ELLIPSOID)
 	{
 		box.min.x = sh->pt_0.x - sh->pt_1.x;
 		box.min.y = sh->pt_0.y - sh->pt_1.y;
@@ -88,18 +93,19 @@ static t_aabb ft_aabb_ellipsoid_box(t_shape *sh)
 	return (box);
 }
 
+/* Return the AABB for any shape, dispatching by shape type */
 t_aabb ft_shape_aabb(t_shape *sh)
 {
 	t_aabb box;
 	double r;
 
-	if (sh->id == 's' || sh->id == 'k' || sh->id == 'o')
+	if (sh->id == SHAPE_SPHERE || sh->id == SHAPE_DISK || sh->id == SHAPE_CONE)
 		return (ft_aabb_sphere_cone_disk(sh));
-	else if (sh->id == 't')
+	else if (sh->id == SHAPE_TRIANGLE)
 		return (ft_aabb_triangle(sh));
-	else if (sh->id == 'e' || sh->id == 'b')
+	else if (sh->id == SHAPE_ELLIPSOID || sh->id == SHAPE_BOX)
 		return (ft_aabb_ellipsoid_box(sh));
-	else if (sh->id == 'u')
+	else if (sh->id == SHAPE_TORUS)
 	{
 		r = sh->diameter + sh->height;
 		box.min = ft_sub_scal(r, sh->pt_0);
@@ -114,6 +120,7 @@ t_aabb ft_shape_aabb(t_shape *sh)
 	return (box);
 }
 
+/* Update ray interval for one axis using the slab intersection method */
 static void ft_slab_test(double *tmin, double *tmax, double orig, double dir,
 						 double bmin, double bmax)
 {
@@ -121,7 +128,7 @@ static void ft_slab_test(double *tmin, double *tmax, double orig, double dir,
 	double t0;
 	double t1;
 
-	if (fabs(dir) < 1e-8)
+	if (fabs(dir) < EPSILON_ZERO)
 	{
 		if (orig < bmin || orig > bmax)
 		{
@@ -145,12 +152,13 @@ static void ft_slab_test(double *tmin, double *tmax, double orig, double dir,
 	}
 }
 
+/* Test whether a ray intersects an AABB within [epsilon, t_max] */
 int ft_aabb_hit(t_aabb *box, t_ray *ray, double t_max)
 {
 	double tmin;
 	double tmax;
 
-	tmin = 0.0001;
+	tmin = EPSILON_HIT;
 	tmax = t_max;
 	ft_slab_test(&tmin, &tmax, ray->orig.x, ray->dir.x, box->min.x, box->max.x);
 	if (tmax < tmin)

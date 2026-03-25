@@ -12,11 +12,11 @@
 
 #include "mini_rt.h"
 
-int ft_sphere_init(t_window *win, t_shape **cur, char *line)
+/* Parse sphere properties (center, diameter, color) from scene line */
+static int ft_sphere_parse(t_window *win, t_shape **cur, char *line)
 {
 	int check;
 
-	(*cur)->id = 's';
 	while ((ft_isspace(*line)) == 1 || (ft_isalpha(*line)) == 1)
 		line++;
 	check = (ft_isnum(line) == 1) ? ft_point_init(win, &(*cur)->pt_0, &line)
@@ -38,6 +38,14 @@ int ft_sphere_init(t_window *win, t_shape **cur, char *line)
 	return (check == 0 ? 0 : ft_error(check, win, "sphere"));
 }
 
+/* Initialize sphere shape and delegate to parser */
+int ft_sphere_init(t_window *win, t_shape **cur, char *line)
+{
+	(*cur)->id = SHAPE_SPHERE;
+	return (ft_sphere_parse(win, cur, line));
+}
+
+/* Validate sphere parameters (non-negative diameter, valid point and color) */
 int ft_sphere_check(t_window *win, t_shape **current)
 {
 	int check;
@@ -51,6 +59,7 @@ int ft_sphere_check(t_window *win, t_shape **current)
 	return (check);
 }
 
+/* Compute sphere surface normal at hit point (hit - center, normalized) */
 void ft_sphere_norm(t_shape *sh, t_ray *ray)
 {
 	t_pt r;
@@ -61,6 +70,7 @@ void ft_sphere_norm(t_shape *sh, t_ray *ray)
 	ray->hit_n = r;
 }
 
+/* Ray-sphere intersection using the quadratic formula on ||P - C||^2 = r^2 */
 void ft_intersect_ray_sphere(t_shape *sh, t_ray *ray)
 {
 	double b;
@@ -78,12 +88,12 @@ void ft_intersect_ray_sphere(t_shape *sh, t_ray *ray)
 		return;
 	calc.y = (-b - sqrt(calc.x)) / 2;
 	calc.z = (-b + sqrt(calc.x)) / 2;
-	if (calc.z > 0.0001 && calc.z < calc.y)
+	if (calc.z > EPSILON_HIT && calc.z < calc.y)
 		calc.y = calc.z;
-	else if (calc.z > 0.0001 && calc.y < 0.0001)
+	else if (calc.z > EPSILON_HIT && calc.y < EPSILON_HIT)
 		calc.y = calc.z;
 	ray->lenght = calc.y;
 	ft_sphere_norm(sh, ray);
-	if (ft_dot_product(ray->dir, ray->hit_n) > 0.001)
+	if (ft_dot_product(ray->dir, ray->hit_n) > EPSILON_NORMAL)
 		ft_inv_norm(&ray->hit_n);
 }

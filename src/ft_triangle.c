@@ -12,11 +12,11 @@
 
 #include "mini_rt.h"
 
-int ft_triangle_init(t_window *win, t_shape **cur, char *line)
+/* Parse triangle properties (three vertices, color) from scene line */
+static int ft_triangle_parse(t_window *win, t_shape **cur, char *line)
 {
 	int check;
 
-	(*cur)->id = 't';
 	while ((ft_isspace(*line)) == 1 || (ft_isalpha(*line)) == 1)
 		line++;
 	check = (ft_isnum(line) == 1) ? ft_point_init(win, &(*cur)->pt_0, &line)
@@ -34,6 +34,14 @@ int ft_triangle_init(t_window *win, t_shape **cur, char *line)
 	return (check == 0 ? 0 : ft_error(check, win, "triangle"));
 }
 
+/* Initialize triangle shape and delegate to parser */
+int ft_triangle_init(t_window *win, t_shape **cur, char *line)
+{
+	(*cur)->id = SHAPE_TRIANGLE;
+	return (ft_triangle_parse(win, cur, line));
+}
+
+/* Validate triangle parameters (three vertices, color) */
 int ft_triangle_check(t_window *win, t_shape **current)
 {
 	int check;
@@ -47,6 +55,7 @@ int ft_triangle_check(t_window *win, t_shape **current)
 	return (check);
 }
 
+/* Ray-triangle intersection: plane test followed by edge containment check */
 void ft_intersect_ray_triangle(t_shape *sh, t_ray *ray)
 {
 	double d;
@@ -56,7 +65,7 @@ void ft_intersect_ray_triangle(t_shape *sh, t_ray *ray)
 	ray->hit_n = sh->tri_norm;
 	t = -(ft_dot_product(ray->hit_n, ray->orig) + sh->plane_d) /
 		ft_dot_product(ray->hit_n, ray->dir);
-	if (t < 0.0001)
+	if (t < EPSILON_HIT)
 	{
 		ray->lenght = -1;
 		return;
@@ -91,7 +100,7 @@ double ft_is_in_triangle(t_pt r, t_shape *sh, t_ray *ray)
 		ft_dot_product(ray->hit_n, ft_cross_product(sh->tri_edge2, c.z)) < 0)
 		return (-1);
 	ray->hit_n = sh->tri_norm;
-	if (ft_dot_product(ft_subtraction(sh->pt_0, ray->orig), ray->hit_n) > 0.001)
+	if (ft_dot_product(ft_subtraction(sh->pt_0, ray->orig), ray->hit_n) > EPSILON_NORMAL)
 		ft_inv_norm(&ray->hit_n);
 	return (0);
 }

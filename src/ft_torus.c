@@ -12,11 +12,11 @@
 
 #include "mini_rt.h"
 
-int ft_torus_init(t_window *win, t_shape **cur, char *line)
+/* Parse torus properties (center, orientation, major/minor radii, color) from scene line */
+static int ft_torus_parse(t_window *win, t_shape **cur, char *line)
 {
 	int check;
 
-	(*cur)->id = 'u';
 	while ((ft_isspace(*line)) == 1 || (ft_isalpha(*line)) == 1)
 		line++;
 	check = (ft_isnum(line) == 1) ? ft_point_init(win, &(*cur)->pt_0, &line)
@@ -41,6 +41,14 @@ int ft_torus_init(t_window *win, t_shape **cur, char *line)
 	return (check == 0 ? 0 : ft_error(check, win, "torus"));
 }
 
+/* Initialize torus shape and delegate to parser */
+int ft_torus_init(t_window *win, t_shape **cur, char *line)
+{
+	(*cur)->id = SHAPE_TORUS;
+	return (ft_torus_parse(win, cur, line));
+}
+
+/* Validate torus parameters (positive radii, valid point, color, orientation) */
 int ft_torus_check(t_window *win, t_shape **cur)
 {
 	int check;
@@ -55,6 +63,7 @@ int ft_torus_check(t_window *win, t_shape **cur)
 	return (check);
 }
 
+/* Transform ray into local torus coordinate space using orientation basis */
 static void ft_torus_transform_ray(t_shape *sh, t_ray *ray, t_pt *lo, t_pt *ld)
 {
 	t_pt up;
@@ -77,6 +86,7 @@ static void ft_torus_transform_ray(t_shape *sh, t_ray *ray, t_pt *lo, t_pt *ld)
 	ld->z = ft_dot_product(ray->dir, fwd);
 }
 
+/* Build quartic polynomial coefficients for torus intersection */
 static void ft_torus_build_quartic(double *c, t_pt lo, t_pt ld, double big_r,
 								   double small_r)
 {
@@ -100,6 +110,7 @@ static void ft_torus_build_quartic(double *c, t_pt lo, t_pt ld, double big_r,
 		   4.0 * big_r2 * (r2 - lo.y * lo.y);
 }
 
+/* Solve quadratic equation ax^2 + bx + c = 0, return number of real roots */
 static int ft_solve_quadratic_local(double a, double b, double c, double *r)
 {
 	double disc;
@@ -113,6 +124,7 @@ static int ft_solve_quadratic_local(double a, double b, double c, double *r)
 	return (2);
 }
 
+/* Compute cube root supporting negative values */
 static double ft_cbrt(double x)
 {
 	if (x >= 0.0)
@@ -120,6 +132,7 @@ static double ft_cbrt(double x)
 	return (-pow(-x, 1.0 / 3.0));
 }
 
+/* Solve depressed cubic using Cardano's formula, return number of real roots */
 static int ft_solve_cubic(double a, double b, double c, double *r)
 {
 	double p;
@@ -146,6 +159,7 @@ static int ft_solve_cubic(double a, double b, double c, double *r)
 	return (3);
 }
 
+/* Attempt to factor quartic into two quadratics using a cubic resolvent root */
 static int ft_try_cubic_root(double *coef, double y, double *roots)
 {
 	double p;
@@ -165,18 +179,19 @@ static int ft_try_cubic_root(double *coef, double y, double *roots)
 		q = -q;
 	count = 0;
 	n = ft_solve_quadratic_local(1.0, coef[0] / 2.0 + p, y / 2.0 + q, r1);
-	if (n > 0 && r1[0] > 0.0001)
+	if (n > 0 && r1[0] > EPSILON_HIT)
 		roots[count++] = r1[0];
-	if (n > 1 && r1[1] > 0.0001)
+	if (n > 1 && r1[1] > EPSILON_HIT)
 		roots[count++] = r1[1];
 	n = ft_solve_quadratic_local(1.0, coef[0] / 2.0 - p, y / 2.0 - q, r2);
-	if (n > 0 && r2[0] > 0.0001)
+	if (n > 0 && r2[0] > EPSILON_HIT)
 		roots[count++] = r2[0];
-	if (n > 1 && r2[1] > 0.0001)
+	if (n > 1 && r2[1] > EPSILON_HIT)
 		roots[count++] = r2[1];
 	return (count);
 }
 
+/* Solve quartic equation using Ferrari's method via cubic resolvent */
 static int ft_solve_quartic(double *c, double *roots)
 {
 	double coef[4];
@@ -203,6 +218,7 @@ static int ft_solve_quartic(double *c, double *roots)
 	return (0);
 }
 
+/* Public wrapper to solve quartic x^4 + ax^3 + bx^2 + cx + d = 0 */
 int ft_quartic_inner(double a, double b, double cc, double d,
 					 double *cubic_roots, double *roots)
 {
@@ -217,6 +233,7 @@ int ft_quartic_inner(double a, double b, double cc, double d,
 	return (ft_solve_quartic(c, roots));
 }
 
+/* Compute torus surface normal in local space, then convert to world space */
 void ft_torus_norm(t_shape *sh, t_ray *ray)
 {
 	t_pt lo;
@@ -228,8 +245,8 @@ void ft_torus_norm(t_shape *sh, t_ray *ray)
 	ft_torus_transform_ray(sh, ray, &lo, &ld);
 	p = ft_addition(lo, ft_multi_scal(ray->lenght, ld));
 	param = sqrt(p.x * p.x + p.z * p.z);
-	if (param < 1e-8)
-		param = 1e-8;
+	if (param < EPSILON_ZERO)
+		param = EPSILON_ZERO;
 	proj.x = sh->diameter * p.x / param;
 	proj.y = 0;
 	proj.z = sh->diameter * p.z / param;
@@ -237,6 +254,7 @@ void ft_torus_norm(t_shape *sh, t_ray *ray)
 	ft_torus_world_normal(sh, ray);
 }
 
+/* Transform local-space normal back to world coordinates using orientation basis */
 void ft_torus_world_normal(t_shape *sh, t_ray *ray)
 {
 	t_pt up;
@@ -256,6 +274,7 @@ void ft_torus_world_normal(t_shape *sh, t_ray *ray)
 	ray->hit_n = ft_normal_vect(n);
 }
 
+/* Ray-torus intersection by solving quartic equation in local space */
 void ft_intersect_ray_torus(t_shape *sh, t_ray *ray)
 {
 	t_pt lo;
@@ -278,7 +297,7 @@ void ft_intersect_ray_torus(t_shape *sh, t_ray *ray)
 	i = -1;
 	while (++i < n)
 	{
-		if (roots[i] > 0.0001 && roots[i] < best)
+		if (roots[i] > EPSILON_HIT && roots[i] < best)
 			best = roots[i];
 	}
 	if (best >= INFINITY)
@@ -288,6 +307,6 @@ void ft_intersect_ray_torus(t_shape *sh, t_ray *ray)
 	}
 	ray->lenght = best;
 	ft_torus_norm(sh, ray);
-	if (ft_dot_product(ray->dir, ray->hit_n) > 0.001)
+	if (ft_dot_product(ray->dir, ray->hit_n) > EPSILON_NORMAL)
 		ft_inv_norm(&ray->hit_n);
 }

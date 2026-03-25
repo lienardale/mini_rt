@@ -12,6 +12,7 @@
 
 #include "mini_rt.h"
 
+/* Sample the bump map and return a grayscale height value in [0,1] */
 static double ft_bump_height(t_texture *bump, double u, double v)
 {
 	t_argb c;
@@ -20,6 +21,7 @@ static double ft_bump_height(t_texture *bump, double u, double v)
 	return ((c.r + c.g + c.b) / (3.0 * 255.0));
 }
 
+/* Build an orthonormal tangent frame from the surface normal */
 static void ft_get_tangent_bitangent(t_pt normal, t_pt *tangent,
 									 t_pt *bitangent)
 {
@@ -30,6 +32,7 @@ static void ft_get_tangent_bitangent(t_pt normal, t_pt *tangent,
 	*bitangent = ft_cross_product(normal, *tangent);
 }
 
+/* Perturb the surface normal using the bump map gradient */
 void ft_apply_bump_map(t_shape *sh, t_ray *ray)
 {
 	double u;
@@ -44,15 +47,15 @@ void ft_apply_bump_map(t_shape *sh, t_ray *ray)
 
 	if (!sh->mat.bump_map)
 		return;
-	if (sh->id == 's')
+	if (sh->id == SHAPE_SPHERE)
 		ft_uv_sphere(sh, ray, &u, &v);
-	else if (sh->id == 'p' || sh->id == 'q')
+	else if (sh->id == SHAPE_PLANE || sh->id == SHAPE_SQUARE)
 		ft_uv_plane(sh, ray, &u, &v);
-	else if (sh->id == 'y')
+	else if (sh->id == SHAPE_CYLINDER)
 		ft_uv_cylinder(sh, ray, &u, &v);
 	else
 		ft_uv_generic(sh, ray, &u, &v);
-	step = 0.001;
+	step = BUMP_STEP;
 	h_center = ft_bump_height(sh->mat.bump_map, u, v);
 	du = ft_bump_height(sh->mat.bump_map, u + step, v) - h_center;
 	dv = ft_bump_height(sh->mat.bump_map, u, v + step) - h_center;

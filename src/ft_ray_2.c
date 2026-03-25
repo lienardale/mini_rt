@@ -12,6 +12,7 @@
 
 #include "mini_rt.h"
 
+/* Return an invalid ray with length -1 (no intersection) */
 t_ray ft_no_ray(void)
 {
 	t_ray ray;
@@ -20,36 +21,38 @@ t_ray ft_no_ray(void)
 	return (ray);
 }
 
+/* Dispatch ray-shape intersection test based on shape type ID */
 void ft_which_shape(t_shape *sh, t_ray *ray)
 {
-	if (sh->id == 's')
+	if (sh->id == SHAPE_SPHERE)
 		ft_intersect_ray_sphere(sh, ray);
-	else if (sh->id == 'p')
+	else if (sh->id == SHAPE_PLANE)
 		ft_intersect_ray_plan(sh, ray);
-	else if (sh->id == 'q')
+	else if (sh->id == SHAPE_SQUARE)
 		ft_intersect_ray_square(sh, ray);
-	else if (sh->id == 'y')
+	else if (sh->id == SHAPE_CYLINDER)
 		ft_intersect_ray_cylinder(sh, ray);
-	else if (sh->id == 't')
+	else if (sh->id == SHAPE_TRIANGLE)
 		ft_intersect_ray_triangle(sh, ray);
-	else if (sh->id == 'o')
+	else if (sh->id == SHAPE_CONE)
 		ft_intersect_ray_cone(sh, ray);
-	else if (sh->id == 'k')
+	else if (sh->id == SHAPE_DISK)
 		ft_intersect_ray_disk(sh, ray);
-	else if (sh->id == 'u')
+	else if (sh->id == SHAPE_TORUS)
 		ft_intersect_ray_torus(sh, ray);
-	else if (sh->id == 'e')
+	else if (sh->id == SHAPE_ELLIPSOID)
 		ft_intersect_ray_ellipsoid(sh, ray);
-	else if (sh->id == 'b')
+	else if (sh->id == SHAPE_BOX)
 		ft_intersect_ray_box(sh, ray);
-	else if (sh->id == 'h')
+	else if (sh->id == SHAPE_HYPERBOLOID)
 		ft_intersect_ray_hyperboloid(sh, ray);
-	else if (sh->id == 'a')
+	else if (sh->id == SHAPE_PARABOLOID)
 		ft_intersect_ray_paraboloid(sh, ray);
-	else if (sh->id == 'g')
+	else if (sh->id == SHAPE_CSG)
 		ray->lenght = -1;
 }
 
+/* Iterate all shapes to find the closest ray intersection */
 void ft_trace_shapes(t_shape *cur_shape, t_ray *ray, double *min,
 					 t_shape **min_sh)
 {
@@ -59,7 +62,7 @@ void ft_trace_shapes(t_shape *cur_shape, t_ray *ray, double *min,
 	while (cur_shape)
 	{
 		ft_which_shape(cur_shape, ray);
-		if (ray->lenght > 0.0001 && ray->lenght < *min)
+		if (ray->lenght > EPSILON_HIT && ray->lenght < *min)
 		{
 			*min = ray->lenght;
 			*min_sh = cur_shape;

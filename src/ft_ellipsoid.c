@@ -12,11 +12,11 @@
 
 #include "mini_rt.h"
 
-int ft_ellipsoid_init(t_window *win, t_shape **cur, char *line)
+/* Parse ellipsoid properties (center, radii per axis, color) from scene line */
+static int ft_ellipsoid_parse(t_window *win, t_shape **cur, char *line)
 {
 	int check;
 
-	(*cur)->id = 'e';
 	while ((ft_isspace(*line)) == 1 || (ft_isalpha(*line)) == 1)
 		line++;
 	check = (ft_isnum(line) == 1) ? ft_point_init(win, &(*cur)->pt_0, &line)
@@ -32,6 +32,14 @@ int ft_ellipsoid_init(t_window *win, t_shape **cur, char *line)
 	return (check == 0 ? 0 : ft_error(check, win, "ellipsoid"));
 }
 
+/* Initialize ellipsoid shape and delegate to parser */
+int ft_ellipsoid_init(t_window *win, t_shape **cur, char *line)
+{
+	(*cur)->id = SHAPE_ELLIPSOID;
+	return (ft_ellipsoid_parse(win, cur, line));
+}
+
+/* Validate ellipsoid parameters (positive radii, valid center and color) */
 int ft_ellipsoid_check(t_window *win, t_shape **cur)
 {
 	int check;
@@ -45,6 +53,7 @@ int ft_ellipsoid_check(t_window *win, t_shape **cur)
 	return (check);
 }
 
+/* Compute ellipsoid normal via gradient of implicit surface (x/a)^2+(y/b)^2+(z/c)^2=1 */
 void ft_ellipsoid_norm(t_shape *sh, t_ray *ray)
 {
 	t_pt r;
@@ -55,10 +64,11 @@ void ft_ellipsoid_norm(t_shape *sh, t_ray *ray)
 	ray->hit_n.y = 2.0 * r.y / (sh->pt_1.y * sh->pt_1.y);
 	ray->hit_n.z = 2.0 * r.z / (sh->pt_1.z * sh->pt_1.z);
 	ray->hit_n = ft_normal_vect(ray->hit_n);
-	if (ft_dot_product(ray->dir, ray->hit_n) > 0.001)
+	if (ft_dot_product(ray->dir, ray->hit_n) > EPSILON_NORMAL)
 		ft_inv_norm(&ray->hit_n);
 }
 
+/* Ray-ellipsoid intersection by scaling ray into unit-sphere space */
 void ft_intersect_ray_ellipsoid(t_shape *sh, t_ray *ray)
 {
 	t_pt oc;
@@ -80,6 +90,7 @@ void ft_intersect_ray_ellipsoid(t_shape *sh, t_ray *ray)
 					   (t_pt){b, ft_dot_product(oc_s, oc_s) - 1.0, 0});
 }
 
+/* Solve quadratic and select nearest positive root for ellipsoid hit */
 void ft_ellipsoid_solve(t_shape *sh, t_ray *ray, double a, t_pt bc)
 {
 	double disc;
@@ -94,9 +105,9 @@ void ft_ellipsoid_solve(t_shape *sh, t_ray *ray, double a, t_pt bc)
 	}
 	t0 = (-bc.x - sqrt(disc)) / (2.0 * a);
 	t1 = (-bc.x + sqrt(disc)) / (2.0 * a);
-	if (t0 > 0.0001)
+	if (t0 > EPSILON_HIT)
 		ray->lenght = t0;
-	else if (t1 > 0.0001)
+	else if (t1 > EPSILON_HIT)
 		ray->lenght = t1;
 	else
 	{

@@ -15,11 +15,13 @@
 #include <emmintrin.h>
 #endif
 
+/* Compute the Euclidean length (magnitude) of vector a: sqrt(x^2 + y^2 + z^2) */
 double ft_lenght(t_pt a)
 {
 	return (sqrt(a.x * a.x + a.y * a.y + a.z * a.z));
 }
 
+/* Negate (invert) a direction vector in-place: dir = -dir */
 void ft_inv_norm(t_pt *dir)
 {
 #ifdef __SSE2__
@@ -37,6 +39,7 @@ void ft_inv_norm(t_pt *dir)
 	dir->z = -dir->z;
 }
 
+/* Normalize vector a to unit length: a / |a| */
 t_pt ft_normal_vect(t_pt a)
 {
 	double inv;
@@ -45,6 +48,7 @@ t_pt ft_normal_vect(t_pt a)
 	return (ft_multi_scal(inv, a));
 }
 
+/* Compute dot product of vectors a and b: a.x*b.x + a.y*b.y + a.z*b.z */
 double ft_dot_product(t_pt a, t_pt b)
 {
 #ifdef __SSE2__
@@ -63,6 +67,7 @@ double ft_dot_product(t_pt a, t_pt b)
 #endif
 }
 
+/* Component-wise division of vector a by vector b */
 t_pt ft_div_vect(t_pt a, t_pt b)
 {
 	t_pt c;

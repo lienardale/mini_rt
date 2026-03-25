@@ -12,6 +12,7 @@
 
 #include "mini_rt.h"
 
+/* Validate a 3D point (currently accepts all values). */
 int ft_pt_check(t_window *win, t_pt pt)
 {
 	pt.x = pt.x;
@@ -19,6 +20,7 @@ int ft_pt_check(t_window *win, t_pt pt)
 	return (0);
 }
 
+/* Validate that orientation vector components are within [-1, 1]. */
 int ft_ori_check(t_window *win, t_pt ori)
 {
 	(void)win;
@@ -31,6 +33,7 @@ int ft_ori_check(t_window *win, t_pt ori)
 	return (0);
 }
 
+/* Validate that RGB color channels are within [0, 255]. */
 int ft_color_check(t_window *win, t_argb color)
 {
 	(void)win;
@@ -43,12 +46,14 @@ int ft_color_check(t_window *win, t_argb color)
 	return (0);
 }
 
+/* Parse the resolution line and increment the resolution counter. */
 void ft_parse_resol(int *res, t_window *win, char *line)
 {
 	ft_resol_init(win, line);
 	(*res)++;
 }
 
+/* Parse the ambient light line and increment the ambient counter. */
 void ft_parse_amb(int *amb, t_window *win, char *line)
 {
 	ft_amb_light_init(win, line);
