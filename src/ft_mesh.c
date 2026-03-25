@@ -150,6 +150,7 @@ int ft_mesh_init(t_window *win, t_shape **begin, char *line)
 	return (ft_load_obj_mesh(win, begin, path, offset, color));
 }
 
+/* Load OBJ file: two-pass read (count then load), then create triangle shapes */
 int ft_load_obj_mesh(t_window *win, t_shape **begin, char *path, t_pt offset,
 					 t_argb color)
 {
@@ -183,6 +184,7 @@ int ft_load_obj_mesh(t_window *win, t_shape **begin, char *path, t_pt offset,
 	return (0);
 }
 
+/* Create triangle shapes from face indices, applying offset to each vertex */
 void ft_mesh_create_triangles(t_window *win, t_shape **begin, t_pt *verts,
 							  int *faces, int fcount, t_pt offset, t_argb color)
 {
