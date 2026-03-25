@@ -12,7 +12,8 @@
 
 #include "mini_rt.h"
 
-/* Parse paraboloid properties (center, axis, focal length, height, color) from scene line */
+/* Parse paraboloid properties (center, axis, focal length, height, color) from
+ * scene line */
 static int ft_paraboloid_parse(t_window *win, t_shape **cur, char *line)
 {
 	int check;
@@ -48,7 +49,8 @@ int ft_paraboloid_init(t_window *win, t_shape **cur, char *line)
 	return (ft_paraboloid_parse(win, cur, line));
 }
 
-/* Validate paraboloid parameters (positive focal length/height, valid point, color, axis) */
+/* Validate paraboloid parameters (positive focal length/height, valid point,
+ * color, axis) */
 int ft_paraboloid_check(t_window *win, t_shape **cur)
 {
 	int check;

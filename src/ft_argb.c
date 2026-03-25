@@ -22,7 +22,8 @@ static double ft_gamma_correct(double c)
 	return (255.0 * pow(c / 255.0, 1.0 / 2.2));
 }
 
-/* Write a gamma-corrected pixel (scaled by resolution factor) into the image buffer */
+/* Write a gamma-corrected pixel (scaled by resolution factor) into the image
+ * buffer */
 void ft_pix(int x, int y, t_window *w, t_argb color)
 {
 	int i;
@@ -60,7 +61,8 @@ t_argb ft_multi_argb(t_argb a, t_argb col)
 	return (c);
 }
 
-/* Scale a color by an albedo vector (per-channel intensity), normalized to [0,255] */
+/* Scale a color by an albedo vector (per-channel intensity), normalized to
+ * [0,255] */
 t_argb ft_albedo(t_pt a, t_argb col)
 {
 	t_argb c;

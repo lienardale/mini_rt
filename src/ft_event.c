@@ -27,7 +27,8 @@ void ft_key_fov(int keycode, t_window *param)
 	}
 }
 
-/* Handle key press events: update held keys, FOV, resolution, and camera switching. */
+/* Handle key press events: update held keys, FOV, resolution, and camera
+ * switching. */
 int ft_key_press(int keycode, t_window *param)
 {
 	unsigned int bit;
@@ -73,7 +74,8 @@ int ft_key_release(int keycode, t_window *param)
 	return (0);
 }
 
-/* Per-frame callback: apply movement/look, render at low then full resolution. */
+/* Per-frame callback: apply movement/look, render at low then full resolution.
+ */
 int ft_frame_update(t_window *win)
 {
 	if (win->keys_held == 0 && !win->needs_render)

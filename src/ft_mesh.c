@@ -63,7 +63,8 @@ static t_pt ft_parse_vertex(char *line)
 	return (v);
 }
 
-/* Parse a face line ("f v1 v2 v3") into three vertex indices (1-based to 0-based) */
+/* Parse a face line ("f v1 v2 v3") into three vertex indices (1-based to
+ * 0-based) */
 static void ft_parse_face(char *line, int *indices)
 {
 	int i;
@@ -123,7 +124,8 @@ static int ft_load_obj_data(int fd, t_pt *verts, int *faces)
 	return (0);
 }
 
-/* Parse mesh scene line (OBJ path, optional offset, optional color) and load mesh */
+/* Parse mesh scene line (OBJ path, optional offset, optional color) and load
+ * mesh */
 int ft_mesh_init(t_window *win, t_shape **begin, char *line)
 {
 	char path[256];
@@ -150,7 +152,8 @@ int ft_mesh_init(t_window *win, t_shape **begin, char *line)
 	return (ft_load_obj_mesh(win, begin, path, offset, color));
 }
 
-/* Load OBJ file: two-pass read (count then load), then create triangle shapes */
+/* Load OBJ file: two-pass read (count then load), then create triangle shapes
+ */
 int ft_load_obj_mesh(t_window *win, t_shape **begin, char *path, t_pt offset,
 					 t_argb color)
 {

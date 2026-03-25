@@ -12,7 +12,8 @@
 
 #include "mini_rt.h"
 
-/* Free all allocated resources: line buffer, linked lists, BVH, and mlx objects. */
+/* Free all allocated resources: line buffer, linked lists, BVH, and mlx
+ * objects. */
 void ft_cleanup(t_window *win)
 {
 	if (win->line)

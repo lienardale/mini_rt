@@ -42,8 +42,7 @@ static const char *g_error_msgs[] = {
 	"memory allocation failed during %s initialization",
 	"invalid %s parameters",
 	"invalid orientation vector in %s line",
-	"invalid color values in %s line"
-};
+	"invalid color values in %s line"};
 
 /* Print a formatted error message, clean up resources, and exit. */
 int ft_error(int error, t_window *win, const char *str)

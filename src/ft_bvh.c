@@ -58,12 +58,18 @@ static t_aabb ft_aabb_triangle(t_shape *sh)
 {
 	t_aabb box;
 
-	box.min.x = ft_dmin(sh->pt_0.x, ft_dmin(sh->pt_1.x, sh->pt_2.x)) - EPSILON_AABB;
-	box.min.y = ft_dmin(sh->pt_0.y, ft_dmin(sh->pt_1.y, sh->pt_2.y)) - EPSILON_AABB;
-	box.min.z = ft_dmin(sh->pt_0.z, ft_dmin(sh->pt_1.z, sh->pt_2.z)) - EPSILON_AABB;
-	box.max.x = ft_dmax(sh->pt_0.x, ft_dmax(sh->pt_1.x, sh->pt_2.x)) + EPSILON_AABB;
-	box.max.y = ft_dmax(sh->pt_0.y, ft_dmax(sh->pt_1.y, sh->pt_2.y)) + EPSILON_AABB;
-	box.max.z = ft_dmax(sh->pt_0.z, ft_dmax(sh->pt_1.z, sh->pt_2.z)) + EPSILON_AABB;
+	box.min.x =
+		ft_dmin(sh->pt_0.x, ft_dmin(sh->pt_1.x, sh->pt_2.x)) - EPSILON_AABB;
+	box.min.y =
+		ft_dmin(sh->pt_0.y, ft_dmin(sh->pt_1.y, sh->pt_2.y)) - EPSILON_AABB;
+	box.min.z =
+		ft_dmin(sh->pt_0.z, ft_dmin(sh->pt_1.z, sh->pt_2.z)) - EPSILON_AABB;
+	box.max.x =
+		ft_dmax(sh->pt_0.x, ft_dmax(sh->pt_1.x, sh->pt_2.x)) + EPSILON_AABB;
+	box.max.y =
+		ft_dmax(sh->pt_0.y, ft_dmax(sh->pt_1.y, sh->pt_2.y)) + EPSILON_AABB;
+	box.max.z =
+		ft_dmax(sh->pt_0.z, ft_dmax(sh->pt_1.z, sh->pt_2.z)) + EPSILON_AABB;
 	return (box);
 }
 

@@ -15,7 +15,8 @@
 #include <emmintrin.h>
 #endif
 
-/* Compute the Euclidean length (magnitude) of vector a: sqrt(x^2 + y^2 + z^2) */
+/* Compute the Euclidean length (magnitude) of vector a: sqrt(x^2 + y^2 + z^2)
+ */
 double ft_lenght(t_pt a)
 {
 	return (sqrt(a.x * a.x + a.y * a.y + a.z * a.z));

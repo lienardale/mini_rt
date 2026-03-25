@@ -41,7 +41,7 @@ static void ft_cylinder_calc_two(t_pt *calc, t_ray *ray, t_mat *tmp,
 
 /* Compute discriminant and solve for intersection distances */
 static double ft_cylinder_calc_three(t_pt *calc, t_argb *dist, t_argb *dot,
-									  t_ray *ray)
+									 t_ray *ray)
 {
 	dist->a = calc->y * calc->y - calc->x * calc->z;
 	if (dist->a < EPSILON_NORMAL && (ray->lenght = -1))
@@ -64,7 +64,7 @@ static void ft_cylinder_calc_four(t_pt *calc, t_argb *dist, t_argb *dot)
 
 /* Check if hit is within cylinder height bounds; handle cap fallback */
 static double ft_cylinder_calc_five(t_shape *sh, t_argb *dist, t_argb *dot,
-									 t_ray *ray)
+									t_ray *ray)
 {
 	if (dist->b > EPSILON_HIT && dist->b < dot->r)
 	{
@@ -78,7 +78,8 @@ static double ft_cylinder_calc_five(t_shape *sh, t_argb *dist, t_argb *dot,
 	return (0);
 }
 
-/* Parse cylinder properties (center, axis, diameter, height, color) from scene line */
+/* Parse cylinder properties (center, axis, diameter, height, color) from scene
+ * line */
 static int ft_cylinder_parse(t_window *win, t_shape **cur, char *line)
 {
 	int check;
@@ -114,7 +115,8 @@ int ft_cylinder_init(t_window *win, t_shape **cur, char *line)
 	return (ft_cylinder_parse(win, cur, line));
 }
 
-/* Validate cylinder parameters (non-negative height/diameter, valid point, color, orientation) */
+/* Validate cylinder parameters (non-negative height/diameter, valid point,
+ * color, orientation) */
 int ft_cylinder_check(t_window *win, t_shape **cur)
 {
 	int check;
@@ -178,7 +180,8 @@ void ft_cylinder_cap_check(t_shape *sh, t_ray *ray, double *best_t)
 	}
 }
 
-/* Ray-cylinder intersection using quadratic formula projected off axis, with cap checks */
+/* Ray-cylinder intersection using quadratic formula projected off axis, with
+ * cap checks */
 void ft_intersect_ray_cylinder(t_shape *sh, t_ray *ray)
 {
 	t_mat tmp;

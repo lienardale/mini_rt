@@ -12,7 +12,8 @@
 
 #include "mini_rt.h"
 
-/* Parse square properties (center, orientation, side length, color) from scene line */
+/* Parse square properties (center, orientation, side length, color) from scene
+ * line */
 static int ft_square_parse(t_window *win, t_shape **cur, char *line)
 {
 	int check;
@@ -47,7 +48,8 @@ int ft_square_init(t_window *win, t_shape **cur, char *line)
 	return (ft_square_parse(win, cur, line));
 }
 
-/* Validate square parameters (non-negative height, valid point, orientation, color) */
+/* Validate square parameters (non-negative height, valid point, orientation,
+ * color) */
 int ft_square_check(t_window *win, t_shape **current)
 {
 	int check;

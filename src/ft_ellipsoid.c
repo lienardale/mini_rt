@@ -53,7 +53,8 @@ int ft_ellipsoid_check(t_window *win, t_shape **cur)
 	return (check);
 }
 
-/* Compute ellipsoid normal via gradient of implicit surface (x/a)^2+(y/b)^2+(z/c)^2=1 */
+/* Compute ellipsoid normal via gradient of implicit surface
+ * (x/a)^2+(y/b)^2+(z/c)^2=1 */
 void ft_ellipsoid_norm(t_shape *sh, t_ray *ray)
 {
 	t_pt r;
