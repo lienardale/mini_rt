@@ -100,7 +100,7 @@ int ft_cam_init(t_window *win, t_cam **begin, char *line)
 			cur->focal_dist = ft_atof(line);
 		}
 		else
-			break ;
+			break;
 		while (*line && !ft_isspace(*line))
 			line++;
 		while ((ft_isspace(*line)) == 1)

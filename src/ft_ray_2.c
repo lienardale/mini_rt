@@ -59,12 +59,11 @@ static void ft_trace_one_shape(t_shape *sh, t_ray *ray, double motion_time)
 	t_pt vel;
 
 	vel = sh->mat.vel;
-	if (motion_time > EPSILON_ZERO
-		&& (vel.x != 0.0 || vel.y != 0.0 || vel.z != 0.0))
+	if (motion_time > EPSILON_ZERO &&
+		(vel.x != 0.0 || vel.y != 0.0 || vel.z != 0.0))
 	{
 		moved = *ray;
-		moved.orig = ft_subtraction(ray->orig,
-									ft_multi_scal(motion_time, vel));
+		moved.orig = ft_subtraction(ray->orig, ft_multi_scal(motion_time, vel));
 		ft_which_shape(sh, &moved);
 		ray->lenght = moved.lenght;
 		ray->hit_n = moved.hit_n;

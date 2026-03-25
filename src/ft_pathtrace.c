@@ -26,7 +26,7 @@ static t_argb ft_indirect_color(t_argb indirect, t_argb shape_col)
 
 /* Trace a single path through the scene with Monte Carlo bounces */
 static t_argb ft_pathtrace_ray(t_window *win, t_ray *ray, int bounces,
-								unsigned int *seed)
+							   unsigned int *seed)
 {
 	t_shape *min_sh;
 	double min;
@@ -50,15 +50,14 @@ static t_argb ft_pathtrace_ray(t_window *win, t_ray *ray, int bounces,
 		ft_apply_bump_map(min_sh, ray);
 	p = ft_addition(ray->orig, ft_multi_scal(min, ray->dir));
 	view_dir = ft_normal_vect(ft_neg_pt(ray->dir));
-	color = ft_albedo(ft_light(win, ray->hit_n, p, min_sh, view_dir),
-					  hit_color);
+	color =
+		ft_albedo(ft_light(win, ray->hit_n, p, min_sh, view_dir), hit_color);
 	if (bounces > 0)
 	{
 		t_ray bounce;
 		t_argb indirect;
 
-		bounce.orig = ft_addition(p, ft_multi_scal(EPSILON_NORMAL,
-													ray->hit_n));
+		bounce.orig = ft_addition(p, ft_multi_scal(EPSILON_NORMAL, ray->hit_n));
 		bounce.dir = ft_rand_hemisphere_cosine(ray->hit_n, seed);
 		bounce.lenght = -1;
 		bounce.motion_time = ray->motion_time;

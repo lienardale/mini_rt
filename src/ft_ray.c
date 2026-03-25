@@ -50,17 +50,17 @@ void ft_ray(double i, double j, t_window *win, t_cam *cam)
 	if (win->path_trace_spp > 0)
 	{
 		ft_pathtrace_pixel(i, j, win, cam);
-		return ;
+		return;
 	}
 	if (cam->aperture > EPSILON_ZERO)
 	{
 		ft_ray_dof(i, j, win, cam);
-		return ;
+		return;
 	}
 	if (win->motion_blur_samples > 1)
 	{
 		ft_ray_motion(i, j, win, cam);
-		return ;
+		return;
 	}
 	offsets[0] = -0.25;
 	offsets[1] = 0.25;
