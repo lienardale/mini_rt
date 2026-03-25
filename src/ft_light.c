@@ -20,7 +20,7 @@ t_pt ft_pre_light(t_window *win, t_shape *sh, double clos, t_ray *ray)
 
 	p = ft_addition(ray->orig, ft_multi_scal(clos, ray->dir));
 	view_dir = ft_normal_vect(ft_neg_pt(ray->dir));
-	i = ft_light(win, sh->n, p, sh, view_dir);
+	i = ft_light(win, ray->hit_n, p, sh, view_dir);
 	return (i);
 }
 

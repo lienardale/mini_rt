@@ -124,12 +124,12 @@ void ft_csg_combine(t_shape *sh, t_ray *ray, t_ray *ray_a, t_ray *ray_b,
 		else if (a_hit && (!b_hit || ray_a->lenght <= ray_b->lenght))
 		{
 			ray->lenght = ray_a->lenght;
-			sh->n = sa->n;
+			ray->hit_n = ray_a->hit_n;
 		}
 		else
 		{
 			ray->lenght = ray_b->lenght;
-			sh->n = sb->n;
+			ray->hit_n = ray_b->hit_n;
 		}
 	}
 	else if (sh->csg_op == CSG_INTERSECT)
@@ -144,6 +144,7 @@ void ft_csg_intersect(t_shape *sh, t_ray *ray, t_ray *ray_a, t_ray *ray_b,
 	t_pt pa;
 	t_pt pb;
 
+	(void)sh;
 	if (ray_a->lenght <= 0.0001 || ray_b->lenght <= 0.0001)
 	{
 		ray->lenght = -1;
@@ -154,12 +155,12 @@ void ft_csg_intersect(t_shape *sh, t_ray *ray, t_ray *ray_a, t_ray *ray_b,
 	if (ray_a->lenght >= ray_b->lenght && ft_point_inside_shape(sb, pa))
 	{
 		ray->lenght = ray_a->lenght;
-		sh->n = sa->n;
+		ray->hit_n = ray_a->hit_n;
 	}
 	else if (ft_point_inside_shape(sa, pb))
 	{
 		ray->lenght = ray_b->lenght;
-		sh->n = sb->n;
+		ray->hit_n = ray_b->hit_n;
 	}
 	else
 		ray->lenght = -1;
@@ -170,6 +171,8 @@ void ft_csg_difference(t_shape *sh, t_ray *ray, t_ray *ray_a, t_ray *ray_b,
 {
 	t_pt pa;
 
+	(void)sh;
+	(void)sa;
 	if (ray_a->lenght <= 0.0001)
 	{
 		ray->lenght = -1;
@@ -179,13 +182,13 @@ void ft_csg_difference(t_shape *sh, t_ray *ray, t_ray *ray_a, t_ray *ray_b,
 	if (!ft_point_inside_shape(sb, pa))
 	{
 		ray->lenght = ray_a->lenght;
-		sh->n = sa->n;
+		ray->hit_n = ray_a->hit_n;
 	}
 	else if (ray_b->lenght > 0.0001)
 	{
 		ray->lenght = ray_b->lenght;
-		sh->n = sb->n;
-		ft_inv_norm(&sh->n);
+		ray->hit_n = ray_b->hit_n;
+		ft_inv_norm(&ray->hit_n);
 	}
 	else
 		ray->lenght = -1;

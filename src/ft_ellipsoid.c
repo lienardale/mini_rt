@@ -51,12 +51,12 @@ void ft_ellipsoid_norm(t_shape *sh, t_ray *ray)
 
 	r = ft_addition(ray->orig, ft_multi_scal(ray->lenght, ray->dir));
 	r = ft_subtraction(r, sh->pt_0);
-	sh->n.x = 2.0 * r.x / (sh->pt_1.x * sh->pt_1.x);
-	sh->n.y = 2.0 * r.y / (sh->pt_1.y * sh->pt_1.y);
-	sh->n.z = 2.0 * r.z / (sh->pt_1.z * sh->pt_1.z);
-	sh->n = ft_normal_vect(sh->n);
-	if (ft_dot_product(ray->dir, sh->n) > 0.001)
-		ft_inv_norm(&sh->n);
+	ray->hit_n.x = 2.0 * r.x / (sh->pt_1.x * sh->pt_1.x);
+	ray->hit_n.y = 2.0 * r.y / (sh->pt_1.y * sh->pt_1.y);
+	ray->hit_n.z = 2.0 * r.z / (sh->pt_1.z * sh->pt_1.z);
+	ray->hit_n = ft_normal_vect(ray->hit_n);
+	if (ft_dot_product(ray->dir, ray->hit_n) > 0.001)
+		ft_inv_norm(&ray->hit_n);
 }
 
 void ft_intersect_ray_ellipsoid(t_shape *sh, t_ray *ray)

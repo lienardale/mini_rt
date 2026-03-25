@@ -69,6 +69,7 @@ typedef struct s_ray
 	double lenght;
 	t_pt ray;
 	t_pt unit;
+	t_pt hit_n;
 } t_ray;
 
 typedef struct s_mat
@@ -366,7 +367,7 @@ void ft_ellipsoid_solve(t_shape *sh, t_ray *ray, double a, t_pt bc);
 void ft_ellipsoid_norm(t_shape *sh, t_ray *ray);
 void ft_box_compute_normal(t_shape *sh, t_ray *ray);
 void ft_torus_norm(t_shape *sh, t_ray *ray);
-void ft_torus_world_normal(t_shape *sh);
+void ft_torus_world_normal(t_shape *sh, t_ray *ray);
 int ft_quartic_inner(double a, double b, double cc, double d,
 					 double *cubic_roots, double *roots);
 void ft_hyperboloid_norm(t_shape *sh, t_ray *ray);
@@ -387,11 +388,11 @@ t_shape *ft_get_shape_by_index(t_window *win, int idx);
 void ft_shape_norm(t_shape *sh, t_ray *ray);
 void ft_sphere_norm(t_shape *sh, t_ray *ray);
 void ft_sphere_inv_norm(t_shape *sh, t_ray *ray);
-void ft_plane_norm(t_shape *sh);
-void ft_square_norm(t_shape *sh);
+void ft_plane_norm(t_shape *sh, t_ray *ray);
+void ft_square_norm(t_shape *sh, t_ray *ray);
 void ft_cylinder_norm(t_shape *sh, t_ray *ray);
 void ft_cylinder_inv_norm(t_shape *sh, t_ray *ray);
-void ft_triangle_norm(t_shape *sh);
+void ft_triangle_norm(t_shape *sh, t_ray *ray);
 void ft_inv_norm(t_pt *dir);
 
 double ft_is_in_triangle(t_pt r, t_shape *sh, t_ray *ray);

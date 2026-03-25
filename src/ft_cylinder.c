@@ -65,9 +65,9 @@ void ft_cylinder_norm(t_shape *sh, t_ray *ray)
 	n = ft_normal_vect(ft_cross_product(n, sh->ori));
 	n = ft_cross_product(n, sh->ori);
 	ft_inv_norm(&n);
-	sh->n = n;
-	if (ft_dot_product(ray->dir, sh->n) > 0.001)
-		ft_inv_norm(&sh->n);
+	ray->hit_n = n;
+	if (ft_dot_product(ray->dir, ray->hit_n) > 0.001)
+		ft_inv_norm(&ray->hit_n);
 }
 
 void ft_cylinder_cap_check(t_shape *sh, t_ray *ray, double *best_t)
@@ -95,9 +95,9 @@ void ft_cylinder_cap_check(t_shape *sh, t_ray *ray, double *best_t)
 		{
 			*best_t = t;
 			ray->lenght = t;
-			sh->n = sh->ori;
-			if (ft_dot_product(ray->dir, sh->n) > 0.001)
-				ft_inv_norm(&sh->n);
+			ray->hit_n = sh->ori;
+			if (ft_dot_product(ray->dir, ray->hit_n) > 0.001)
+				ft_inv_norm(&ray->hit_n);
 		}
 	}
 }
@@ -131,8 +131,8 @@ void ft_intersect_ray_cylinder(t_shape *sh, t_ray *ray)
 	{
 		best_t = ray->lenght;
 		ft_cylinder_cap_check(sh, ray, &best_t);
-		if (ft_dot_product(ray->dir, sh->n) > 0)
-			ft_inv_norm(&sh->n);
+		if (ft_dot_product(ray->dir, ray->hit_n) > 0)
+			ft_inv_norm(&ray->hit_n);
 		return;
 	}
 	ray->lenght = -1;

@@ -71,13 +71,13 @@ void ft_hyperboloid_norm(t_shape *sh, t_ray *ray)
 	fwd = ft_cross_product(right, up);
 	loc = ft_subtraction(r, sh->pt_0);
 	m = ft_dot_product(loc, up);
-	sh->n.x = 2.0 * ft_dot_product(loc, right) / ft_sqr(sh->pt_1.x);
-	sh->n.y = -2.0 * m / ft_sqr(sh->pt_1.y);
-	sh->n.z = 2.0 * ft_dot_product(loc, fwd) / ft_sqr(sh->pt_1.x);
+	ray->hit_n.x = 2.0 * ft_dot_product(loc, right) / ft_sqr(sh->pt_1.x);
+	ray->hit_n.y = -2.0 * m / ft_sqr(sh->pt_1.y);
+	ray->hit_n.z = 2.0 * ft_dot_product(loc, fwd) / ft_sqr(sh->pt_1.x);
 	(void)m;
-	sh->n = ft_normal_vect(sh->n);
-	if (ft_dot_product(ray->dir, sh->n) > 0.001)
-		ft_inv_norm(&sh->n);
+	ray->hit_n = ft_normal_vect(ray->hit_n);
+	if (ft_dot_product(ray->dir, ray->hit_n) > 0.001)
+		ft_inv_norm(&ray->hit_n);
 }
 
 void ft_intersect_ray_hyperboloid(t_shape *sh, t_ray *ray)

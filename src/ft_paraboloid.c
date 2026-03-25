@@ -78,12 +78,15 @@ void ft_paraboloid_norm(t_shape *sh, t_ray *ray)
 	lz = ft_dot_product(oc, fwd);
 	ly = -1.0;
 	(void)ly;
-	sh->n.x = 2.0 * lx * right.x + 2.0 * lz * fwd.x - 4.0 * sh->diameter * up.x;
-	sh->n.y = 2.0 * lx * right.y + 2.0 * lz * fwd.y - 4.0 * sh->diameter * up.y;
-	sh->n.z = 2.0 * lx * right.z + 2.0 * lz * fwd.z - 4.0 * sh->diameter * up.z;
-	sh->n = ft_normal_vect(sh->n);
-	if (ft_dot_product(ray->dir, sh->n) > 0.001)
-		ft_inv_norm(&sh->n);
+	ray->hit_n.x = 2.0 * lx * right.x + 2.0 * lz * fwd.x -
+		4.0 * sh->diameter * up.x;
+	ray->hit_n.y = 2.0 * lx * right.y + 2.0 * lz * fwd.y -
+		4.0 * sh->diameter * up.y;
+	ray->hit_n.z = 2.0 * lx * right.z + 2.0 * lz * fwd.z -
+		4.0 * sh->diameter * up.z;
+	ray->hit_n = ft_normal_vect(ray->hit_n);
+	if (ft_dot_product(ray->dir, ray->hit_n) > 0.001)
+		ft_inv_norm(&ray->hit_n);
 }
 
 void ft_intersect_ray_paraboloid(t_shape *sh, t_ray *ray)

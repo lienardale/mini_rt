@@ -56,10 +56,10 @@ void ft_apply_bump_map(t_shape *sh, t_ray *ray)
 	h_center = ft_bump_height(sh->mat.bump_map, u, v);
 	du = ft_bump_height(sh->mat.bump_map, u + step, v) - h_center;
 	dv = ft_bump_height(sh->mat.bump_map, u, v + step) - h_center;
-	ft_get_tangent_bitangent(sh->n, &tangent, &bitangent);
+	ft_get_tangent_bitangent(ray->hit_n, &tangent, &bitangent);
 	perturbed = ft_addition(
-		sh->n,
+		ray->hit_n,
 		ft_addition(ft_multi_scal(-du * sh->mat.bump_strength, tangent),
 					ft_multi_scal(-dv * sh->mat.bump_strength, bitangent)));
-	sh->n = ft_normal_vect(perturbed);
+	ray->hit_n = ft_normal_vect(perturbed);
 }

@@ -81,7 +81,7 @@ void ft_intersect_ray_disk(t_shape *sh, t_ray *ray)
 		return;
 	}
 	ray->lenght = t;
-	sh->n = sh->ori;
-	if (ft_dot_product(ray->dir, sh->n) > 0.001)
-		ft_inv_norm(&sh->n);
+	ray->hit_n = sh->ori;
+	if (ft_dot_product(ray->dir, ray->hit_n) > 0.001)
+		ft_inv_norm(&ray->hit_n);
 }

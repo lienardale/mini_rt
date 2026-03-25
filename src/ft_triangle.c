@@ -53,9 +53,9 @@ void ft_intersect_ray_triangle(t_shape *sh, t_ray *ray)
 	double t;
 	t_pt r;
 
-	sh->n = sh->tri_norm;
-	t = -(ft_dot_product(sh->n, ray->orig) + sh->plane_d) /
-		ft_dot_product(sh->n, ray->dir);
+	ray->hit_n = sh->tri_norm;
+	t = -(ft_dot_product(ray->hit_n, ray->orig) + sh->plane_d) /
+		ft_dot_product(ray->hit_n, ray->dir);
 	if (t < 0.0001)
 	{
 		ray->lenght = -1;
@@ -68,15 +68,15 @@ void ft_intersect_ray_triangle(t_shape *sh, t_ray *ray)
 		ray->lenght = -1;
 }
 
-void ft_triangle_norm(t_shape *sh)
+void ft_triangle_norm(t_shape *sh, t_ray *ray)
 {
 	t_pt u;
 	t_pt v;
 
 	u = ft_subtraction(sh->pt_1, sh->pt_0);
 	v = ft_subtraction(sh->pt_2, sh->pt_0);
-	sh->n = ft_cross_product(u, v);
-	sh->n = ft_normal_vect(sh->n);
+	ray->hit_n = ft_cross_product(u, v);
+	ray->hit_n = ft_normal_vect(ray->hit_n);
 }
 
 double ft_is_in_triangle(t_pt r, t_shape *sh, t_ray *ray)
@@ -86,13 +86,13 @@ double ft_is_in_triangle(t_pt r, t_shape *sh, t_ray *ray)
 	c.x = ft_subtraction(r, sh->pt_0);
 	c.y = ft_subtraction(r, sh->pt_1);
 	c.z = ft_subtraction(r, sh->pt_2);
-	if (ft_dot_product(sh->n, ft_cross_product(sh->tri_edge0, c.x)) < 0 ||
-		ft_dot_product(sh->n, ft_cross_product(sh->tri_edge1, c.y)) < 0 ||
-		ft_dot_product(sh->n, ft_cross_product(sh->tri_edge2, c.z)) < 0)
+	if (ft_dot_product(ray->hit_n, ft_cross_product(sh->tri_edge0, c.x)) < 0 ||
+		ft_dot_product(ray->hit_n, ft_cross_product(sh->tri_edge1, c.y)) < 0 ||
+		ft_dot_product(ray->hit_n, ft_cross_product(sh->tri_edge2, c.z)) < 0)
 		return (-1);
-	sh->n = ft_normal_vect(c.x);
-	sh->n = sh->tri_norm;
-	if (ft_dot_product(ft_subtraction(sh->pt_0, ray->orig), sh->n) > 0.001)
-		ft_inv_norm(&sh->n);
+	ray->hit_n = sh->tri_norm;
+	if (ft_dot_product(ft_subtraction(sh->pt_0, ray->orig), ray->hit_n) >
+		0.001)
+		ft_inv_norm(&ray->hit_n);
 	return (0);
 }

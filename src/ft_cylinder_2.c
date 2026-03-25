@@ -63,6 +63,6 @@ double ft_cylinder_calc_five(t_shape *sh, t_argb *dist, t_argb *dot, t_ray *ray)
 	}
 	dist->b = (dist->b < 0.0001) ? 0 : dot->r;
 	dist->r = (dist->b - dot->b) / dot->g;
-	sh->n = sh->ori;
+	ray->hit_n = sh->ori;
 	return (0);
 }

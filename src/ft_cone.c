@@ -66,10 +66,10 @@ void ft_cone_norm(t_shape *sh, t_ray *ray)
 	v = ft_subtraction(r, sh->pt_0);
 	m = ft_dot_product(v, sh->ori);
 	k = sh->cone_half_angle_sq;
-	sh->n = ft_normal_vect(
+	ray->hit_n = ft_normal_vect(
 		ft_subtraction(v, ft_multi_scal(m * (1.0 + k), sh->ori)));
-	if (ft_dot_product(ray->dir, sh->n) > 0.001)
-		ft_inv_norm(&sh->n);
+	if (ft_dot_product(ray->dir, ray->hit_n) > 0.001)
+		ft_inv_norm(&ray->hit_n);
 }
 
 void ft_intersect_ray_cone(t_shape *sh, t_ray *ray)
