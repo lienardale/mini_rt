@@ -12,6 +12,7 @@
 
 #include "mini_rt.h"
 
+/* Parse CSG operation (union/intersect/difference), child shape indices, and color */
 static int ft_csg_parse(t_window *win, t_shape **cur, char *line)
 {
 	int check;
@@ -55,11 +56,13 @@ static int ft_csg_parse(t_window *win, t_shape **cur, char *line)
 	return (check);
 }
 
+/* Initialize CSG shape and delegate to parser */
 int ft_csg_init(t_window *win, t_shape **cur, char *line)
 {
 	return (ft_csg_parse(win, cur, line));
 }
 
+/* Test if a ray hits a shape and output the intersection distance */
 static int ft_csg_test_hit(t_shape *sh, t_ray *ray, double *t_out)
 {
 	ft_which_shape_base(sh, ray);
@@ -72,6 +75,7 @@ static int ft_csg_test_hit(t_shape *sh, t_ray *ray, double *t_out)
 	return (0);
 }
 
+/* Determine if point is inside shape using ray-casting parity test */
 static int ft_point_inside_shape(t_shape *sh, t_pt p)
 {
 	t_ray test;
@@ -91,6 +95,7 @@ static int ft_point_inside_shape(t_shape *sh, t_pt p)
 	return (hits % 2);
 }
 
+/* Ray-CSG intersection: test both child shapes and combine results */
 void ft_intersect_ray_csg(t_shape *sh, t_ray *ray, t_window *win)
 {
 	t_shape *shape_a;
