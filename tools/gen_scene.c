@@ -934,7 +934,8 @@ static void gen_cathedral_ruins(FILE *f, t_config *cfg)
 	int i;
 
 	fprintf(f, "R\t%d\t%d\n", cfg->width, cfg->height);
-	fprintf(f, "A\t0.08\t200,190,170\n\n");
+	fprintf(f, "A\t0.08\t200,190,170\n");
+	fprintf(f, "E\n\n");
 	fprintf(f, "c\t0.0,12.0,25.0\t0.055,0,0\t70\n");
 	fprintf(f, "c\t-4.0,7.0,18.0\t0.04,-0.03,0\t70\n");
 	fprintf(f, "c\t8.0,6.0,-15.0\t0.03,0.3,0\t70\n");
