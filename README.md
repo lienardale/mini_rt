@@ -1,6 +1,6 @@
 # miniRT
 
-![Cathedral Ruins](./saves/cathedral_ruins.bmp?raw=true)
+![Cathedral Ruins](./renders_preview/cathedral_ruins.png?raw=true)
 
 **A basic RayTracer using minilibX**    
 project of 42 Paris's common-core
