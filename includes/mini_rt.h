@@ -251,6 +251,7 @@ typedef struct s_window
 	int path_trace_spp;
 	int path_trace_bounces;
 	int motion_blur_samples;
+	int use_env_sky;
 } t_window;
 
 typedef struct s_thread_data
