@@ -213,6 +213,12 @@ test:		$(LIB)
 				$(TEST_DIR)/test_parsing.c $(TEST_DIR)/test_stubs.c \
 				$(addprefix $(SRC_DIR)/,$(TEST_PARSING_SRCS)) \
 				$(TEST_LINK) -o run_test_parsing && ./run_test_parsing
+			@echo ""
+			@echo "=== Running PBR tests ==="
+			@$(CC) -Wall -Wextra -Werror -g3 $(MLX_DEF) $(TEST_INC) \
+				$(TEST_DIR)/test_pbr.c $(TEST_DIR)/test_stubs.c \
+				$(addprefix $(SRC_DIR)/,$(TEST_INTERSECT_SRCS)) \
+				$(TEST_LINK) -o run_test_pbr && ./run_test_pbr
 
 COV_FLAGS = -Wall -Wextra -g3 --coverage -fprofile-arcs -ftest-coverage
 
@@ -225,6 +231,7 @@ coverage:	$(LIB)
 				$(TEST_DIR)/test_intersections.c \
 				$(TEST_DIR)/test_lighting.c \
 				$(TEST_DIR)/test_parsing.c \
+				$(TEST_DIR)/test_pbr.c \
 				$(TEST_DIR)/test_stubs.c \
 				$(addprefix $(SRC_DIR)/,$(TEST_INTERSECT_SRCS)) \
 				$(TEST_LINK) -o cov_test_all && ./cov_test_all
@@ -266,7 +273,7 @@ gen_scene:
 			@echo "Built gen_scene tool"
 
 testclean:
-			$(RM) run_test_math run_test_camera run_test_intersections run_test_lighting run_test_parsing run_benchmark
+			$(RM) run_test_math run_test_camera run_test_intersections run_test_lighting run_test_parsing run_test_pbr run_benchmark
 			$(RM) cov_test_math cov_test_intersections cov_test_lighting cov_test_parsing cov_test_all
 			$(RM) -r coverage
 			$(RM) *.gcno *.gcda src/*.gcno src/*.gcda tests/*.gcno tests/*.gcda

@@ -10,6 +10,7 @@ void	run_camera_tests(void);
 void	run_intersection_tests(void);
 void	run_lighting_tests(void);
 void	run_parsing_tests(void);
+void	run_pbr_tests(void);
 
 int	main(void)
 {
@@ -18,5 +19,6 @@ int	main(void)
 	run_intersection_tests();
 	run_lighting_tests();
 	run_parsing_tests();
+	run_pbr_tests();
 	TEST_REPORT();
 }
