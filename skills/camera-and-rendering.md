@@ -139,6 +139,45 @@ DISPLAY=:42 ./miniRT scene.rt -save
 - Neutral wall/plane colors of 150–200 work better than 220–240 for scenes with white/reflective objects
 - At least 2 lights from different angles improves depth perception
 
+## Post-42 Scene Generation Rules
+
+All scenes created after the initial 42 project **MUST** follow these rules. Original 42 scenes (cylinder, exemple, inside_cy, inside_cy_l, inside_sp, inside_sp_l, lights, objects, square, tiny, triangle, error) are left as-is.
+
+### Drone-view camera placement
+
+Every showcase scene uses an elevated "drone view" where **all objects are fully visible at first glance**:
+
+| Parameter | Rule | Typical range |
+|-----------|------|---------------|
+| Camera Y | max_object_height + 8–12 | 12–16 |
+| Camera Z | furthest_object_z + scene_x_span × 0.8 | 20–40 |
+| rot_x (pitch) | 0.12–0.18 (22°–32° downward tilt) | 0.15 |
+| rot_y (yaw) | 0 always | 0 |
+| rot_z (roll) | 0 always (**never** ±1) | 0 |
+| FOV | 65–70° | 70 |
+
+**Checklist for row-based layouts** (e.g. materials, pbr_showcase):
+- All objects in every row must be fully visible — no clipping at frame edges
+- Clear ground visible between rows (at least 4–6 units of Z separation)
+- Camera high enough that rear rows are not occluded by front rows
+
+### Sky background
+
+Add the `E` directive (on its own line, after `A`) to enable the gradient sky. This replaces the black void with a blue-to-white horizon gradient.
+
+```
+R   1920  1080
+A   0.15   255,255,255
+E
+c   0,14,28   0.15,0,0   70
+```
+
+### Object layout
+
+- Spread objects along X with at least 1 diameter of spacing between them
+- Use 2+ lights from different angles for depth/shadow separation
+- Ground plane color: light gray (220–235) to contrast with objects and sky
+
 ### Material properties (parsed in `ft_material.c`)
 
 Appended to shape lines as `key:value` pairs:
@@ -149,6 +188,9 @@ Appended to shape lines as `key:value` pairs:
 | `refl:` | 0–1 | Reflectivity (recursive ray tracing, max depth 4) |
 | `trans:` | 0–1 | Transparency |
 | `ior:` | >0 | Index of refraction (used with trans) |
+| `metal:` | 0–1 | Metallic factor (PBR metallic-roughness workflow) |
+| `rough:` | 0–1 | Surface roughness (0 = mirror, 1 = matte) |
+| `emit:` | R,G,B | Emissive light (HDR values allowed, e.g. `emit:500,400,300`) |
 
 ### Supported shape IDs
 

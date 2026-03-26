@@ -324,4 +324,29 @@ GitHub Actions pipeline: build validation, unit tests, regression tests, clang-f
 
 ### Scene Files
 
-`scenes/` directory contains 19 test scenes covering basic shapes, extended shapes, quadrics, lighting, interior views, DOF, motion blur, and path tracing.
+`scenes/` directory contains 22 test scenes covering basic shapes, extended shapes, quadrics, lighting, interior views, DOF, motion blur, path tracing, PBR materials, and emissive objects.
+
+## Development Workflow
+
+### Every iteration MUST:
+
+1. **`make lint`** — clang-format check passes
+2. **`make test`** — all unit tests pass (math, camera, intersections, lighting, parsing, PBR)
+3. **`make regression`** — all 19 BMP regression tests pass (requires Xvfb on headless systems: `xvfb-run make regression`)
+
+### When scenes are added or modified:
+
+4. **Re-render `saves/`** — run each changed scene with `-save --output saves/<name>.bmp`
+5. **Regenerate `renders_preview/`** — run `python3 tools/bmp_to_png.py saves/ --output renders_preview/`
+6. **Note:** `scenes/cathedral_ruins.rt` renders at 2560×1440 and takes ~1h. Render in background or last.
+
+### Scene authoring (post-42 scenes only):
+
+All scenes created after the initial 42 project follow the drone-view guidelines documented in **[skills/camera-and-rendering.md](skills/camera-and-rendering.md)** § "Post-42 Scene Generation Rules":
+
+- Elevated camera with downward tilt (`rot_x` 0.12–0.18), **never** `rot_z = ±1`
+- All objects fully visible and well-separated at first glance
+- `E` directive for sky gradient background
+- If rows of items, all rows visible from above (no occlusion)
+
+Original 42 scenes are left unchanged.
