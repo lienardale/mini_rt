@@ -935,7 +935,10 @@ static void gen_cathedral_ruins(FILE *f, t_config *cfg)
 
 	fprintf(f, "R\t%d\t%d\n", cfg->width, cfg->height);
 	fprintf(f, "A\t0.08\t200,190,170\n\n");
-	fprintf(f, "c\t0.0,6.0,12.0\t0.03,0,0\t70\n\n");
+	fprintf(f, "c\t0.0,12.0,25.0\t0.055,0,0\t70\n");
+	fprintf(f, "c\t-4.0,7.0,18.0\t0.04,-0.03,0\t70\n");
+	fprintf(f, "c\t8.0,6.0,-15.0\t0.03,0.3,0\t70\n");
+	fprintf(f, "c\t0.0,2.0,16.0\t0.0,0,0\t70\n\n");
 	write_light(f, (t_vec){-3, 25, -5}, 0.9, (t_color){255, 240, 200});
 	write_light(f, (t_vec){5, 20, 5}, 0.6, (t_color){255, 235, 190});
 	write_light(f, (t_vec){-8, 15, -15}, 0.5, (t_color){255, 220, 180});
