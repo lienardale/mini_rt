@@ -12,6 +12,16 @@
 
 #include "mini_rt.h"
 
+/* Apply gamma correction (gamma=2.2) to a color channel, clamped to [0, 255] */
+static double ft_gamma_correct(double c)
+{
+	if (c <= 0.0)
+		return (0.0);
+	if (c >= 255.0)
+		return (255.0);
+	return (255.0 * pow(c / 255.0, 1.0 / 2.2));
+}
+
 /* ACES filmic tone mapping: maps HDR [0,inf) to [0,1] with filmic curve */
 static double ft_aces_tonemap(double x)
 {
@@ -30,8 +40,8 @@ static double ft_aces_tonemap(double x)
 	return (x);
 }
 
-/* Apply ACES tone mapping and sRGB gamma to a color channel */
-static double ft_gamma_correct(double c)
+/* Apply ACES tone mapping and sRGB gamma for HDR path tracing output */
+static double ft_hdr_tonemap(double c)
 {
 	double linear;
 
@@ -52,9 +62,18 @@ void ft_pix(int x, int y, t_window *w, t_argb color)
 	unsigned char g;
 	unsigned char b;
 
-	r = (unsigned char)ft_gamma_correct(color.r);
-	g = (unsigned char)ft_gamma_correct(color.g);
-	b = (unsigned char)ft_gamma_correct(color.b);
+	if (w->path_trace_spp > 0)
+	{
+		r = (unsigned char)ft_hdr_tonemap(color.r);
+		g = (unsigned char)ft_hdr_tonemap(color.g);
+		b = (unsigned char)ft_hdr_tonemap(color.b);
+	}
+	else
+	{
+		r = (unsigned char)ft_gamma_correct(color.r);
+		g = (unsigned char)ft_gamma_correct(color.g);
+		b = (unsigned char)ft_gamma_correct(color.b);
+	}
 	i = 0;
 	while (i < w->resol)
 	{

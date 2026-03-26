@@ -27,7 +27,7 @@ void ft_material_default(t_material *mat)
 	mat->tex_scale_v = 1.0;
 	mat->bump_strength = 1.0;
 	mat->metallic = 0.0;
-	mat->roughness = 0.5;
+	mat->roughness = 0.0;
 	mat->emission = (t_argb){0, 0, 0, 0};
 	mat->vel = (t_pt){0, 0, 0};
 }
