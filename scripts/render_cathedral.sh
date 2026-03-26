@@ -6,6 +6,7 @@
 #   --preview         Quick render at 640x360
 #   --full            Full resolution render (2560x1440)
 #   --generate-only   Create .rt file without rendering
+#   --png             Convert output BMP to PNG (requires Pillow)
 #   --width N         Custom width (default: 1280)
 #   --height N        Custom height (default: 720)
 #   --threads N       Thread count (default: auto)
@@ -25,6 +26,7 @@ OUTPUT="$PROJECT_DIR/saves/cathedral_ruins.bmp"
 SCENE_FILE=""
 GENERATE_ONLY=0
 USE_EXISTING=0
+CONVERT_PNG=0
 
 while [ $# -gt 0 ]; do
     case "$1" in
@@ -34,6 +36,8 @@ while [ $# -gt 0 ]; do
             WIDTH=2560; HEIGHT=1440 ;;
         --generate-only)
             GENERATE_ONLY=1 ;;
+        --png)
+            CONVERT_PNG=1 ;;
         --width)
             WIDTH="$2"; shift ;;
         --height)
@@ -47,7 +51,7 @@ while [ $# -gt 0 ]; do
         --scene)
             SCENE_FILE="$2"; USE_EXISTING=1; shift ;;
         --help|-h)
-            head -14 "$0" | tail -12
+            head -16 "$0" | tail -14
             exit 0 ;;
         *)
             echo "Unknown option: $1" >&2
@@ -96,8 +100,14 @@ echo ""
 
 START=$(date +%s)
 
+cd "$PROJECT_DIR"
 xvfb-run -a "$PROJECT_DIR/miniRT" "$SCENE_FILE" -save \
-    --output "$OUTPUT" --threads="$THREADS"
+    --output "$OUTPUT" --threads="$THREADS" || {
+    echo "Retrying with default output path..."
+    xvfb-run -a "$PROJECT_DIR/miniRT" "$SCENE_FILE" -save \
+        --threads="$THREADS"
+    mv -f "$PROJECT_DIR/miniRT.bmp" "$OUTPUT"
+}
 
 END=$(date +%s)
 ELAPSED=$((END - START))
@@ -109,3 +119,11 @@ echo "=== Render Complete ==="
 echo "Time: ${MINUTES}m ${SECONDS}s"
 ls -lh "$OUTPUT" | awk '{print "Size:", $5}'
 file "$OUTPUT" | sed 's/.*: /Format: /'
+
+# Convert to PNG if requested
+if [ "$CONVERT_PNG" -eq 1 ]; then
+    PNG_OUTPUT="${OUTPUT%.bmp}.png"
+    echo ""
+    echo "Converting to PNG..."
+    python3 "$PROJECT_DIR/scripts/bmp2png.py" "$OUTPUT" "$PNG_OUTPUT"
+fi
