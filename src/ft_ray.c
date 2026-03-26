@@ -168,7 +168,11 @@ t_argb ft_trace_ray_recursive(t_window *win, t_ray *ray, int depth)
 		ft_trace_shapes(win->beg_sh, ray, &min, &min_sh);
 	ft_trace_csg_shapes(win, ray, &min, &min_sh);
 	if (min_sh == NULL)
+	{
+		if (win->use_env_sky)
+			return (ft_env_sky(ray->dir));
 		return (black = (t_argb){0, 0, 0, 0});
+	}
 	hit_color = min_sh->color;
 	if (min_sh->mat.texture)
 		hit_color = ft_get_shape_color(min_sh, ray);

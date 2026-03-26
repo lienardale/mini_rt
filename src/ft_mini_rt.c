@@ -62,6 +62,9 @@ void ft_parse(int *check, t_window *win, int fd)
 			ft_cam_init(win, &win->beg_cam, win->line);
 		else if (win->line[0] == 'l' && (ft_isspace(win->line[1])) == 1)
 			ft_light_init(win, &win->beg_light, win->line);
+		else if (win->line[0] == 'E' &&
+				 ((ft_isspace(win->line[1])) == 1 || win->line[1] == '\0'))
+			win->use_env_sky = 1;
 		else if ((ft_isalpha(win->line[0])) == 1)
 			ft_shape_init(win, &win->beg_sh, win->line);
 		else if (win->line[0] != '\0')
