@@ -263,10 +263,13 @@ gen_scene:
 			@$(CC) -Wall -Wextra -Werror -o gen_scene tools/gen_scene.c -lm
 			@echo "Built gen_scene tool"
 
+render-cathedral:	$(NAME) gen_scene
+			@scripts/render_cathedral.sh $(ARGS)
+
 testclean:
 			$(RM) run_test_math run_test_camera run_test_intersections run_test_lighting run_test_parsing run_benchmark
 			$(RM) cov_test_math cov_test_intersections cov_test_lighting cov_test_parsing cov_test_all
 			$(RM) -r coverage
 			$(RM) *.gcno *.gcda src/*.gcno src/*.gcda tests/*.gcno tests/*.gcda
 
-.PHONY:		re all clean fclean sanitize debug release test testclean coverage regression regression-generate lint benchmark gen_scene
+.PHONY:		re all clean fclean sanitize debug release test testclean coverage regression regression-generate lint benchmark gen_scene render-cathedral
