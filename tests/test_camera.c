@@ -187,7 +187,7 @@ TEST(test_keycode_to_bit)
 	ASSERT_TRUE(ft_keycode_to_bit(LK_DWN) == KEY_BIT_LK_D);
 	ASSERT_TRUE(ft_keycode_to_bit(LK_ZL) == KEY_BIT_LK_ZL);
 	ASSERT_TRUE(ft_keycode_to_bit(LK_ZR) == KEY_BIT_LK_ZR);
-	ASSERT_TRUE(ft_keycode_to_bit(0) == 0);
+	ASSERT_TRUE(ft_keycode_to_bit(-1) == 0);
 	ASSERT_TRUE(ft_keycode_to_bit(999999) == 0);
 }
 
