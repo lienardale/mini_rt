@@ -100,12 +100,12 @@ CC =		gcc
 
 RM = 		rm -f
 
-CFLAGS =	-Wall -Wextra -Werror -Wpedantic -Wshadow -Wconversion -g3 -O3
+CFLAGS =	-Wall -Wextra -Werror -Wpedantic -Wshadow -Wconversion -Wno-strict-prototypes -g3 -O3
 
-DBGFLAGS =	-Wall -Wextra -Werror -Wpedantic -Wshadow -Wconversion -g3 -O0 \
+DBGFLAGS =	-Wall -Wextra -Werror -Wpedantic -Wshadow -Wconversion -Wno-strict-prototypes -g3 -O0 \
 			-fsanitize=address,undefined -fno-omit-frame-pointer
 
-RELFLAGS =	-Wall -Wextra -Werror -Wpedantic -Wshadow -Wconversion -O3 -DNDEBUG
+RELFLAGS =	-Wall -Wextra -Werror -Wpedantic -Wshadow -Wconversion -Wno-strict-prototypes -O3 -DNDEBUG
 
 SANFLAGS =	$(DBGFLAGS)
 

@@ -44,8 +44,11 @@ static double ft_cylinder_calc_three(t_pt *calc, t_argb *dist, t_argb *dot,
 									 t_ray *ray)
 {
 	dist->a = calc->y * calc->y - calc->x * calc->z;
-	if (dist->a < EPSILON_NORMAL && (ray->lenght = -1))
+	if (dist->a < EPSILON_NORMAL)
+	{
+		ray->lenght = -1;
 		return (-1);
+	}
 	ft_cylinder_calc_four(calc, dist, dot);
 	return (0);
 }
@@ -206,9 +209,9 @@ void ft_intersect_ray_cylinder(t_shape *sh, t_ray *ray)
 		ft_cylinder_cap_check(sh, ray, &best_t);
 		return;
 	}
-	if ((fabs(calc.y + calc.x * dist.r)) < dist.a &&
-		(ray->lenght = dist.r + EPSILON_NORMAL))
+	if ((fabs(calc.y + calc.x * dist.r)) < dist.a)
 	{
+		ray->lenght = dist.r + EPSILON_NORMAL;
 		best_t = ray->lenght;
 		ft_cylinder_cap_check(sh, ray, &best_t);
 		if (ft_dot_product(ray->dir, ray->hit_n) > 0)

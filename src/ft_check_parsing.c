@@ -33,7 +33,7 @@ int ft_check_amb_light(t_window *win)
 
 	if (!win)
 		return (ft_error(7, win, "amb_light params, no amb_light"));
-	if (!win->ratio)
+	if (win->ratio == 0.0)
 		return (ft_error(7, win, "amb_light params, no ratio"));
 	if (win->ratio < 0.0 || 1.0 < win->ratio)
 		return (ft_error(9, win, "amb_light ratio"));
