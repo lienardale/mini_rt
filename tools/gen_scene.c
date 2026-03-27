@@ -243,6 +243,18 @@ static void write_triangle(FILE *f, t_vec p1, t_vec p2, t_vec p3,
 		col.r, col.g, col.b);
 }
 
+static void write_triangle_mat(FILE *f, t_vec p1, t_vec p2, t_vec p3,
+							   t_color col, const char *mat)
+{
+	fprintf(f, "tr\t%.1f,%.1f,%.1f\t%.1f,%.1f,%.1f\t%.1f,%.1f,%.1f"
+		"\t%d,%d,%d",
+		p1.x, p1.y, p1.z, p2.x, p2.y, p2.z, p3.x, p3.y, p3.z,
+		col.r, col.g, col.b);
+	if (mat)
+		fprintf(f, "\t%s", mat);
+	fprintf(f, "\n");
+}
+
 static void write_paraboloid(FILE *f, t_vec pos, t_vec ori, double scale,
 							 double height, t_color col, const char *mat)
 {
@@ -666,30 +678,288 @@ static void cathedral_rose_window(FILE *f)
 		(t_color){255, 255, 220}, "trans:0.85 ior:1.5\tspec:0.5");
 }
 
+static void cathedral_altar_candle(FILE *f, double x, double z, double h)
+{
+	write_cylinder(f, (t_vec){x, 1.8, z}, (t_vec){0, 1, 0}, 0.1, h,
+		(t_color){240, 230, 200});
+	write_sphere(f, (t_vec){x, 1.8 + h + 0.05, z}, 0.15,
+		(t_color){255, 220, 100}, "emit:200,150,50");
+}
+
 static void cathedral_altar(FILE *f)
 {
-	t_color gold = {150, 120, 40};
+	t_color stone = {200, 190, 170};
+	t_color gold = {210, 180, 80};
 
-	write_box_mat(f, (t_vec){0, 1.5, -27}, (t_vec){3, 1.5, 1.5},
-		(t_color){220, 210, 190}, "spec:0.3");
-	write_box(f, (t_vec){0, 0.5, -27}, (t_vec){3.5, 0.5, 2},
-		(t_color){210, 200, 180});
-	write_cylinder_mat(f, (t_vec){-1, 2.25, -27}, (t_vec){0, 1, 0}, 0.15,
-		1.5, (t_color){240, 230, 200}, "spec:0.4");
-	write_sphere(f, (t_vec){-1, 3.75, -27}, 0.25,
-		(t_color){255, 220, 100}, "spec:0.8");
-	write_cylinder_mat(f, (t_vec){1, 2.25, -27}, (t_vec){0, 1, 0}, 0.15,
-		1.5, (t_color){240, 230, 200}, "spec:0.4");
-	write_sphere(f, (t_vec){1, 3.75, -27}, 0.25,
-		(t_color){255, 220, 100}, "spec:0.8");
-	write_cylinder_mat(f, (t_vec){0, 2.25, -27.5}, (t_vec){0, 1, 0}, 0.2,
-		3.0, gold, "spec:0.6 refl:0.2");
-	write_cylinder_mat(f, (t_vec){0, 4.0, -27.5}, (t_vec){1, 0, 0}, 0.2,
-		1.5, gold, "spec:0.6 refl:0.2");
-	write_box(f, (t_vec){0, 0.15, -25.5}, (t_vec){5, 0.15, 1},
-		(t_color){200, 190, 170});
-	write_box(f, (t_vec){0, 0.30, -24.5}, (t_vec){6, 0.15, 1},
-		(t_color){200, 190, 170});
+	write_box(f, (t_vec){0, 0.15, -26}, (t_vec){8, 0.15, 4}, stone);
+	write_box(f, (t_vec){0, 0.35, -26.5}, (t_vec){6, 0.15, 3}, stone);
+	write_box_mat(f, (t_vec){0, 1.2, -27}, (t_vec){4, 1.0, 1.8},
+		(t_color){100, 80, 60}, "spec:0.25");
+	write_box(f, (t_vec){0, 1.75, -27}, (t_vec){4.3, 0.05, 2},
+		(t_color){240, 235, 225});
+	cathedral_altar_candle(f, -1.5, -27.0, 1.0);
+	cathedral_altar_candle(f, -1.2, -26.5, 0.8);
+	cathedral_altar_candle(f, -1.5, -27.5, 0.9);
+	cathedral_altar_candle(f, 1.5, -27.0, 1.0);
+	cathedral_altar_candle(f, 1.2, -26.5, 0.8);
+	cathedral_altar_candle(f, 1.5, -27.5, 0.9);
+	write_box_mat(f, (t_vec){0, 2.3, -27}, (t_vec){0.08, 0.8, 0.08},
+		gold, "spec:0.7 refl:0.2");
+	write_box_mat(f, (t_vec){0, 2.6, -27}, (t_vec){0.4, 0.08, 0.08},
+		gold, "spec:0.7 refl:0.2");
+	write_box(f, (t_vec){0, 0.15, -25.5}, (t_vec){5, 0.15, 1}, stone);
+	write_box(f, (t_vec){0, 0.30, -24.5}, (t_vec){6, 0.15, 1}, stone);
+}
+
+static void cathedral_cross(FILE *f)
+{
+	t_color wood = {90, 70, 50};
+	t_color gold = {220, 200, 100};
+
+	write_box_mat(f, (t_vec){0, 6, -28.8}, (t_vec){0.35, 6, 0.25},
+		wood, "spec:0.2");
+	write_box_mat(f, (t_vec){0, 8, -28.8}, (t_vec){3, 0.35, 0.25},
+		wood, "spec:0.2");
+	write_sphere(f, (t_vec){0, 9, -28.8}, 0.25, gold, "spec:0.8 refl:0.3");
+	write_sphere(f, (t_vec){0, 3, -28.8}, 0.25, gold, "spec:0.8 refl:0.3");
+	write_sphere(f, (t_vec){-1.5, 8, -28.8}, 0.25,
+		gold, "spec:0.8 refl:0.3");
+	write_sphere(f, (t_vec){1.5, 8, -28.8}, 0.25,
+		gold, "spec:0.8 refl:0.3");
+	write_torus(f, (t_vec){0, 8, -28.7}, (t_vec){0, 0, 1}, 1.0, 0.08,
+		gold, "spec:0.7 refl:0.3");
+}
+
+static void cathedral_organ(FILE *f)
+{
+	double z;
+	double heights_b[] = {12, 11, 10, 13, 11.5, 9.5, 12.5, 10.5, 8};
+	double heights_f[] = {8, 9, 8.5, 9.5, 5.5, 0, 0, 0, 0};
+	double heights_o[] = {6, 5, 7, 5.5, 6.5};
+	int i;
+
+	write_box_mat(f, (t_vec){11, 1, 10}, (t_vec){2, 2, 4},
+		(t_color){90, 75, 55}, "spec:0.2");
+	i = 0;
+	while (i < 9)
+	{
+		z = 12.0 - (double)i * 0.5;
+		write_cylinder_mat(f, (t_vec){11, 2, z}, (t_vec){0, 1, 0},
+			0.5 - (double)(i % 3) * 0.05, heights_b[i],
+			(t_color){200, 180, 100}, "spec:0.5 metal:0.3");
+		i++;
+	}
+	i = 0;
+	while (i < 5)
+	{
+		z = 12.0 - (double)i * 1.0;
+		write_cylinder_mat(f, (t_vec){10.5, 2, z}, (t_vec){0, 1, 0},
+			0.35, heights_f[i],
+			(t_color){200, 180, 100}, "spec:0.5 metal:0.3");
+		i++;
+	}
+	i = 0;
+	while (i < 5)
+	{
+		z = 12.0 - (double)i * 1.0;
+		write_cylinder_mat(f, (t_vec){11.5, 2, z}, (t_vec){0, 1, 0},
+			0.3, heights_o[i],
+			(t_color){210, 190, 110}, "spec:0.5 metal:0.3");
+		i++;
+	}
+	write_disk(f, (t_vec){11, 15, 10.5}, (t_vec){0, 1, 0}, 0.6,
+		(t_color){220, 200, 100}, "spec:0.6");
+	write_disk(f, (t_vec){11, 14.5, 9}, (t_vec){0, 1, 0}, 0.6,
+		(t_color){220, 200, 100}, "spec:0.6");
+	write_disk(f, (t_vec){11, 14, 12}, (t_vec){0, 1, 0}, 0.6,
+		(t_color){220, 200, 100}, "spec:0.6");
+	write_box_mat(f, (t_vec){11, 8, 13}, (t_vec){0.15, 12, 0.15},
+		(t_color){90, 75, 55}, "spec:0.2");
+	write_box_mat(f, (t_vec){11, 8, 7}, (t_vec){0.15, 12, 0.15},
+		(t_color){90, 75, 55}, "spec:0.2");
+	write_box_mat(f, (t_vec){11, 14, 10}, (t_vec){0.15, 0.15, 6},
+		(t_color){90, 75, 55}, "spec:0.2");
+}
+
+static void cathedral_candelabra(FILE *f, double x, double z)
+{
+	t_color iron = {70, 60, 55};
+	t_color wax = {240, 230, 200};
+	t_color flame = {255, 220, 100};
+
+	write_cylinder_mat(f, (t_vec){x, 0, z}, (t_vec){0, 1, 0}, 0.15, 3.5,
+		iron, "spec:0.4 metal:0.5");
+	write_disk(f, (t_vec){x, 3.5, z}, (t_vec){0, 1, 0}, 1.0,
+		iron, "spec:0.4 metal:0.5");
+	write_cylinder(f, (t_vec){x, 3.5, z}, (t_vec){0, 1, 0}, 0.08, 0.8,
+		wax);
+	write_sphere(f, (t_vec){x, 4.35, z}, 0.12,
+		flame, "emit:180,140,40");
+	write_cylinder(f, (t_vec){x - 0.3, 3.5, z + 0.3}, (t_vec){0, 1, 0},
+		0.08, 0.6, wax);
+	write_sphere(f, (t_vec){x - 0.3, 4.15, z + 0.3}, 0.12,
+		flame, "emit:180,140,40");
+	write_cylinder(f, (t_vec){x + 0.3, 3.5, z - 0.3}, (t_vec){0, 1, 0},
+		0.08, 0.7, wax);
+	write_sphere(f, (t_vec){x + 0.3, 4.25, z - 0.3}, 0.12,
+		flame, "emit:180,140,40");
+}
+
+static void cathedral_wall_sconce(FILE *f, double x, double z)
+{
+	t_color iron = {70, 60, 55};
+
+	write_box_mat(f, (t_vec){x, 5, z}, (t_vec){0.3, 0.3, 0.3},
+		iron, "spec:0.3 metal:0.4");
+	write_cylinder(f, (t_vec){x, 5.3, z}, (t_vec){0, 1, 0}, 0.08, 0.6,
+		(t_color){240, 230, 200});
+	write_sphere(f, (t_vec){x, 5.95, z}, 0.12,
+		(t_color){255, 220, 100}, "emit:180,140,40");
+}
+
+static void cathedral_candelabras(FILE *f)
+{
+	cathedral_candelabra(f, -5, 5);
+	cathedral_candelabra(f, -5, 0);
+	cathedral_candelabra(f, -5, -5);
+	cathedral_candelabra(f, 5, 5);
+	cathedral_candelabra(f, 5, 0);
+	cathedral_candelabra(f, 5, -5);
+	cathedral_wall_sconce(f, -11.5, 5);
+	cathedral_wall_sconce(f, -11.5, -3);
+	cathedral_wall_sconce(f, -11.5, -11);
+	cathedral_wall_sconce(f, -11.5, -19);
+	cathedral_wall_sconce(f, 11.5, 5);
+	cathedral_wall_sconce(f, 11.5, -3);
+	cathedral_wall_sconce(f, 11.5, -11);
+	cathedral_wall_sconce(f, 11.5, -19);
+}
+
+static void cathedral_chandelier(FILE *f, double z)
+{
+	t_color iron = {70, 60, 55};
+	t_color wax = {240, 230, 200};
+	t_color flame = {255, 220, 100};
+	t_color gold = {220, 200, 100};
+	double offsets[][2] = {{2, 0}, {-2, 0}, {1.41, 1.41}, {-1.41, 1.41},
+		{0, 2}, {0, -2}, {1.41, -1.41}, {-1.41, -1.41}};
+	int i;
+
+	write_cylinder_mat(f, (t_vec){0, 16.5, z}, (t_vec){0, 1, 0}, 0.06,
+		3.5, iron, "spec:0.3 metal:0.5");
+	write_torus(f, (t_vec){0, 13, z}, (t_vec){0, 1, 0}, 2.0, 0.15,
+		iron, "spec:0.4 metal:0.5");
+	write_torus(f, (t_vec){0, 13, z}, (t_vec){0, 1, 0}, 1.2, 0.1,
+		iron, "spec:0.4 metal:0.5");
+	write_sphere(f, (t_vec){0, 13.3, z}, 0.3,
+		gold, "spec:0.6 refl:0.2");
+	i = 0;
+	while (i < 8)
+	{
+		write_cylinder(f, (t_vec){offsets[i][0], 13, z + offsets[i][1]},
+			(t_vec){0, 1, 0}, 0.07, 0.6, wax);
+		write_sphere(f,
+			(t_vec){offsets[i][0], 13.65, z + offsets[i][1]}, 0.1,
+			flame, "emit:180,140,40");
+		i++;
+	}
+}
+
+static void cathedral_chandeliers(FILE *f)
+{
+	cathedral_chandelier(f, 5);
+	cathedral_chandelier(f, -5);
+	cathedral_chandelier(f, -15);
+}
+
+static void cathedral_pews(FILE *f)
+{
+	t_color wood_a = {95, 78, 58};
+	t_color wood_b = {90, 75, 55};
+	t_color *w;
+	double z;
+	int i;
+
+	i = 0;
+	while (i < 12)
+	{
+		z = 8.0 - (double)i * 2.0;
+		w = (i % 2 == 0) ? &wood_a : &wood_b;
+		write_box_mat(f, (t_vec){-3, 0.4, z}, (t_vec){2.8, 0.4, 0.5},
+			*w, "spec:0.2");
+		write_box_mat(f, (t_vec){-3, 0.85, z + 0.25},
+			(t_vec){2.8, 0.5, 0.08}, *w, "spec:0.2");
+		write_box_mat(f, (t_vec){3, 0.4, z}, (t_vec){2.8, 0.4, 0.5},
+			*w, "spec:0.2");
+		write_box_mat(f, (t_vec){3, 0.85, z + 0.25},
+			(t_vec){2.8, 0.5, 0.08}, *w, "spec:0.2");
+		i++;
+	}
+}
+
+static void cathedral_gothic_arches(FILE *f)
+{
+	t_color stone = {200, 185, 160};
+	double z;
+	int i;
+
+	i = 0;
+	while (i < 7)
+	{
+		z = 10.0 - (double)i * 5.0;
+		write_triangle_mat(f, (t_vec){-6, 14, z},
+			(t_vec){-6, 16.5, z - 2.5}, (t_vec){-6, 14, z - 5},
+			stone, "spec:0.1");
+		write_triangle_mat(f, (t_vec){6, 14, z},
+			(t_vec){6, 16.5, z - 2.5}, (t_vec){6, 14, z - 5},
+			stone, "spec:0.1");
+		i++;
+	}
+}
+
+static void cathedral_extras(FILE *f)
+{
+	t_color stone = {180, 170, 150};
+	t_color wood = {80, 65, 48};
+
+	write_cylinder_mat(f, (t_vec){-3, 0, 12}, (t_vec){0, 1, 0}, 0.3, 2.5,
+		stone, "spec:0.2");
+	write_paraboloid(f, (t_vec){-3, 2.5, 12}, (t_vec){0, 1, 0}, 0.5, 1.2,
+		stone, "spec:0.2");
+	write_disk(f, (t_vec){-3, 2.8, 12}, (t_vec){0, 1, 0}, 1.4,
+		(t_color){120, 140, 160}, "refl:0.5 spec:0.6");
+	write_box_mat(f, (t_vec){-10.5, 1.2, -2}, (t_vec){1.5, 2.4, 1},
+		wood, "spec:0.15");
+	write_box_mat(f, (t_vec){-10.5, 1.2, -2.8}, (t_vec){0.15, 2.4, 0.6},
+		wood, "spec:0.15");
+	write_box_mat(f, (t_vec){-10.5, 1.2, -1.2}, (t_vec){0.15, 2.4, 0.6},
+		wood, "spec:0.15");
+	write_box_mat(f, (t_vec){-10.5, 2.5, -2}, (t_vec){1.8, 0.1, 1.4},
+		wood, "spec:0.15");
+	write_box_mat(f, (t_vec){-10.5, 1.2, -8}, (t_vec){1.5, 2.4, 1},
+		wood, "spec:0.15");
+	write_box_mat(f, (t_vec){-10.5, 1.2, -8.8}, (t_vec){0.15, 2.4, 0.6},
+		wood, "spec:0.15");
+	write_box_mat(f, (t_vec){-10.5, 1.2, -7.2}, (t_vec){0.15, 2.4, 0.6},
+		wood, "spec:0.15");
+	write_box_mat(f, (t_vec){-10.5, 2.5, -8}, (t_vec){1.8, 0.1, 1.4},
+		wood, "spec:0.15");
+	write_box(f, (t_vec){0, 0.04, 0}, (t_vec){0.7, 0.04, 14},
+		(t_color){120, 30, 30});
+	write_cylinder_mat(f, (t_vec){-3, 0, -25}, (t_vec){0, 1, 0}, 0.2,
+		3.0, (t_color){90, 75, 55}, "spec:0.3");
+	write_box_mat(f, (t_vec){-3, 3, -25}, (t_vec){0.8, 0.05, 0.6},
+		(t_color){90, 75, 55}, "spec:0.3");
+	write_box_mat(f, (t_vec){-3, 3.3, -24.85}, (t_vec){0.8, 0.5, 0.05},
+		(t_color){90, 75, 55}, "spec:0.3");
+	write_square_mat(f, (t_vec){-3.5, 12, -29.5}, (t_vec){0, 0, 1}, 1.5,
+		(t_color){80, 40, 180}, "trans:0.7 ior:1.4");
+	write_square_mat(f, (t_vec){3.5, 12, -29.5}, (t_vec){0, 0, 1}, 1.5,
+		(t_color){180, 40, 40}, "trans:0.7 ior:1.4");
+	write_square_mat(f, (t_vec){-3.5, 7, -29.5}, (t_vec){0, 0, 1}, 1.2,
+		(t_color){40, 160, 80}, "trans:0.7 ior:1.4");
+	write_square_mat(f, (t_vec){3.5, 7, -29.5}, (t_vec){0, 0, 1}, 1.2,
+		(t_color){180, 160, 40}, "trans:0.7 ior:1.4");
 }
 
 static void cathedral_debris(FILE *f, int seed)
@@ -983,6 +1253,10 @@ static void gen_cathedral_ruins(FILE *f, t_config *cfg)
 	fprintf(f, "\n");
 	cathedral_altar(f);
 	fprintf(f, "\n");
+	cathedral_cross(f);
+	fprintf(f, "\n");
+	cathedral_organ(f);
+	fprintf(f, "\n");
 	cathedral_debris(f, cfg->seed);
 	fprintf(f, "\n");
 	cathedral_roof(f);
@@ -994,6 +1268,16 @@ static void gen_cathedral_ruins(FILE *f, t_config *cfg)
 	cathedral_stained_glass(f);
 	fprintf(f, "\n");
 	cathedral_decorations(f);
+	fprintf(f, "\n");
+	cathedral_candelabras(f);
+	fprintf(f, "\n");
+	cathedral_chandeliers(f);
+	fprintf(f, "\n");
+	cathedral_pews(f);
+	fprintf(f, "\n");
+	cathedral_gothic_arches(f);
+	fprintf(f, "\n");
+	cathedral_extras(f);
 }
 
 static void print_usage(void)
