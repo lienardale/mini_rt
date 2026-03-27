@@ -26,6 +26,9 @@ jobs:
             runs-on: ubuntu-latest
             container: fedora:39
             deps: dnf install -y gcc make libX11-devel libXext-devel zlib-devel
+          - distro: macos-15
+            runs-on: macos-15
+            deps: "true"
 
     runs-on: ${{ matrix.runs-on }}
     container: ${{ matrix.container || '' }}

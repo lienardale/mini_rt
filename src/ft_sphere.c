@@ -84,8 +84,11 @@ void ft_intersect_ray_sphere(t_shape *sh, t_ray *ray)
 	b = 2 * ft_dot_product(oc, ray->dir);
 	c = ft_dot_product(oc, oc) - sh->radius_sq;
 	calc.x = (b * b) - (4 * c);
-	if (calc.x < 0 && (ray->lenght = -1))
+	if (calc.x < 0)
+	{
+		ray->lenght = -1;
 		return;
+	}
 	calc.y = (-b - sqrt(calc.x)) / 2;
 	calc.z = (-b + sqrt(calc.x)) / 2;
 	if (calc.z > EPSILON_HIT && calc.z < calc.y)
