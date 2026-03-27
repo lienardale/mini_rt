@@ -49,6 +49,7 @@ int ft_window_init(t_window *win)
 	win->path_trace_spp = 0;
 	win->path_trace_bounces = PT_DEFAULT_BOUNCES;
 	win->motion_blur_samples = 0;
+	win->use_env_sky = 0;
 	return (0);
 }
 
