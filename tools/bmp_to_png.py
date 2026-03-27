@@ -11,16 +11,18 @@ Usage:
 import os
 import sys
 import glob
-from PIL import Image
+import subprocess
 
 
 def convert_bmp_to_png(bmp_path, output_dir):
-    """Convert a single BMP file to PNG."""
+    """Convert a single BMP file to PNG using macOS sips."""
     name = os.path.splitext(os.path.basename(bmp_path))[0]
     png_path = os.path.join(output_dir, name + ".png")
     try:
-        img = Image.open(bmp_path)
-        img.save(png_path, "PNG", optimize=True)
+        subprocess.run(
+            ["sips", "-s", "format", "png", bmp_path, "--out", png_path],
+            check=True, capture_output=True,
+        )
         size_kb = os.path.getsize(png_path) / 1024
         print(f"  {name}.bmp -> {name}.png ({size_kb:.0f} KB)")
         return True
