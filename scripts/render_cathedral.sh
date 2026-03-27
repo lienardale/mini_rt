@@ -63,7 +63,8 @@ done
 # Build miniRT if missing
 if [ ! -f "$PROJECT_DIR/miniRT" ]; then
     echo "Building miniRT..."
-    make -C "$PROJECT_DIR" -j"$(nproc)" 2>&1 | tail -1
+    NJOBS=$(nproc 2>/dev/null || sysctl -n hw.logicalcpu 2>/dev/null || echo 4)
+    make -C "$PROJECT_DIR" -j"$NJOBS" 2>&1 | tail -1
 fi
 
 # Build gen_scene if missing
@@ -101,10 +102,16 @@ echo ""
 START=$(date +%s)
 
 cd "$PROJECT_DIR"
-xvfb-run -a "$PROJECT_DIR/miniRT" "$SCENE_FILE" -save \
+if command -v xvfb-run >/dev/null 2>&1; then
+    RUNNER="xvfb-run -a"
+else
+    RUNNER=""
+fi
+
+$RUNNER "$PROJECT_DIR/miniRT" "$SCENE_FILE" -save \
     --output "$OUTPUT" --threads="$THREADS" || {
     echo "Retrying with default output path..."
-    xvfb-run -a "$PROJECT_DIR/miniRT" "$SCENE_FILE" -save \
+    $RUNNER "$PROJECT_DIR/miniRT" "$SCENE_FILE" -save \
         --threads="$THREADS"
     mv -f "$PROJECT_DIR/miniRT.bmp" "$OUTPUT"
 }
